@@ -3,11 +3,16 @@ import config
 
 
 def get_logger(log_name=config.LOG_FILES['default']):
+    """
+    get logger by log name and write by variety of levels: [debug, info, warning, error, critical]
+    :param log_name: the name of the log file
+    :return: void
+    """
     logging.basicConfig(filename=log_name,
-                        filemode='a',
-                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                        datefmt='%H:%M:%S',
-                        level=logging.DEBUG)
+                        filemode=config.LOG_OPTIONS['file_mode'],
+                        format=config.LOG_OPTIONS['format'],
+                        datefmt=config.LOG_OPTIONS['date_format'],
+                        level=config.LOG_OPTIONS['level'])
     return logging.getLogger(log_name)
 
 # Logs for example
