@@ -1,14 +1,13 @@
 import logging
+import config
 
 
-# TODO: fetch default log name from config
-def get_logger(log_name = './Logs/back_eye.log'):
-
+def get_logger(log_name=config.LOG_FILES['default']):
     logging.basicConfig(filename=log_name,
-                                filemode='a',
-                                format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                                datefmt='%H:%M:%S',
-                                level=logging.DEBUG)
+                        filemode='a',
+                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                        datefmt='%H:%M:%S',
+                        level=logging.DEBUG)
     return logging.getLogger(log_name)
 
 # Logs for example
