@@ -41,18 +41,18 @@ def post(url, data):
     try:
         if not data or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
-        r = requests.post(url, data)
-        r.raise_for_status()
-        return r.ok
+        response = requests.post(url, data)
+        response.raise_for_status()
+        return response.ok
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return False
     except requests.exceptions.RequestException:
-        loggerService.get_logger().error(str(r.text))
+        loggerService.get_logger().error(str(response.text))
         return False
     except Exception as e:
         loggerService.get_logger().error(
-            f'post call to url: {url}, data: {data} has failed with status: {r.status_code}, due to: {str(e)}')
+            f'post call to url: {url}, data: {data} has failed with status: {response.status_code}, due to: {str(e)}')
         return False
 
 
