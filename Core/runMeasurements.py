@@ -16,6 +16,8 @@ class RunMeasurements:
                 Gaol: The constructor function.
                 Parameters: measurements - List of objects [each object is a measure
                 that needs to be executed and get its results].
+                lesson_configuration - lesson configuration dictionary which hold the
+                configuration of a specific lesson such as lesson duration and breaks.
             *************************************************************************"""
 
         # [fd.FaceDetector(),hp(),ot(),sd()]
@@ -34,7 +36,7 @@ class RunMeasurements:
 
         try:
             capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
-            # TODO: get the lesson time from self.configuration['lesson_time'] and change the while accordingly
+            # TODO: get the lesson time from self.configuration['duration'] and change the while accordingly
             # TODO: add support for a break in the middle of the lesson
             while True:
                 ret, frame = capture_device.read()
