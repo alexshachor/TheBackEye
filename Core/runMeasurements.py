@@ -18,6 +18,7 @@ class RunMeasurements:
         try:
             capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
             # TODO: get the lesson time from self.configuration['lesson_time'] and change the while accordingly
+            # TODO: add support for a break in the middle of the lesson
             while True:
                 ret, frame = capture_device.read()
                 if not ret:
