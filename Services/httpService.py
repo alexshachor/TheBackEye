@@ -3,7 +3,12 @@ from Services import loggerService
 
 
 def get(url, params):
-
+    """
+    get response from server by the given url and its params
+    :param url: get the data from the url
+    :param params: params needed for the request
+    :return: the response in json format if succeed and None otherwise
+    """
     try:
         if not url:
             raise ValueError(f'cannot get, url is missing')
@@ -20,7 +25,12 @@ def get(url, params):
 
 
 def post(url, data):
-
+    """
+    post the given data to the given url
+    :param url: post the data to this url
+    :param data: data to send the server
+    :return: True if succeed and False otherwise
+    """
     try:
         if not data or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
