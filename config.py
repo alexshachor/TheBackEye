@@ -1,13 +1,15 @@
 import logging
 
-URLS = {
-    'post_measures': 'http://bla/bla',
-    'post_multiple_measures:' 'http://test'
-    'class_configuration': 'http://Configuration/blabla'
-}
 DEBUG = True
 TIMEOUT = 5
 CAM_SRC = 1
+
+URLS = {
+    'post_measures': 'http://bla/bla',
+    'post_multiple_measures': 'http://test',
+    'lesson_configuration': 'http://Configuration/blabla'
+}
+
 LOG_FILES = {
     'default': './Logs/back_eye.log'
 }
