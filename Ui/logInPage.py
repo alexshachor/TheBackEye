@@ -11,9 +11,10 @@ import threading
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
 
 
-# This class is responsible for displaying the start page.
 class LogInPage(tk.Frame):
-
+    """
+    This class is responsible for displaying the start page.
+    """
     def __init__(self, parent, controller):
         """
         Init variables and calling functions.
@@ -59,6 +60,7 @@ class LogInPage(tk.Frame):
     def buttons(self, controller):
         """
         Init buttons.
+        :param controller: gives the ability to switch between pages
         """
         login = tk.Button(self, image=self.login_img, borderwidth=0, background='black',
                           command=lambda: self.login_button(controller))

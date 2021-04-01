@@ -4,10 +4,11 @@ from config import APP
 import config as c
 
 
-# This is the class that is responsible for managing the page view,
-# which means that the main part of the application is located here.
 class TheBackEyeView(tk.Tk):
-
+    """
+    This is the class that is responsible for managing the page view,
+    which means that the main part of the application is located here.
+    """
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.container = tk.Frame(self)
