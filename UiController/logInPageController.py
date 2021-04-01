@@ -37,6 +37,9 @@ class LoginController:
 
     @staticmethod
     def has_pic():
+        """
+        Check if we already have pics for this student.
+        """
         if config.DEBUG:
             time.sleep(2)
             return False
