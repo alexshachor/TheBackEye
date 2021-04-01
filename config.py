@@ -32,3 +32,8 @@ APP = {
     'FONT_MSG': ("Ariel", 10, "bold")
 }
 APPLICATION = None
+USER_DATA = {
+    'USERNAME': '',
+    'ID': ''
+}
+

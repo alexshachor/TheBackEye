@@ -79,6 +79,8 @@ class LogInPage(tk.Frame):
         if msg1 != 'OK':
             self.invalid_id = ovb.create_msg(self, 260, 360, msg1)
         if msg == 'OK' and msg1 == 'OK':
+            c.USER_DATA['USERNAME'] = self.name.get()
+            c.USER_DATA['ID'] = self.id.get()
             self.pb = progressbar.progressbar(self)
             self.pb.place(bordermode=OUTSIDE, x=118, y=420, height=30, width=200)
             self.pb.start()
