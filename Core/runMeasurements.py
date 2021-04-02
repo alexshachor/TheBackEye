@@ -44,7 +44,7 @@ class RunMeasurements:
                 if not ret:
                     loggerService.get_logger().error(f'cannot read from camera source')
                     continue
-                result = run_measurement_processes(self.measurements,frame)
+                result = self.run_measurement_processes(frame)
                 measurements_service.post_measurements(result)
                 # TODO: do we need these lines?
                 # if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -58,26 +58,25 @@ class RunMeasurements:
             loggerService.get_logger().error(f'an error occurred: {str(e)}')
             return
 
+    def run_measurement_processes(self, frame):
 
-def run_measurement_processes(measurements, frame):
+        q_results = mp.Queue()
 
-    q_results = mp.Queue()
+        # assign all processes and start each one of them
+        processes = []
+        for job in self.measurements:
+            process = mp.Process(target=job, args=(frame, q_results))
+            process.start()
+            processes.append(process)
 
-    # assign all processes and start each one of them
-    processes = []
-    for job in measurements:
-        process = mp.Process(target=job, args=(frame, q_results))
-        process.start()
-        processes.append(process)
+        for process in processes:
+            # TODO: do we need to use timeout?
+            # TODO: what we do in case of one of the processes has not finished yet?
+            process.join()
+            process.close()
 
-    for process in processes:
-        # TODO: do we need to use timeout?
-        # TODO: what we do in case of one of the processes has not finished yet?
-        process.join()
-        process.close()
-
-    # collect results from the queue
-    results = {}
-    for i in range(len(measurements)):
-        results.update(q_results.get())
-    return results
+        # collect results from the queue
+        results = {}
+        for i in range(len(self.measurements)):
+            results.update(q_results.get())
+        return results
