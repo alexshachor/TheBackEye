@@ -3,6 +3,7 @@ from Measurements import faceDetector as fd
 from Measurements import headPose as hp
 from Measurements import sleepDetector as sd
 from Services import httpService as hs
+from Core import runMeasurements as rm
 import config
 
 MSGS = {
@@ -34,11 +35,9 @@ def upload_pic(pic):
     """
     if config.DEBUG:
         return 'OK'
-    result = {}
     measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
-    for measure in measurements:
-        # TODO: run each algorithm in thread, then wait for their result using join
-        result[str(measure)] = measure.run(pic)
+    run_measurements = rm.RunMeasurements(measurements, None)
+    result = run_measurements.run_measurement_processes(pic)
     msg = check_pic(result)
     if msg == 'OK':
         # TODO: give real URL
