@@ -7,6 +7,11 @@ import time
 
 
 def check_recognition(path):
+    """
+    Check for student FaceRecognition.
+    :param path: path to the snapshot image
+    :return msg: True or false according to FaceRecognition result
+    """
     measurements = rm.RunMeasurements([fr.FaceRecognition()], None)
     if config.DEBUG:
         time.sleep(2)
@@ -18,4 +23,7 @@ def check_recognition(path):
 
 
 def successes():
+    """
+    Go and destroy the Ui.
+    """
     uiController.destructor()

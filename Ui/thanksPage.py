@@ -9,6 +9,7 @@ FONT_OUTPUT = c.APP['FONT_OUTPUT']
 FONT_MSG = c.APP['FONT_MSG']
 SHOW_MSG_TIME = 20
 
+
 class TanksPage(tk.Frame):
     """
     This class is responsible for displaying the Tanks Page.

@@ -35,7 +35,6 @@ def upload_pic(pic):
     """
     if config.DEBUG:
         return 'OK'
-    result = {}
     measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
     run_measurements = rm.RunMeasurements(measurements, None)
     result = run_measurements.run_measurement_processes(pic)
