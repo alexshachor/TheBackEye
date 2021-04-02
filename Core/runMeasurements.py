@@ -59,6 +59,11 @@ class RunMeasurements:
             return
 
     def run_measurement_processes(self, frame):
+        """
+        run all measurements in a parallel, wait them all to finish, and return their result.
+        :param frame: frame to measure.
+        :return: results - dictionary of the results [key = measurement name, value = measurement result]
+        """
 
         q_results = mp.Queue()
 
