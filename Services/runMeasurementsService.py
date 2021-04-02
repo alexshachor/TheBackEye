@@ -8,6 +8,7 @@ class MeasurementsService:
     to the server even if there were an connection problems,
     it will keep the data until connection is back
     """
+
     def __init__(self):
         self.measurements_stack = []
 
