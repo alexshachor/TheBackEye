@@ -1,6 +1,7 @@
 import cv2
 from time import sleep
 import config
+from Core.measurementsResult import MeasurementsResult
 from Services import loggerService
 from Services.runMeasurementsService import MeasurementsService
 import multiprocessing as mp
@@ -45,7 +46,7 @@ class RunMeasurements:
                     loggerService.get_logger().error(f'cannot read from camera source')
                     continue
                 result = self.run_measurement_processes(frame)
-                measurements_service.post_measurements(result)
+                measurements_service.post_measurements(MeasurementsResult(result))
                 # TODO: do we need these lines?
                 # if cv2.waitKey(1) & 0xFF == ord('q'):
                 #     break
