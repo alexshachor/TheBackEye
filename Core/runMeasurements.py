@@ -65,12 +65,12 @@ class RunMeasurements:
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
 
-        q_results = mp.Queue()
+        dict_results = mp.Manager().dict()
 
         # assign all processes and start each one of them
         processes = []
         for job in self.measurements:
-            process = mp.Process(target=job, args=(frame, q_results))
+            process = mp.Process(target=job, args=(frame, dict_results))
             process.start()
             processes.append(process)
 
@@ -80,8 +80,4 @@ class RunMeasurements:
             process.join()
             process.close()
 
-        # collect results from the queue
-        results = {}
-        for i in range(len(self.measurements)):
-            results.update(q_results.get())
-        return results
+        return dict_results

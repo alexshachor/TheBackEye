@@ -19,10 +19,11 @@ class FaceDetector(am.AbstractMeasurements):
             min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
-    def run(self, frame, q_results):
+    def run(self, frame, dict_results):
         """
         run the face detector algorithm on the given frame
         :param frame: frame to process.
+        :param dict_results: a dictionary which the result will be put there
         :return: pair of key = 'face_detection', value = True if there is face and False otherwise.
             """
         run_result = {repr(self): False}
@@ -41,7 +42,7 @@ class FaceDetector(am.AbstractMeasurements):
                 # show face net on image
                 if config.DEBUG:
                     self.draw_annonations(image, results)
-            q_results.put(run_result)
+            dict_results.update(run_result)
         except Exception as e:
             self.face_mesh.close()
             # write error to log file
