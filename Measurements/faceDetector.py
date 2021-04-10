@@ -38,12 +38,28 @@ class FaceDetector(am.AbstractMeasurements):
             if results.multi_face_landmarks:
                 # face has been detected
                 run_result[repr(self)] = True
+                # show face net on image
+                if config.DEBUG:
+                    self.draw_annonations(image, results)
             q_results.put(run_result)
         except Exception as e:
             self.face_mesh.close()
             # write error to log file
             loggerService.get_logger().error(str(e))
 
+    def __repr__(self):
+        return 'Face Detector'
 
-def __repr__(self):
-    return 'Face Detector'
+    def draw_annotations(self, image, results):
+
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        for face_landmarks in results.multi_face_landmarks:
+            # draw face landmark net
+            mp_drawing.draw_landmarks(
+                image=image,
+                landmark_list=face_landmarks,
+                connections=mp_face_mesh.FACE_CONNECTIONS,
+                landmark_drawing_spec=self.drawing_spec,
+                connection_drawing_spec=self.drawing_spec)
+            cv2.imshow('MediaPipe FaceMesh', image)
