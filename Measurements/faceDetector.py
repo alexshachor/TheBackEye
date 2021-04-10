@@ -52,7 +52,12 @@ class FaceDetector(am.AbstractMeasurements):
         return 'Face Detector'
 
     def draw_annotations(self, image, results):
-
+        """
+               draw face annotations on the image.
+               :param image: image to draw on.
+               :param results: the face detector results.
+               :return: void.
+               """
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         for face_landmarks in results.multi_face_landmarks:
