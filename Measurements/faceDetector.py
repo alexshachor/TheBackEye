@@ -11,13 +11,20 @@ mp_face_mesh = mp.solutions.face_mesh
 class FaceDetector(am.AbstractMeasurements):
 
     def __init__(self):
+        """
+        initialize the parent class and the face_mesh model.
+        """
         am.AbstractMeasurements.__init__(self)
         self.face_mesh = mp_face_mesh.FaceMesh(
             min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
     def run(self, frame, q_results):
-
+        """
+        run the face detector algorithm on the given frame
+        :param frame: frame to process.
+        :return: pair of key = 'face_detection', value = True if there is face and False otherwise.
+            """
         run_result = {repr(self): False}
         try:
             # flip the image in order to represent a true self of the person not mirror of it
@@ -37,5 +44,6 @@ class FaceDetector(am.AbstractMeasurements):
             # write error to log file
             loggerService.get_logger().error(str(e))
 
-    def __repr__(self):
-        return 'Face Detector'
+
+def __repr__(self):
+    return 'Face Detector'
