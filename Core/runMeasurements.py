@@ -1,6 +1,7 @@
 import cv2
 from time import sleep
 import config
+from Core.measurementsResult import MeasurementsResult
 from Services import loggerService
 from Services.runMeasurementsService import MeasurementsService
 import multiprocessing as mp
@@ -45,7 +46,7 @@ class RunMeasurements:
                     loggerService.get_logger().error(f'cannot read from camera source')
                     continue
                 result = self.run_measurement_processes(frame)
-                measurements_service.post_measurements(result)
+                measurements_service.post_measurements(MeasurementsResult(result))
                 # TODO: do we need these lines?
                 # if cv2.waitKey(1) & 0xFF == ord('q'):
                 #     break
@@ -65,12 +66,12 @@ class RunMeasurements:
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
 
-        q_results = mp.Queue()
+        dict_results = mp.Manager().dict()
 
         # assign all processes and start each one of them
         processes = []
         for job in self.measurements:
-            process = mp.Process(target=job, args=(frame, q_results))
+            process = mp.Process(target=job, args=(frame, dict_results))
             process.start()
             processes.append(process)
 
@@ -80,8 +81,4 @@ class RunMeasurements:
             process.join()
             process.close()
 
-        # collect results from the queue
-        results = {}
-        for i in range(len(self.measurements)):
-            results.update(q_results.get())
-        return results
+        return dict_results
