@@ -83,5 +83,9 @@ class RunMeasurements:
         return dict_results
 
     def finish_lesson(self):
+        """
+        all the logic concerning finishing lesson will be activated from here.
+        :return: void
+        """
         cv2.destroyAllWindows()
         loggerService.send_log_reports()

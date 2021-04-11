@@ -26,6 +26,11 @@ def get_logger(log_name=config.LOG_FILES['default']):
 
 
 def send_log_reports(log_name=config.LOG_FILES['default']):
+    """
+    send the given log file to the server.
+    :param log_name: the name of log file to send.
+    :return: True if the logs successfully sent and False otherwise.
+    """
     with open(log_name) as f:
         log_lines = f.readlines()
     return httpService.post(config.URLS['post_logs'], log_lines)
