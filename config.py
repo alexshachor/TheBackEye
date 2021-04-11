@@ -7,7 +7,8 @@ CAM_SRC = 1
 URLS = {
     'post_measures': 'http://bla/bla',
     'post_stacked_measures': 'http://test',
-    'lesson_configuration': 'http://Configuration/blabla'
+    'lesson_configuration': 'http://Configuration/blabla',
+    'post_logs':'http://logs/bla'
 }
 
 LOG_FILES = {

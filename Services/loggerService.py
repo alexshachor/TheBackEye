@@ -1,5 +1,6 @@
 import logging
 import config
+from Services import httpService
 
 
 def get_logger(log_name=config.LOG_FILES['default']):
@@ -8,6 +9,14 @@ def get_logger(log_name=config.LOG_FILES['default']):
     :param log_name: the name of the log file
     :return: void
     """
+
+    # Log's levels for example:
+    # logger.debug('A debug message')
+    # logger.info('An info message')
+    # logger.warning('Something is not right.')
+    # logger.error('A Major error has happened.')
+    # logger.critical('Fatal error. Cannot continue')
+
     logging.basicConfig(filename=log_name,
                         filemode=config.LOG_OPTIONS['file_mode'],
                         format=config.LOG_OPTIONS['format'],
@@ -15,9 +24,8 @@ def get_logger(log_name=config.LOG_FILES['default']):
                         level=config.LOG_OPTIONS['level'])
     return logging.getLogger(log_name)
 
-# Logs for example
-# logger.debug('A debug message')
-# logger.info('An info message')
-# logger.warning('Something is not right.')
-# logger.error('A Major error has happened.')
-# logger.critical('Fatal error. Cannot continue')
+
+def send_log_reports(log_name=config.LOG_FILES['default']):
+    with open(log_name) as f:
+        log_lines = f.readlines()
+    return httpService.post(config.URLS['post_logs'], log_lines)
