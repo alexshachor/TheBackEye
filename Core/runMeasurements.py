@@ -47,14 +47,13 @@ class RunMeasurements:
                     continue
                 result = self.run_measurement_processes(frame)
                 measurements_service.post_measurements(MeasurementsResult(result))
-                # TODO: do we need these lines?
-                # if cv2.waitKey(1) & 0xFF == ord('q'):
-                #     break
+                if config.DEBUG & cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
                 sleep(config.TIMEOUT)
 
             capture_device.release()
-            cv2.destroyAllWindows()
+            self.finish_lesson()
         except Exception as e:
             loggerService.get_logger().error(f'an error occurred: {str(e)}')
             return
@@ -76,9 +75,17 @@ class RunMeasurements:
             processes.append(process)
 
         for process in processes:
-            # TODO: do we need to use timeout?
+            # TODO: do we need to use timeout (if one of the processes is taking too long time to finish)?
             # TODO: what we do in case of one of the processes has not finished yet?
             process.join()
             process.close()
 
         return dict_results
+
+    def finish_lesson(self):
+        """
+        all the logic concerning finishing lesson will be activated from here.
+        :return: void
+        """
+        cv2.destroyAllWindows()
+        loggerService.send_log_reports()
