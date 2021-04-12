@@ -7,6 +7,9 @@ import cv2
 class SleepDetector(am.AbstractMeasurement):
 
     def __init__(self):
+        """
+        initialize the parent class and eye_cascade model.
+        """
         am.AbstractMeasurement.__init__(self)
         self.path = '../MeasurementsFilesAndModels/haarcascade_eye_tree_eyeglasses.xml'
         try:
@@ -17,6 +20,12 @@ class SleepDetector(am.AbstractMeasurement):
             ls.get_logger().error(f'failed to open files, due to: {str(e)}')
 
     def run(self, frame, dict_results):
+        """
+        run the sleep detector algorithm on the given frame & if student asleep
+        update the dict_results to false else true.
+        :param frame: frame to process
+        :param dict_results: a dictionary which the result will be put there
+        """
         am.AbstractMeasurement.run(self, frame, dict_results)
         eyes = None
         result = {repr(self): False}
@@ -34,12 +43,19 @@ class SleepDetector(am.AbstractMeasurement):
             dict_results.update(result)
             return
         result[repr(self)] = True if len(eyes) != 0 else False
+        dict_results.update(result)
 
     def __repr__(self):
-        return 'SleepDetector'
+        """
+        :return: the name of the measurement.
+        """
+        return 'Sleep Detector'
 
 
 def for_tests_only():
+    """
+    A test func to this page only.
+    """
     cap = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
     while True:
         ret, frame = cap.read()
