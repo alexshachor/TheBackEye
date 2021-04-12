@@ -8,7 +8,7 @@ class SleepDetector(am.AbstractMeasurement):
 
     def __init__(self):
         am.AbstractMeasurement.__init__(self)
-        self.path = '../MeasurementsFilsAndModels/haarcascade_eye_tree_eyeglasses.xml'
+        self.path = '../MeasurementsFilesAndModels/haarcascade_eye_tree_eyeglasses.xml'
         try:
             self.eye_cascade = cv2.CascadeClassifier(self.path)
         except FileNotFoundError as f:
@@ -39,3 +39,19 @@ class SleepDetector(am.AbstractMeasurement):
         return 'SleepDetector'
 
 
+def for_tests_only():
+    cap = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+    while True:
+        ret, frame = cap.read()
+        if ret:
+            dict = {}
+            SleepDetector().run(frame, dict)
+            print(dict[SleepDetector().__repr__()])
+            cv2.imshow('Sleep Detector', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+for_tests_only()
