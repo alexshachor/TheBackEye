@@ -24,7 +24,7 @@ class TanksPage(tk.Frame):
         Init background.
         """
         panel = tk.Label(self, image=self.img)
-        panel.place(bordermode=OUTSIDE)
+        panel.pack(expand=tk.YES, fill=tk.BOTH)
         # pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
         #                         , bg='black', bd=0, fg='green', font=FONT_OUTPUT)
         # pure_sarcasm.place(bordermode=OUTSIDE, x=135, y=85)
