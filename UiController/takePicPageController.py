@@ -12,10 +12,10 @@ def check_recognition(path):
     :param path: path to the snapshot image
     :return msg: True or false according to FaceRecognition result
     """
-    measurements = rm.RunMeasurements([fr.FaceRecognition()], None)
     if config.DEBUG:
         time.sleep(2)
         return True
+    measurements = rm.RunMeasurements([fr.FaceRecognition()], None)
     # TODO - check if image need to be change into frame.
     img = Image.open(path)
     face_recognition_res = measurements.run_measurement_processes(img)
