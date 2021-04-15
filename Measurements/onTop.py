@@ -34,7 +34,24 @@ class OnTop(am.AbstractMeasurement):
         dict_results.update(result)
 
     def check_and_act(self):
-        pass
+        # Check which program is on top.
+        program_name = None
+        is_on_top = False
+        try:
+            pid = win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
+            program_name = psutil.Process(pid[-1]).name().lower()
+        except Exception as e:
+            ls.get_logger().error(
+                f'Failed to identify process up front, due to: {str(e)}')
+        if program_name == DESIRED_PROGRAM['EXPECTED_ON_TOP']:
+            is_on_top = True
+            if self.is_in_good_size():
+                return True
+        # If we got here the student is not watching the desired program and we act
+        # according to the settings.
+        if not REPORT_ONLY:
+            self.handle_active_teacher(is_on_top)
+        return False
 
     def is_in_good_size(self):
         pass
