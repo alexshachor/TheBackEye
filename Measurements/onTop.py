@@ -22,7 +22,16 @@ class OnTop(am.AbstractMeasurement):
         self.screen_height = GetSystemMetrics(1)
 
     def run(self, frame, dict_results):
-        pass
+        result = {repr(self): False}
+        try:
+            am.AbstractMeasurement.run(self, frame, dict_results)
+            result[repr(self)] = self.check_and_act()
+        except Exception as e:
+            ls.get_logger().error(
+                f'Failed to identify which program on top, due to: {str(e)}')
+            dict_results.update(result)
+            return
+        dict_results.update(result)
 
     def check_and_act(self):
         pass
