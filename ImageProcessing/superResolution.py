@@ -4,6 +4,7 @@ import config
 
 
 class SuperResolution:
+
     def __init__(self, img, quality):
         self.image = img
         self.quality = quality.upper() if quality.upper() in ['LOW', 'MEDIUM', 'HIGH'] else 'LOW'
