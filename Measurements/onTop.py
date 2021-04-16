@@ -65,7 +65,16 @@ class OnTop(am.AbstractMeasurement):
         return False
 
     def handle_active_teacher(self, is_on_top):
-        pass
+        try:
+            hwnd = w.FindWindow(None, DESIRED_PROGRAM['HWND'])
+            if is_on_top:
+                w.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
+            else:
+                w.CloseWindow(w.GetForegroundWindow())
+                w.SetForegroundWindow(hwnd)
+        except Exception as e:
+            ls.get_logger().error(
+                f'Failed to force forward the desired program, due to: {str(e)}')
 
     def __repr__(self):
         return 'OnTop'
