@@ -54,7 +54,15 @@ class OnTop(am.AbstractMeasurement):
         return False
 
     def is_in_good_size(self):
-        pass
+        rect = w.GetWindowRect(w.GetForegroundWindow())
+        x, y = rect[0], rect[1]
+        width, height = rect[2] + x if x < 0 else rect[2] - x, rect[3] - y
+        screen_volume = self.screen_width * self.screen_height
+        foreground_window_volume = width * height
+        accepted_percentage = ((100 - DESIRED_SIZE) * screen_volume) / 100
+        if screen_volume - foreground_window_volume < accepted_percentage:
+            return True
+        return False
 
     def handle_active_teacher(self, is_on_top):
         pass
