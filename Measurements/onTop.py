@@ -6,6 +6,7 @@ import psutil
 import win32process
 import win32con
 from win32api import GetSystemMetrics
+import time
 
 # If it False: If the desired program is not ON TOP, it will be.
 # If it True: Report only.
@@ -73,8 +74,23 @@ class OnTop(am.AbstractMeasurement):
                 w.CloseWindow(w.GetForegroundWindow())
                 w.SetForegroundWindow(hwnd)
         except Exception as e:
-            ls.get_logger().error(
-                f'Failed to force forward the desired program, due to: {str(e)}')
+            pass
+            # TODO - check way logger make the program Exception and exit.
+            # ls.get_logger().error(
+            #     f'Failed to force forward the desired program, due to: {str(e)}')
 
     def __repr__(self):
         return 'OnTop'
+
+
+def for_tests_only():
+    dict = {}
+    x = OnTop()
+    while True:
+        x.run(None, dict)
+        print(dict[x.__repr__()])
+        time.sleep(5)
+
+
+if __name__ == '__main__':
+    for_tests_only()
