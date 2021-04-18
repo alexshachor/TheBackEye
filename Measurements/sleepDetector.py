@@ -70,4 +70,5 @@ def for_tests_only():
     cv2.destroyAllWindows()
 
 
-for_tests_only()
+if __name__ == '__main__':
+    for_tests_only()

@@ -28,7 +28,19 @@ class SuperResolution:
         return bicubic
 
     def to_super_resolution(self):
-        pass
+        model = self.init_model()
+        start = time.time()
+        scaled_image = model.upsample(self.image)
+        end = time.time()
+        if config.DEBUG:
+            print("[INFO] width: {}, height: {} - Before scaling".format(self.image.shape[1], self.image.shape[0]))
+            print("[INFO] width: {}, height: {} - After scaling".format(scaled_image.shape[1], scaled_image.shape[0]))
+            print('[INFO] Super resolution interpolation took {:.2f} seconds'.format(end - start))
+            cv2.imshow("Original", self.image)
+            cv2.imshow("Super Resolution", scaled_image)
+            cv2.imwrite('.\SavedImages\\superRes.jpg', scaled_image)
+            cv2.waitKey(0)
+        return scaled_image
 
     def init_model(self):
         model_file = self.models[self.quality]
