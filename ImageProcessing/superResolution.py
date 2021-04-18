@@ -31,7 +31,13 @@ class SuperResolution:
         pass
 
     def init_model(self):
-        pass
+        model_file = self.models[self.quality]
+        self.model_name = model_file.split('_')[0].lower()
+        scale = self.model_scale[self.quality]
+        super_resolution = cv2.dnn_superres.DnnSuperResImpl_create()
+        super_resolution.readModel(self.path + model_file)
+        super_resolution.setModel(self.model_name, scale)
+        return super_resolution
 
 
 # For tests only.
