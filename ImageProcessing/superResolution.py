@@ -6,6 +6,11 @@ import config
 class SuperResolution:
 
     def __init__(self, img, quality):
+        """
+        initialize params for this class.
+        :param: img: the image to improve
+        :param: quality: in which quality the result pic should be
+        """
         self.image = img
         self.quality = quality.upper() if quality.upper() in ['LOW', 'MEDIUM', 'HIGH'] else 'LOW'
         self.path = '.\Models\\'
@@ -15,6 +20,10 @@ class SuperResolution:
         self.model_scale = {'LOW': 3, 'MEDIUM': 4, 'HIGH': 8}
 
     def to_bicubic(self):
+        """
+        a minor improvement to a picture, take a very sort time.
+        :return: bicubic: a bicubic improvement image
+        """
         start = time.time()
         bicubic = cv2.resize(self.image, (self.image.shape[1], self.image.shape[0]),
                              interpolation=cv2.INTER_CUBIC)
@@ -28,6 +37,11 @@ class SuperResolution:
         return bicubic
 
     def to_super_resolution(self):
+        """
+        use the heavy tools to improve image by the expropriate models.
+        :return: scaled_image: depend on what the quality that the user
+        ask for
+        """
         model = self.init_model()
         start = time.time()
         scaled_image = model.upsample(self.image)
@@ -43,6 +57,9 @@ class SuperResolution:
         return scaled_image
 
     def init_model(self):
+        """
+        this func will init model by the asked quality
+        """
         model_file = self.models[self.quality]
         self.model_name = model_file.split('_')[0].lower()
         scale = self.model_scale[self.quality]
@@ -53,6 +70,9 @@ class SuperResolution:
 
 
 def for_tests_only():
+    """
+    A test func to this page only.
+    """
     image = cv2.imread('.\SavedImages\\butterfly.png')
     SuperResolution(image, 'HIGH').to_bicubic()
     SuperResolution(image, 'HIGH').to_super_resolution()
