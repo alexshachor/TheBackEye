@@ -24,7 +24,7 @@ class SuperResolution:
             cv2.imshow("Original", self.image)
             cv2.imshow("Bicubic", bicubic)
             cv2.imwrite('.\SavedImages\\bicubic.jpg', bicubic)
-            cv2.waitKey(0)
+            time.sleep(5)
         return bicubic
 
     def to_super_resolution(self):
@@ -39,7 +39,7 @@ class SuperResolution:
             cv2.imshow("Original", self.image)
             cv2.imshow("Super Resolution", scaled_image)
             cv2.imwrite('.\SavedImages\\superRes.jpg', scaled_image)
-            cv2.waitKey(0)
+            time.sleep(5)
         return scaled_image
 
     def init_model(self):
@@ -52,5 +52,12 @@ class SuperResolution:
         return super_resolution
 
 
-# For tests only.
+def for_tests_only():
+    image = cv2.imread('.\SavedImages\\butterfly.png')
+    SuperResolution(image, 'HIGH').to_bicubic()
+    SuperResolution(image, 'HIGH').to_super_resolution()
+
+
+if __name__ == '__main__':
+    for_tests_only()
 
