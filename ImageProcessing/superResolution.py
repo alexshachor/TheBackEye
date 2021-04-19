@@ -71,7 +71,7 @@ class SuperResolution:
 
 def for_tests_only():
     """
-    A test func to this page only.
+    A test func to this page only..
     """
     image = cv2.imread('.\SavedImages\\butterfly.png')
     SuperResolution(image, 'HIGH').to_bicubic()
