@@ -65,18 +65,21 @@ class HeadPose(am.AbstractMeasurement):
 
     def write_measures_to_video(self, frame, yaw, pitch, roll, is_looking):
 
-        cv2.putText(frame, f"Yaw(degree): {yaw}", (30, 50), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
-        cv2.putText(frame, f"Pitch(degree): {pitch}", (30, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
-                    2)
-        cv2.putText(frame, f"Roll(degree): {roll}", (30, 150), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
-                    2)
+        x, y, font_face, color, thickness = 30, 50, 1, (0, 255, 0), 2
+        distance = 50
 
-        cv2.putText(frame, f"look  {is_looking['yaw']}", (30, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                    (0, 255, 0), 2)
-        cv2.putText(frame, f"look  {is_looking['pitch']}", (30, 250), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                    (0, 255, 0), 2)
-        cv2.putText(frame, f"look  {is_looking['roll']}", (30, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                    (0, 255, 0), 2)
+        cv2.putText(frame, f"Yaw(degree): {yaw}", (x, y), cv2.FONT_HERSHEY_COMPLEX_SMALL, font_face, color, thickness)
+        cv2.putText(frame, f"Pitch(degree): {pitch}", (x, y + distance), cv2.FONT_HERSHEY_COMPLEX_SMALL, font_face,
+                    color, thickness)
+        cv2.putText(frame, f"Roll(degree): {roll}", (x, y + (2 * distance)), cv2.FONT_HERSHEY_COMPLEX_SMALL, font_face,
+                    color, thickness)
+
+        cv2.putText(frame, f"look  {is_looking['yaw']}", (x, y + (3 * distance)), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                    font_face, color, thickness)
+        cv2.putText(frame, f"look  {is_looking['pitch']}", (x, y + (4 * distance)), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                    font_face, color, thickness)
+        cv2.putText(frame, f"look  {is_looking['roll']}", (x, y + (5 * distance)), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                    font_face, color, thickness)
 
         self.video_writer.write(frame)
 
@@ -219,8 +222,7 @@ def get_roll(point_dict):
 
 
 def get_video_writer():
-    # TODO: get video capture from configuration file
-    video_capture = cv2.VideoCapture(1)
+    video_capture = cv2.VideoCapture(config.CAM_SRC)
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     size = (int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     # print("fps:", fps, "size:", size)
