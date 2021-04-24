@@ -34,8 +34,8 @@ class HeadPose(am.AbstractMeasurement):
             """
         run_result = {repr(self): False}
         try:
+            # get dictionary point and a few key points (1,31,51)
             point_dict = get_point_dict(frame)
-
             point1 = [get_num(point_dict, 1, 0), get_num(point_dict, 1, 1)]
             point31 = [get_num(point_dict, 31, 0), get_num(point_dict, 31, 1)]
             point51 = [get_num(point_dict, 51, 0), get_num(point_dict, 51, 1)]
@@ -48,10 +48,12 @@ class HeadPose(am.AbstractMeasurement):
 
             run_result[repr(self)] = True
             is_looking = {'yaw': True, 'pitch': True, 'roll': True}
-            # TODO: change it to take boundaries from configuration file
-            if yaw > 10 or yaw < -10:
+
+            # check the valid range of yaw and pitch
+            hp_range = config.HEAD_POSE['range']
+            if yaw < hp_range['yaw'][0] or yaw > hp_range['yaw'][1]:
                 run_result[repr(self)] = is_looking['yaw'] = False
-            if pitch > 20 or pitch < 4:
+            if pitch < hp_range['pitch'][0] or pitch > hp_range['pitch'][1]:
                 run_result[repr(self)] = is_looking['pitch'] = False
 
             if config.DEBUG:
@@ -224,5 +226,6 @@ def get_video_writer():
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     size = (int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     # print("fps:", fps, "size:", size)
-    video_writer = cv2.VideoWriter(config.HEAD_POSE['video_file'], cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps, size)
+    video_writer = cv2.VideoWriter(config.HEAD_POSE['video_file'], cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps,
+                                   size)
     return video_writer

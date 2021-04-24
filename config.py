@@ -39,5 +39,10 @@ USER_DATA = {
 }
 HEAD_POSE = {
     'video_file': './video/result.avi',
-    'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar'
+    'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar',
+    'range': {
+        'yaw': (-10, 10),
+        'pitch': (4, 20),
+        'roll': (-30, 50)
+    }
 }
