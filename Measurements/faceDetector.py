@@ -49,7 +49,7 @@ class FaceDetector(am.AbstractMeasurements):
             loggerService.get_logger().error(str(e))
 
     def __repr__(self):
-        return 'Face Detector'
+        return 'FaceDetector'
 
     def draw_annotations(self, image, results):
         """
