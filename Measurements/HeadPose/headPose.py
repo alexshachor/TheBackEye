@@ -122,8 +122,7 @@ def get_distance(point_1, point_2):
 
 def get_frame_cropped(frame):
     height, width = frame.shape[:2]
-    # TODO: should replace 0 with device id
-    model_test = AntiSpoofPredict(0)
+    model_test = AntiSpoofPredict(config.CAM_SRC)
     image_bbox = model_test.get_bbox(frame)
 
     x1 = image_bbox[0]
@@ -185,8 +184,7 @@ def get_point_dict(frame):
 
 
 def init_plfd_backbone():
-    # TODO: take path from configuration file, change it to the true relative path
-    checkpoint = torch.load("./checkpoint/snapshot/checkpoint.pth.tar", map_location=device)
+    checkpoint = torch.load(config.HEAD_POSE['snapshot_file'], map_location=device)
     plfd_backbone = PFLDInference().to(device)
     plfd_backbone.load_state_dict(checkpoint['plfd_backbone'])
     plfd_backbone.eval()
@@ -226,6 +224,5 @@ def get_video_writer():
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     size = (int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     # print("fps:", fps, "size:", size)
-    # TODO: get file path from configuration file
-    video_writer = cv2.VideoWriter("./video/result.avi", cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps, size)
+    video_writer = cv2.VideoWriter(config.HEAD_POSE['video_file'], cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps, size)
     return video_writer
