@@ -1,4 +1,3 @@
-import cv2
 import config
 from Measurements import abstractMeasurement as am
 from Services import loggerService
@@ -8,22 +7,22 @@ import torch
 import math
 from torchvision import transforms
 import cv2
-from dectect import AntiSpoofPredict
-
-from pfld.pfld import PFLDInference
+from Measurements.HeadPose.detect import AntiSpoofPredict
+from Measurements.HeadPose.pfld.pfld import PFLDInference
 
 warnings.filterwarnings('ignore')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-class HeadPose(am.AbstractMeasurements):
+class HeadPose(am.AbstractMeasurement):
 
     def __init__(self):
         """
         initialize the parent class.
         """
         am.AbstractMeasurements.__init__(self)
+        self.video_writer = get_video_writer()
 
     def run(self, frame, dict_results):
         """
@@ -47,38 +46,16 @@ class HeadPose(am.AbstractMeasurements):
             pitch = get_pitch(point51, crossover51)
             roll = get_roll(point_dict)
 
-            run_res = True
+            run_result[repr(self)] = True
             is_looking = {'yaw': True, 'pitch': True, 'roll': True}
             # TODO: change it to take boundaries from configuration file
             if yaw > 10 or yaw < -10:
-                run_res = is_looking['yaw'] = False
+                run_result[repr(self)] = is_looking['yaw'] = False
             if pitch > 20 or pitch < 4:
-                run_res = is_looking['pitch'] = False
+                run_result[repr(self)] = is_looking['pitch'] = False
 
             if config.DEBUG:
-                cv2.putText(frame, f"Yaw(degree): {yaw}", (30, 50), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
-                cv2.putText(frame, f"Pitch(degree): {pitch}", (30, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
-                            2)
-                cv2.putText(frame, f"Roll(degree): {roll}", (30, 150), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
-                            2)
-                cv2.putText(frame, f"look  {is_looking['yaw']}", (30, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                            (0, 255, 0), 2)
-                cv2.putText(frame, f"look  {is_looking['pitch']}", (30, 250), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                            (0, 255, 0), 2)
-                cv2.putText(frame, f"look  {is_looking['roll']}", (30, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                            (0, 255, 0), 2)
-
-                video_writer = get_video_writer()
-                video_writer.write(frame)
-
-            # if results.multi_face_landmarks:
-            #     # face has been detected
-            #     run_result[repr(self)] = True
-            #
-            #     # if config.DEBUG:
-            #     #     self.draw_annonations(image, results)
-
-
+                self.write_measures_to_video(frame, yaw, pitch, roll, is_looking)
 
             dict_results.update(run_result)
 
@@ -86,8 +63,26 @@ class HeadPose(am.AbstractMeasurements):
             # write error to log file
             loggerService.get_logger().error(str(e))
 
+    def write_measures_to_video(self, frame, yaw, pitch, roll, is_looking):
+
+        cv2.putText(frame, f"Yaw(degree): {yaw}", (30, 50), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
+        cv2.putText(frame, f"Pitch(degree): {pitch}", (30, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
+                    2)
+        cv2.putText(frame, f"Roll(degree): {roll}", (30, 150), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0),
+                    2)
+
+        cv2.putText(frame, f"look  {is_looking['yaw']}", (30, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                    (0, 255, 0), 2)
+        cv2.putText(frame, f"look  {is_looking['pitch']}", (30, 250), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                    (0, 255, 0), 2)
+        cv2.putText(frame, f"look  {is_looking['roll']}", (30, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                    (0, 255, 0), 2)
+
+        self.video_writer.write(frame)
+
     def __repr__(self):
         return 'HeadPose'
+
 
 def get_num(point_dict, name, axis):
     num = point_dict.get(f'{name}')[axis]
@@ -232,5 +227,3 @@ def get_video_writer():
     # TODO: get file path from configuration file
     video_writer = cv2.VideoWriter("./video/result.avi", cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps, size)
     return video_writer
-
-
