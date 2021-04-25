@@ -43,7 +43,7 @@ class ObjectDetection(am.AbstractMeasurement):
                 f'Failed to detect objects, due to: {str(e)}')
 
     def __repr__(self):
-        pass
+        return 'ObjectDetection'
 
     def run_debug(self, objects, confidence, box):
         pass
