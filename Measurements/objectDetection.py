@@ -46,7 +46,14 @@ class ObjectDetection(am.AbstractMeasurement):
         return 'ObjectDetection'
 
     def run_debug(self, objects, confidence, box):
-        pass
+        for obj, conf, b in zip(objects.flatten(), confidence.flatten(), box):
+            cv2.rectangle(self.frame, b, color=(0, 255, 0), thickness=2)
+            cv2.putText(self.frame, self.objects[obj - 1].upper(), (b[0] + 10, b[1] + 30),
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(self.frame, str(round(conf * 100, 2)), (b[0] + 200, b[1] + 30),
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+        cv2.imshow("Output", self.frame)
+        time.sleep(7)
 
     def init_model(self):
         try:
