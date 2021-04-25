@@ -8,7 +8,7 @@ class FlickerSystem:
     def __init__(self):
         pass
 
-    def run_flicker_system(self):
+    def __run_flicker_system(self):
         pass
 
 
