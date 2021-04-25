@@ -49,7 +49,17 @@ class ObjectDetection(am.AbstractMeasurement):
         pass
 
     def init_model(self):
-        pass
+        try:
+            self.model = cv2.dnn_DetectionModel(self.weights_path, self.config_path)
+            # TODO - check for the real input size
+            self.model.setInputSize(320, 320)
+            self.model.setInputScale(1.0 / 127.5)
+            self.model.setInputMean((127.5, 127.5, 127.5))
+            self.model.setInputSwapRB(True)
+        except ValueError as v:
+            ls.get_logger().error(str(v))
+        except Exception as e:
+            ls.get_logger().error(f'failed to open files, due to: {str(e)}')
 
 
 def for_tests_only():
