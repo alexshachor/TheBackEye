@@ -25,7 +25,22 @@ class ObjectDetection(am.AbstractMeasurement):
             ls.get_logger().error(f'failed to open files, due to: {str(e)}')
 
     def run(self, frame, dict_results):
-        pass
+        am.AbstractMeasurement.run(self, frame, dict_results)
+        result = {repr(self): False}
+        try:
+            objects, confidence, box = self.model.detect(frame, confThreshold=self.threshold)
+            # Check for prohibited objects.
+            for obj in objects.flatten():
+                if self.objects[obj - 1].upper() in self.prohibited_objects:
+                    dict_results.update(result)
+                    break
+            result[repr(self)] = True
+            dict_results.update(result)
+            if config.DEBUG:
+                self.run_debug(objects, confidence, box)
+        except Exception as e:
+            ls.get_logger().error(
+                f'Failed to detect objects, due to: {str(e)}')
 
     def __repr__(self):
         pass
