@@ -37,4 +37,4 @@ USER_DATA = {
     'USERNAME': '',
     'ID': ''
 }
-
+PROHIBITED_OBJECTS = ['CELL PHONE']

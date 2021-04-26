@@ -98,7 +98,7 @@ class OnTop(am.AbstractMeasurement):
             else:
                 w.CloseWindow(w.GetForegroundWindow())
                 w.SetForegroundWindow(hwnd)
-        except Exception as e:
+        except IOError as e:
             pass
             # TODO - check way logger make the program Exception and exit.
             # ls.get_logger().error(
