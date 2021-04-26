@@ -8,6 +8,10 @@ import cv2
 class ObjectDetection(am.AbstractMeasurement):
 
     def __init__(self):
+        """
+        initialize the parent class all paths & list of obj
+        & list of the prohibited objects from the list of obj.
+        """
         am.AbstractMeasurement.__init__(self)
         self.class_file = '../MeasurementsFilsAndModels/objects.names'
         self.config_path = '../MeasurementsFilsAndModels/objects_config.pbtxt'
@@ -25,6 +29,12 @@ class ObjectDetection(am.AbstractMeasurement):
             ls.get_logger().error(f'failed to open files, due to: {str(e)}')
 
     def run(self, frame, dict_results):
+        """
+        report if we detect prohibited obj. if yes
+        update the dict_results to false else true.
+        :param frame: frame to process
+        :param dict_results: a dictionary which the result will be put there
+        """
         am.AbstractMeasurement.run(self, frame, dict_results)
         result = {repr(self): False}
         try:
@@ -43,9 +53,20 @@ class ObjectDetection(am.AbstractMeasurement):
                 f'Failed to detect objects, due to: {str(e)}')
 
     def __repr__(self):
+        """
+        :return: the name of the measurement.
+        """
         return 'ObjectDetection'
 
     def run_debug(self, objects, confidence, box):
+        """
+        if we in debug mode open a pop up window and show the obj
+        the system detect with boxes painted over them.
+        :param objects: the list of obj the system detect
+        :param confidence: for each obj in what confidence the system have for
+        identify him correctly.
+        :param box: list of boxes
+        """
         for obj, conf, b in zip(objects.flatten(), confidence.flatten(), box):
             cv2.rectangle(self.frame, b, color=(0, 255, 0), thickness=2)
             cv2.putText(self.frame, self.objects[obj - 1].upper(), (b[0] + 10, b[1] + 30),
@@ -56,6 +77,9 @@ class ObjectDetection(am.AbstractMeasurement):
         time.sleep(7)
 
     def init_model(self):
+        """
+        this func will init model input size & scale
+        """
         try:
             self.model = cv2.dnn_DetectionModel(self.weights_path, self.config_path)
             # TODO - check for the real input size
@@ -70,6 +94,9 @@ class ObjectDetection(am.AbstractMeasurement):
 
 
 def for_tests_only():
+    """
+    A test func to this page only.
+    """
     x = ObjectDetection()
     image = cv2.imread('..\ImageProcessing\\SavedImages\\2.png')
     print(x.run(image))
