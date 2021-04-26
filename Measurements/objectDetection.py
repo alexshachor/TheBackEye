@@ -70,7 +70,9 @@ class ObjectDetection(am.AbstractMeasurement):
 
 
 def for_tests_only():
-    pass
+    x = ObjectDetection()
+    image = cv2.imread('..\ImageProcessing\\SavedImages\\2.png')
+    print(x.run(image))
 
 
 if __name__ == '__main__':
