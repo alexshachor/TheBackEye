@@ -22,7 +22,8 @@ class HeadPose(am.AbstractMeasurement):
         initialize the parent class.
         """
         am.AbstractMeasurements.__init__(self)
-        self.video_writer = get_video_writer()
+        self.video_writer = get_video_writer() if config.DEBUG else None
+
 
     def run(self, frame, dict_results):
         """
