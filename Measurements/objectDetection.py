@@ -13,9 +13,9 @@ class ObjectDetection(am.AbstractMeasurement):
         & list of the prohibited objects from the list of obj.
         """
         am.AbstractMeasurement.__init__(self)
-        self.class_file = '../MeasurementsFilsAndModels/objects.names'
-        self.config_path = '../MeasurementsFilsAndModels/objects_config.pbtxt'
-        self.weights_path = '../MeasurementsFilsAndModels/objects_weights.pb'
+        self.class_file = '../MeasurementsFilesAndModels/objects.names'
+        self.config_path = '../MeasurementsFilesAndModels/objects_config.pbtxt'
+        self.weights_path = '../MeasurementsFilesAndModels/objects_weights.pb'
         self.prohibited_objects = config.PROHIBITED_OBJECTS
         self.model = None
         # Threshold to detect object
@@ -68,13 +68,13 @@ class ObjectDetection(am.AbstractMeasurement):
         :param box: list of boxes
         """
         for obj, conf, b in zip(objects.flatten(), confidence.flatten(), box):
-            cv2.rectangle(self.frame, b, color=(0, 255, 0), thickness=2)
+            cv2.rectangle(self.frame, b, color=(0, 145, 145), thickness=1)
             cv2.putText(self.frame, self.objects[obj - 1].upper(), (b[0] + 10, b[1] + 30),
-                        cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-            cv2.putText(self.frame, str(round(conf * 100, 2)), (b[0] + 200, b[1] + 30),
-                        cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+            cv2.putText(self.frame, str(round(conf * 100, 2)), (b[0], b[1] + 70),
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow("Output", self.frame)
-        time.sleep(7)
+        cv2.waitKey(0)
 
     def init_model(self):
         """
@@ -98,8 +98,10 @@ def for_tests_only():
     A test func to this page only.
     """
     x = ObjectDetection()
-    image = cv2.imread('..\ImageProcessing\\SavedImages\\2.png')
-    print(x.run(image))
+    dict_res = {}
+    image = cv2.imread('..\ImageProcessing\\SavedImages\\3.jpg')
+    x.run(image, dict_res)
+    print(dict_res[x.__repr__()])
 
 
 if __name__ == '__main__':
