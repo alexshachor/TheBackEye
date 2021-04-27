@@ -1,6 +1,5 @@
-import time
 from Measurements import faceDetector as fd
-from Measurements import headPose as hp
+from Measurements.HeadPose import headPose as hp
 from Measurements import sleepDetector as sd
 from Services import httpService as hs
 from Core import runMeasurements as rm
