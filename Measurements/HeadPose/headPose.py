@@ -21,7 +21,7 @@ class HeadPose(am.AbstractMeasurement):
         """
         initialize the parent class.
         """
-        am.AbstractMeasurements.__init__(self)
+        am.AbstractMeasurement.__init__(self)
         self.video_writer = get_video_writer() if config.DEBUG else None
 
     def run(self, frame, dict_results):
@@ -295,3 +295,21 @@ def get_video_writer():
     video_writer = cv2.VideoWriter(config.HEAD_POSE['video_file'], cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), fps,
                                    size)
     return video_writer
+
+
+def test_run_func():
+    """
+    test the run function by capturing a frame after frame and process it.
+    :return: void
+    """
+    dict_results = {}
+    video_capture = cv2.VideoCapture(config.CAM_SRC)
+    success, frame = video_capture.read()
+    while success:
+        HeadPose().run(frame, dict_results)
+        print(dict_results)
+        success, frame = video_capture.read()
+
+
+if __name__ == "__main__":
+    test_run_func()
