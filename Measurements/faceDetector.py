@@ -41,7 +41,7 @@ class FaceDetector(am.AbstractMeasurement):
                 run_result[repr(self)] = True
                 # show face net on image
                 if config.DEBUG:
-                    self.draw_annonations(image, results)
+                    self.draw_annotations(image, results)
             dict_results.update(run_result)
         except Exception as e:
             self.face_mesh.close()
@@ -69,3 +69,21 @@ class FaceDetector(am.AbstractMeasurement):
                 landmark_drawing_spec=self.drawing_spec,
                 connection_drawing_spec=self.drawing_spec)
             cv2.imshow('MediaPipe FaceMesh', image)
+
+
+def test_face_detector_measure():
+    """
+    test the run function by capturing a frame after frame and process it.
+    :return: void
+    """
+    dict_results = {}
+    video_capture = cv2.VideoCapture(config.CAM_SRC)
+    success, frame = video_capture.read()
+    while success:
+        FaceDetector().run(frame, dict_results)
+        print(dict_results)
+        success, frame = video_capture.read()
+
+
+if __name__ == "__main__":
+    test_face_detector_measure()
