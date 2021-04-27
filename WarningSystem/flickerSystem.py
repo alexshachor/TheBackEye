@@ -6,7 +6,8 @@ import screen_brightness_control as sbc
 class FlickerSystem:
 
     def __init__(self):
-        pass
+        self.interval = 0.10
+        self.__run_flicker_system()
 
     def __run_flicker_system(self):
         pass

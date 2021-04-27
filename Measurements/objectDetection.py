@@ -82,10 +82,9 @@ class ObjectDetection(am.AbstractMeasurement):
         """
         try:
             self.model = cv2.dnn_DetectionModel(self.weights_path, self.config_path)
-            # TODO - check for the real input size
             self.model.setInputSize(320, 320)
-            self.model.setInputScale(1.0 / 127.5)
-            self.model.setInputMean((127.5, 127.5, 127.5))
+            self.model.setInputScale(1.0 / 100.5)
+            self.model.setInputMean((100.5, 100.5, 100.5))
             self.model.setInputSwapRB(True)
         except ValueError as v:
             ls.get_logger().error(str(v))
