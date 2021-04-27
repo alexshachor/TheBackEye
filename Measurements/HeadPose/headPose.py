@@ -297,7 +297,7 @@ def get_video_writer():
     return video_writer
 
 
-def test_run_func():
+def test_head_pose_measure():
     """
     test the run function by capturing a frame after frame and process it.
     :return: void
@@ -312,4 +312,4 @@ def test_run_func():
 
 
 if __name__ == "__main__":
-    test_run_func()
+    test_head_pose_measure()
