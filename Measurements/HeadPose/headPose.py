@@ -24,7 +24,6 @@ class HeadPose(am.AbstractMeasurement):
         am.AbstractMeasurements.__init__(self)
         self.video_writer = get_video_writer() if config.DEBUG else None
 
-
     def run(self, frame, dict_results):
         """
         run the head pose algorithm on the given frame
@@ -67,6 +66,16 @@ class HeadPose(am.AbstractMeasurement):
             loggerService.get_logger().error(str(e))
 
     def write_measures_to_video(self, frame, yaw, pitch, roll, is_looking):
+        """
+        write all the measures (yaw, pitch, roll) to an output video
+        :param frame: frame to write the result to
+        :param yaw: the yaw (left and right movements) measure in degrees.
+        :param pitch: the pitch (up and down movements) measure in degrees.
+        :param roll: the roll (tilt the head diagonally left and right) measure in degrees.
+        :param is_looking: a dictionary which hold for each measure
+        the decision whether the person is looking toward the screen or not.
+        :return: void
+        """
 
         x, y, font_face, color, thickness = 30, 50, 1, (0, 255, 0), 2
         distance = 50
@@ -91,12 +100,25 @@ class HeadPose(am.AbstractMeasurement):
 
 
 def get_num(point_dict, name, axis):
+    """
+    get the number from the points dictionary according to the given params
+    :param point_dict: dictionary of points in the space
+    :param name: number of point
+    :param axis: what axis (x = 0 or y = 1)
+    :return: the number
+    """
     num = point_dict.get(f'{name}')[axis]
     num = float(num)
     return num
 
 
 def get_intersection(point, line):
+    """
+    get the intersection point of a point and a line.
+    :param point: a point (x,y).
+    :param line: two edge points in array representing a line.
+    :return: the intersection point.
+    """
     x1 = line[0]
     y1 = line[1]
     x2 = line[2]
@@ -115,6 +137,12 @@ def get_intersection(point, line):
 
 
 def get_distance(point_1, point_2):
+    """
+    get the euclidean distance between two given points.
+    :param point_1: point in space.
+    :param point_2: point in space.
+    :return: the euclidean distance between the two.
+    """
     x1 = point_1[0]
     y1 = point_1[1]
     x2 = point_2[0]
@@ -124,6 +152,11 @@ def get_distance(point_1, point_2):
 
 
 def get_frame_cropped(frame):
+    """
+    get a cropped frame of a given frame.
+    :param frame: frame to crop.
+    :return: the cropped frame.
+    """
     height, width = frame.shape[:2]
     model_test = AntiSpoofPredict(config.CAM_SRC)
     image_bbox = model_test.get_bbox(frame)
@@ -161,6 +194,11 @@ def get_frame_cropped(frame):
 
 
 def get_point_dict(frame):
+    """
+    get the head's points based on the frame and put in a dictionary.
+    :param frame: frame to detect the point of the head.
+    :return: dictionary of head's points in the space.
+    """
     # get cropped
     cropped = get_frame_cropped(frame)
     cropped = cv2.resize(cropped, (112, 112))
@@ -177,6 +215,7 @@ def get_point_dict(frame):
     pre_landmark = landmarks[0]
     pre_landmark = pre_landmark.cpu().detach().numpy().reshape(-1, 2) * [112, 112]
 
+    # build the points dictionary
     point_dict = {}
     i = 0
     for (x, y) in pre_landmark.astype(np.float32):
@@ -187,6 +226,10 @@ def get_point_dict(frame):
 
 
 def init_plfd_backbone():
+    """
+    initialize plfd_backbone object with data from checkpoint.
+    :return: the plfd_backbone object.
+    """
     checkpoint = torch.load(config.HEAD_POSE['snapshot_file'], map_location=device)
     plfd_backbone = PFLDInference().to(device)
     plfd_backbone.load_state_dict(checkpoint['plfd_backbone'])
@@ -196,6 +239,13 @@ def init_plfd_backbone():
 
 
 def get_yaw(point1, point31, crossover51):
+    """
+    get the yaw measure (left and right) based on the given head's points.
+    :param point1: one side of the face.
+    :param point31: the other side of the face.
+    :param crossover51: the lne cross between the two.
+    :return: the yaw measure in degrees
+    """
     yaw_mean = get_distance(point1, point31) / 2
     yaw_right = get_distance(point1, crossover51)
     yaw = (yaw_mean - yaw_right) / yaw_mean
@@ -204,6 +254,12 @@ def get_yaw(point1, point31, crossover51):
 
 
 def get_pitch(point51, crossover51):
+    """
+        get the pitch measure (up and down) based on the given head's points.
+        :param point51: one side of the face.
+        :param crossover51: the lne cross between the two.
+        :return: the pitch measure in degrees
+        """
     pitch_dis = get_distance(point51, crossover51)
     if point51[1] < crossover51[1]:
         pitch_dis = -pitch_dis
@@ -212,6 +268,11 @@ def get_pitch(point51, crossover51):
 
 
 def get_roll(point_dict):
+    """
+     get the roll (tilt the head diagonally left and right) measure in degrees.
+    :param point_dict: the head's points dictionary.
+    :return: the roll measure in degrees.
+    """
     roll_tan = abs(get_num(point_dict, 60, 1) - get_num(point_dict, 72, 1)) / abs(
         get_num(point_dict, 60, 0) - get_num(point_dict, 72, 0))
     roll = math.atan(roll_tan)
@@ -223,6 +284,10 @@ def get_roll(point_dict):
 
 
 def get_video_writer():
+    """
+    get a video writer in order to write a video
+    :return: a video writer.
+    """
     video_capture = cv2.VideoCapture(config.CAM_SRC)
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     size = (int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
