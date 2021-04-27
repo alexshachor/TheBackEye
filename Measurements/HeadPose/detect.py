@@ -7,12 +7,20 @@ import torch.nn.functional as F
 
 class Detection:
     def __init__(self):
+        """
+        init the class with caffe model and decide the amount of confidence.
+        """
         caffemodel = "./checkpoint/Widerface-RetinaFace.caffemodel"
         deploy = "./checkpoint/deploy.prototxt"
         self.detector = cv2.dnn.readNetFromCaffe(deploy, caffemodel)
         self.detector_confidence = 0.7
 
     def get_bbox(self, img):
+        """
+        get a bbox representing the corners of the image after normalization
+        :param img: image to get its corners.
+        :return: an array of corners values.
+        """
         height, width = img.shape[0], img.shape[1]
         aspect_ratio = width / height
         if img.shape[1] * img.shape[0] >= 192 * 192:
@@ -30,6 +38,10 @@ class Detection:
 
 class AntiSpoofPredict(Detection):
     def __init__(self, device_id):
+        """
+        init the class and set calculation device to be cuda if cuda is available and cpu if not.
+        :param device_id: the device id.
+        """
         super(AntiSpoofPredict, self).__init__()
         self.device = torch.device("cuda:{}".format(device_id) if torch.cuda.is_available() else "cpu")
 
