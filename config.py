@@ -46,3 +46,4 @@ HEAD_POSE = {
         'roll': (-30, 50)
     }
 }
+PROHIBITED_OBJECTS = ['CELL PHONE']
