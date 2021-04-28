@@ -1,6 +1,9 @@
 import pyttsx3
 import config
 
+FEMALE = 0
+GENERAL_WARNING = 2
+
 
 class VoiceSystem:
 
@@ -27,9 +30,14 @@ class VoiceSystem:
             'FACERECOGNITION': 'Our system suspects that you are not the person in front of the screen.',
             'MANY_FAILURES': 'Our system updates that you are completely out of learning mode.'
         }
+        return indices_msgs
 
     def __init_msg(self):
-        pass
+        if len(self.indices_list) > GENERAL_WARNING:
+            self.msg = self.indices_msgs['MANY_FAILURES']
+            return
+        for i in self.indices_list:
+            self.msg += self.indices_msgs[i] + ' '
 
     def __run_voice_system(self):
         pass
