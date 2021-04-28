@@ -33,7 +33,7 @@ class SuperResolution:
             cv2.imshow("Original", self.image)
             cv2.imshow("Bicubic", bicubic)
             cv2.imwrite('.\SavedImages\\bicubic.jpg', bicubic)
-            time.sleep(5)
+            cv2.waitKey(0)
         return bicubic
 
     def to_super_resolution(self):
@@ -53,7 +53,7 @@ class SuperResolution:
             cv2.imshow("Original", self.image)
             cv2.imshow("Super Resolution", scaled_image)
             cv2.imwrite('.\SavedImages\\superRes.jpg', scaled_image)
-            time.sleep(5)
+            cv2.waitKey(0)
         return scaled_image
 
     def init_model(self):
