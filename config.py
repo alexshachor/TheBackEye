@@ -64,3 +64,10 @@ we probably should receive this objects from the teacher.
 use: in class ObjectDetector
 """
 PROHIBITED_OBJECTS = ['CELL PHONE']
+
+"""
+teacher msgs for the student if the student fail in the
+measurements.
+use: in voice system
+"""
+TEACHER_MSGS = None
