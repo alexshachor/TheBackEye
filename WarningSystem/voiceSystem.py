@@ -63,7 +63,9 @@ class VoiceSystem:
         print(voice)
 
     def __set_voice(self):
-        pass
+        self.engine.setProperty('rate', 180)
+        self.engine.setProperty('volume', 1)
+        self.engine.setProperty('voice', self.engine.getProperty('voices')[not FEMALE].id)
 
 
 def for_tests_only():
