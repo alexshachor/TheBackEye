@@ -5,7 +5,16 @@ import config
 class VoiceSystem:
 
     def __init__(self, indices_list):
-        pass
+        self.indices_list = indices_list
+        self.indices_msgs = self.__init_indices_msgs()
+        self.msg = ''
+        self.general_msg = ' Please return to learning mode!.'
+        # Object voice creation.
+        self.engine = pyttsx3.init()
+        self.__init_msg()
+        self.__set_vice()
+        self.__debug_voice() if config.DEBUG else None
+        self.__run_voice_system()
 
     @staticmethod
     def __init_indices_msgs():
