@@ -69,7 +69,10 @@ class VoiceSystem:
 
 
 def for_tests_only():
-    pass
+    indices_list = ['FACEDETECTOR', 'OBJECTDETECTOR', 'SLEEPDETECTOR']
+    VoiceSystem(indices_list)
+    indices_list = ['FACERECOGNITION', 'OBJECTDETECTOR']
+    VoiceSystem(indices_list)
 
 
 if __name__ == '__main__':
