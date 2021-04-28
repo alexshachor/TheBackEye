@@ -8,7 +8,7 @@ URLS = {
     'post_measures': 'http://bla/bla',
     'post_stacked_measures': 'http://test',
     'lesson_configuration': 'http://Configuration/blabla',
-    'post_logs':'http://logs/bla'
+    'post_logs': 'http://logs/bla'
 }
 
 LOG_FILES = {
@@ -56,6 +56,15 @@ use: loginPage & probably in the warning system
 USER_DATA = {
     'USERNAME': '',
     'ID': ''
+}
+HEAD_POSE = {
+    'video_file': './video/result.avi',
+    'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar',
+    'range': {
+        'yaw': (-10, 10),
+        'pitch': (4, 20),
+        'roll': (-30, 50)
+    }
 }
 
 """

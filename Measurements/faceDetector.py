@@ -8,13 +8,13 @@ mp_drawing = mp.solutions.drawing_utils
 mp_face_mesh = mp.solutions.face_mesh
 
 
-class FaceDetector(am.AbstractMeasurements):
+class FaceDetector(am.AbstractMeasurement):
 
     def __init__(self):
         """
         initialize the parent class and the face_mesh model.
         """
-        am.AbstractMeasurements.__init__(self)
+        am.AbstractMeasurement.__init__(self)
         self.face_mesh = mp_face_mesh.FaceMesh(
             min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
@@ -41,7 +41,7 @@ class FaceDetector(am.AbstractMeasurements):
                 run_result[repr(self)] = True
                 # show face net on image
                 if config.DEBUG:
-                    self.draw_annonations(image, results)
+                    self.draw_annotations(image, results)
             dict_results.update(run_result)
         except Exception as e:
             self.face_mesh.close()
@@ -49,7 +49,7 @@ class FaceDetector(am.AbstractMeasurements):
             loggerService.get_logger().error(str(e))
 
     def __repr__(self):
-        return 'Face Detector'
+        return 'FaceDetector'
 
     def draw_annotations(self, image, results):
         """
@@ -69,3 +69,21 @@ class FaceDetector(am.AbstractMeasurements):
                 landmark_drawing_spec=self.drawing_spec,
                 connection_drawing_spec=self.drawing_spec)
             cv2.imshow('MediaPipe FaceMesh', image)
+
+
+def test_face_detector_measure():
+    """
+    test the run function by capturing a frame after frame and process it.
+    :return: void
+    """
+    dict_results = {}
+    video_capture = cv2.VideoCapture(config.CAM_SRC)
+    success, frame = video_capture.read()
+    while success:
+        FaceDetector().run(frame, dict_results)
+        print(dict_results)
+        success, frame = video_capture.read()
+
+
+if __name__ == "__main__":
+    test_face_detector_measure()
