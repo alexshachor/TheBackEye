@@ -6,10 +6,16 @@ import screen_brightness_control as sbc
 class FlickerSystem:
 
     def __init__(self):
+        """
+        init time interval & run the system
+        """
         self.interval = 0.10
         self.__run_flicker_system()
 
     def __run_flicker_system(self):
+        """
+        run the system for about ten seconds
+        """
         start = time.time()
         while self.interval > 0:
             # Fade the brightness from 100% to 0% with time intervals of 0.01 seconds.
@@ -24,6 +30,9 @@ class FlickerSystem:
 
 
 def for_tests_only():
+    """
+    A test func to this page only.
+    """
     FlickerSystem()
 
 
