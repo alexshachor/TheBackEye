@@ -49,7 +49,18 @@ class VoiceSystem:
         self.engine.stop()
 
     def __debug_voice(self):
-        pass
+        # RATE: getting details of current speaking rate.
+        rate = self.engine.getProperty('rate')
+        # Printing current voice rate.
+        print(rate)
+        # VOLUME: getting details of the current volume level (maximum=1, minimum=0).
+        volume = self.engine.getProperty('volume')
+        # Printing the current volume level.
+        print(volume)
+        # VOICE: getting details of the current voice (male=1, female=0).
+        voice = self.engine.getProperty('voice')
+        # Printing the current voice.
+        print(voice)
 
     def __set_voice(self):
         pass
