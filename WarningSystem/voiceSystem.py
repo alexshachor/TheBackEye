@@ -15,7 +15,7 @@ class VoiceSystem:
         # Object voice creation.
         self.engine = pyttsx3.init()
         self.__init_msg()
-        self.__set_vice()
+        self.__set_voice()
         self.__debug_voice() if config.DEBUG else None
         self.__run_voice_system()
 
@@ -40,12 +40,18 @@ class VoiceSystem:
             self.msg += self.indices_msgs[i] + ' '
 
     def __run_voice_system(self):
-        pass
+        self.engine.say(self.msg)
+        self.engine.say(self.general_msg)
+        self.engine.runAndWait()
+        if config.DEBUG:
+            self.engine.save_to_file(self.msg + self.general_msg, '.\\Mp3Files\\test.mp3')
+            self.engine.runAndWait()
+        self.engine.stop()
 
     def __debug_voice(self):
         pass
 
-    def __set_vice(self):
+    def __set_voice(self):
         pass
 
 
