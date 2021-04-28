@@ -24,7 +24,7 @@ class FlickerSystem:
 
 
 def for_tests_only():
-    pass
+    FlickerSystem()
 
 
 if __name__ == '__main__':
