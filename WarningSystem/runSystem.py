@@ -37,7 +37,9 @@ class RunSystem:
             process.close()
 
     def __init_failed_indices(self):
-        pass
+        for key, val in self.indices_dict.items():
+            if not val:
+                self.failed_in.append(key.upper())
 
 
 def for_tests_only():
