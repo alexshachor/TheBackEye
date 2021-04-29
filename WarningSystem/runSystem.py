@@ -18,7 +18,23 @@ class RunSystem:
         self.__run_warning_system()
 
     def __run_warning_system(self):
-        pass
+        # assign all processes and start each one of them
+        if not self.failed_in:
+            return
+        processes = []
+
+        for key, process in self.dict_process.items():
+            if key == 'email':
+                if 'ObjectDetector'.upper() in self.failed_in:
+                    process.start()
+                    processes.append(process)
+            else:
+                process.start()
+                processes.append(process)
+
+        for process in processes:
+            process.join()
+            process.close()
 
     def __init_failed_indices(self):
         pass
