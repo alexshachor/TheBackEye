@@ -43,7 +43,11 @@ class RunSystem:
 
 
 def for_tests_only():
-    pass
+    indices_dict = {
+        'FaceDetector': True, 'ObjectDetector': False, 'SleepDetector': True,
+        'OnTop': False, 'HeadPose': True
+    }
+    RunSystem(indices_dict)
 
 
 if __name__ == '__main__':
