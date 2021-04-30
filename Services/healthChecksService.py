@@ -6,7 +6,7 @@ import config
 from Services import httpService, loggerService
 
 
-def is_program_installed(program):
+def get_program_status(program):
     def is_exe(file_path):
         return os.path.isfile(file_path) and os.access(file_path, os.X_OK)
 
@@ -62,10 +62,21 @@ def check_camera_source():
 
 
 def check_if_program_installed(program_name):
-    result = is_program_installed(config.PREREQUISITE_PROGRAMS[program_name])
+    result = get_program_status(config.PREREQUISITE_PROGRAMS[program_name])
     loggerService.get_logger().info(f'is {program_name} installed = {result}')
     return {f'is_{program_name}_installed': result}
 
 
 def run_health_checks():
     health_checks = []
+    results = []
+
+    # iterate over prerequisite programs and check if each one of them is installed
+    for key,value in config.PREREQUISITE_PROGRAMS.items():
+        results.append(check_if_program_installed(key))
+
+    # iterate over the health checks, call it and append its result to results array
+    for health_check in health_checks:
+        results.append(health_check())
+
+    return results
