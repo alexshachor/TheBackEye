@@ -80,3 +80,14 @@ measurements.
 use: in voice system
 """
 TEACHER_MSGS = None
+
+"""
+email address & password that the system use to connect with the student
+end send to him message.
+use: in email system & email warning.
+"""
+EMAIL = {
+    'EMAIL': "TheBackEyeApp@gmail.com",
+    'PASSWORD': "thebackeye12345",
+    'USER_EMAIL': "rshalom8@gmail.com"
+}
