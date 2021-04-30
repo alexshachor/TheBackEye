@@ -7,6 +7,11 @@ from WarningSystem import emailWarning as ew
 class RunSystem:
 
     def __init__(self, indices_dict):
+        """
+        initialize the indices & the processes that are related
+        to the warning system.
+        :param indices_dict: dictionary of indices
+        """
         self.indices_dict = indices_dict
         self.failed_in = []
         self.dict_process = {
@@ -18,6 +23,9 @@ class RunSystem:
         self.__run_warning_system()
 
     def __run_warning_system(self):
+        """
+        run the warning system in parallel.
+        """
         # assign all processes and start each one of them
         if not self.failed_in:
             return
@@ -37,12 +45,18 @@ class RunSystem:
             process.close()
 
     def __init_failed_indices(self):
+        """
+        initialize the indices that the student failed in.
+        """
         for key, val in self.indices_dict.items():
             if not val:
                 self.failed_in.append(key.upper())
 
 
 def for_tests_only():
+    """
+    this function is used only for tests.
+    """
     indices_dict = {
         'FaceDetector': True, 'ObjectDetector': False, 'SleepDetector': True,
         'OnTop': False, 'HeadPose': True
