@@ -15,19 +15,25 @@ def check_is_alive():
 
 
 def check_camera_source():
+    """
+    check if able to read from camera by the configured CAM_SRC, if was not able to read,
+    try a range of numbers [0-10] and configure the new source if was success.
+    :return: pair of test kind and True or False if the test was success or failure.
+    """
     success_msg = 'read from camera source was success. source value = {cam_src}'
     failure_msg = 'read from camera source failed. source value = {cam_src}'
     res_key = 'camera_source'
 
-    capture_device = cv2.VideoCapture(config.CAM_SRC)
-    ret, frame = capture_device.read()
+    # at first, try to read camera by CAM_SRC value
+    ret, frame = cv2.VideoCapture(config.CAM_SRC).read()
     if ret:
         loggerService.get_logger().info(success_msg.format(cam_src=config.CAM_SRC))
         return {res_key: True}
-
+    # try each one of the values in range [0-10] until reading success
     for i in range(0, 11):
         ret, frame = cv2.VideoCapture(i).read()
         if ret:
+            # set CAM_SRC to be i from now on
             config.CAM_SRC = i
             loggerService.get_logger().info(success_msg.format(cam_src=i))
             return {res_key: True}
