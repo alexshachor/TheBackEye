@@ -89,3 +89,28 @@ def post_image_data(url, data, image_file):
         loggerService.get_logger().error(
             f'post call to url: {url}, data: {data} has failed with status: {response.status_code}, due to: {str(e)}')
         return False
+
+
+def head(url):
+    """
+    check if server is alive using HEAD call to the given url
+    :param url: head call to the given url
+    :return: True if server respond and False otherwise.
+    """
+    try:
+        if not url:
+            raise ValueError(f'cannot make head call, url is missing')
+        response = requests.head(url)
+        response.raise_for_status()
+        return True
+    except ValueError as e:
+        loggerService.get_logger().error(str(e))
+        return False
+    except requests.exceptions.RequestException:
+        loggerService.get_logger().error(str(response.text))
+        return False
+    except Exception as e:
+        loggerService.get_logger().error(
+            f'head call to url: {url} has failed with status: {response.status_code}, due to: {str(e)}')
+        return False
+
