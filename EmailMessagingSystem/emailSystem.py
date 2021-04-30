@@ -7,12 +7,22 @@ from Services import loggerService as ls
 class EmailSystem:
 
     def __init__(self):
+        """
+        init the email & password & port of the sender
+        """
         self.sender = config.EMAIL['EMAIL']
         self.password = config.EMAIL['PASSWORD']
         self.port = 465
         self.success = False
 
     def send_email(self, msg, recipient_email):
+        """
+        send the email to the asked recipient.
+        :param: msg: the msg to the recipient
+        :param: recipient_email: the email address of the recipient
+        :return: self.success: bool param to update if we succeed
+        to send the email
+        """
         context = ssl.create_default_context()
         print("Starting to send") if config.DEBUG else None
         try:
@@ -29,6 +39,9 @@ class EmailSystem:
 
 
 def for_tests_only():
+    """
+    A test func to this page only.
+    """
     x = EmailSystem()
     message = """\
     Subject: Python Email Test\n
