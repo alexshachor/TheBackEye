@@ -8,7 +8,8 @@ URLS = {
     'post_measures': 'http://bla/bla',
     'post_stacked_measures': 'http://test',
     'lesson_configuration': 'http://Configuration/blabla',
-    'post_logs': 'http://logs/bla'
+    'post_logs': 'http://logs/bla',
+    'is_alive':'http://isAlive'
 }
 
 LOG_FILES = {
