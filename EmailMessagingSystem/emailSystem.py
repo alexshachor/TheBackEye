@@ -29,7 +29,15 @@ class EmailSystem:
 
 
 def for_tests_only():
-    pass
+    x = EmailSystem()
+    message = """\
+    Subject: Python Email Test\n
+
+    hi how are you.\n
+
+    From Tests
+    """
+    x.send_email(message, "rshalom8@gmail.com")
 
 
 if __name__ == '__main__':
