@@ -43,7 +43,7 @@ class RunMeasurements:
             while True:
                 ret, frame = capture_device.read()
                 if not ret:
-                    loggerService.get_logger().error(f'cannot read from camera source')
+                    loggerService.get_logger().fatal(f'cannot read from camera source. source value = {config.CAM_SRC}')
                     continue
                 result = self.run_measurement_processes(frame)
                 measurements_service.post_measurements(MeasurementsResult(result))
