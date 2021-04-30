@@ -1,4 +1,7 @@
+import smtplib
+import ssl
 import config
+from Services import loggerService as ls
 
 
 class EmailSystem:
@@ -10,7 +13,19 @@ class EmailSystem:
         self.success = False
 
     def send_email(self, msg, recipient_email):
-        pass
+        context = ssl.create_default_context()
+        print("Starting to send") if config.DEBUG else None
+        try:
+            with smtplib.SMTP_SSL("smtp.gmail.com", self.port, context=context) as server:
+                server.login(self.sender, self.password)
+                server.sendmail(self.sender, recipient_email, msg)
+                self.success = True
+        except ValueError as v:
+            ls.get_logger().error(str(v))
+        except Exception as e:
+            ls.get_logger().error(f'failed to send the email, due to: {str(e)}')
+        print("sent email!") if config.DEBUG else None
+        return self.success
 
 
 def for_tests_only():
