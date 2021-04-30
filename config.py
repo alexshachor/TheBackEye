@@ -81,3 +81,13 @@ measurements.
 use: in voice system
 """
 TEACHER_MSGS = None
+
+"""
+enlist the prerequisite programs that must be installed
+before running the application.
+use: in healthChecksService.
+"""
+PREREQUISITE_PROGRAMS = {
+    'zoom':'zoom.exe',
+    'manycam':'manycam.exe'
+}

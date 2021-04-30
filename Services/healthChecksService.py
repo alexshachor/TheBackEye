@@ -1,3 +1,5 @@
+import os
+
 import cv2
 
 import config
@@ -40,6 +42,35 @@ def check_camera_source():
 
     loggerService.get_logger().fatal(failure_msg.format(cam_src=config.CAM_SRC))
     return {res_key: False}
+
+def is_program_installed(program):
+    def is_exe(file_path):
+        return os.path.isfile(file_path) and os.access(file_path, os.X_OK)
+
+    file_path, file_name = os.path.split(program)
+    if file_path:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+
+
+def check_if_zoom_installed():
+    result = is_program_installed(config.PREREQUISITE_PROGRAMS['zoom'])
+    loggerService.get_logger().info(f'is zoom installed = {result}')
+    return {'is_zoom_installed': result}
+
+def check_if_manycam_installed():
+    result = is_program_installed(config.PREREQUISITE_PROGRAMS['manycam'])
+    loggerService.get_logger().info(f'is manycam installed = {result}')
+    return {'is_manycam_installed': result}
+
 
 
 def run_health_checks():
