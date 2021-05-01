@@ -89,7 +89,20 @@ class ValidationPage(tk.Frame):
             controller.manage_frame(up.UploadPicPage)
 
     def send_validation_code(self):
-        pass
+        is_sent = self.validation_controller.send_validation_email(self.email)
+        self.pb.destroy()
+        if is_sent:
+            self.email_l.place_forget()
+            self.entry.delete(0, 'end')
+            self.code_l.place(bordermode=OUTSIDE, x=110, y=210)
+            self.email_b.place_forget()
+            self.check_b.place(bordermode=OUTSIDE, x=118, y=300)
+            self.count_flg = 0
+            self.clean_entries()
+            self.bg.configure(image=self.img)
+            self.bg.image = self.img
+        else:
+            self.invalid_email = ovb.create_msg(self, 260, 275, 'Please try anther email.')
 
     def clean_entries(self):
         pass
