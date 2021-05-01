@@ -41,28 +41,32 @@ def check_camera_source():
     failure_msg = 'read from camera source failed. source value = {cam_src}'
     res_key = 'camera_source'
 
+    result = True
+
     # at first, try to read camera by CAM_SRC value
     capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
     ret, frame = capture_device.read()
-    if ret:
-        capture_device.release()
-        cv2.destroyAllWindows()
-        loggerService.get_logger().info(success_msg.format(cam_src=config.CAM_SRC))
-        return {res_key: True}
-    # try each one of the values in range [0-10] until reading success
-    for i in range(0, 11):
-        capture_device = cv2.VideoCapture(i)
-        ret, frame = capture_device.read()
-        if ret:
-            capture_device.release()
-            cv2.destroyAllWindows()
-            # set CAM_SRC to be i from now on
-            config.CAM_SRC = i
-            loggerService.get_logger().info(success_msg.format(cam_src=i))
-            return {res_key: True}
 
-    loggerService.get_logger().fatal(failure_msg.format(cam_src=config.CAM_SRC))
-    return {res_key: False}
+    if not ret:
+        # try each one of the values in range [0-10] until reading success
+        for i in range(0, 11):
+            capture_device = cv2.VideoCapture(i, cv2.CAP_DSHOW)
+            ret, frame = capture_device.read()
+            if ret:
+                # set CAM_SRC to be i from now on
+                config.CAM_SRC = i
+                break
+        else:
+            result = False
+            loggerService.get_logger().fatal(failure_msg.format(cam_src=config.CAM_SRC))
+
+    capture_device.release()
+    cv2.destroyAllWindows()
+
+    if result:
+        loggerService.get_logger().info(success_msg.format(cam_src=config.CAM_SRC))
+
+    return {res_key: result}
 
 
 def check_if_program_installed(program_name):
