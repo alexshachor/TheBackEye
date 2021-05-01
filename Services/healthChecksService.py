@@ -1,5 +1,5 @@
 import os
-
+import psutil
 import cv2
 
 import config
@@ -72,6 +72,17 @@ def check_if_program_installed(program_name):
     return {f'is_{program_name}_installed': result}
 
 
+def check_if_process_is_running(process_name):
+    """
+    check if a given process is currently running.
+    :param process_name: the name of the process.
+    :return: True if the process is running and False otherwise.
+    """
+    result = process_name in (p.name() for p in psutil.process_iter())
+    loggerService.get_logger().info(f'is {process_name} running = {result}')
+    return {f'is_{process_name}_running': result}
+
+
 def run_health_checks():
     """
     run all the health checks needed for the application to run
@@ -81,9 +92,13 @@ def run_health_checks():
     health_checks = []
     results = []
 
-    # iterate over prerequisite programs and check if each one of them is installed
-    for key,value in config.PREREQUISITE_PROGRAMS.items():
+    # iterate over prerequisite installations and check if each one of them is installed
+    for key, value in config.PREREQUISITE_INSTALLATIONS.items():
         results.append(check_if_program_installed(key))
+
+    # iterate over prerequisite processes and check if each one of them is currently running
+    for key, value in config.PREREQUISITE_PROCESSES.items():
+        results.append(check_if_process_is_running(key))
 
     # iterate over the health checks, call it and append its result to results array
     for health_check in health_checks:
