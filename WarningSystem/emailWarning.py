@@ -17,7 +17,7 @@ class EmailWarning:
         self.__send_msg()
 
     def __send_msg(self):
-        pass
+        es.EmailSystem().send_email(self.__msg, self.__user_email)
 
 
 def for_tests_only():
