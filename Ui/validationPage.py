@@ -72,7 +72,21 @@ class ValidationPage(tk.Frame):
             x.start()
 
     def check_button(self, controller):
-        pass
+        check_code = self.validation_controller.check_code(self.entry.get())
+        if check_code != 'OK':
+            self.invalid_email = ovb.create_msg(self, 260, 275, check_code)
+            self.count_flg += 1
+            if self.count_flg >= 3:
+                self.code_l.place_forget()
+                self.entry.delete(0, 'end')
+                self.email_l.place(bordermode=OUTSIDE, x=110, y=210)
+                self.check_b.place_forget()
+                self.email_b.place(bordermode=OUTSIDE, x=118, y=300)
+                self.clean_entries()
+                self.invalid_email = ovb.create_msg(self, 260, 275, 'To many attempts\nEnter email again.')
+        else:
+            self.validation_controller.send_email_to_server(self.email)
+            controller.manage_frame(up.UploadPicPage)
 
     def send_validation_code(self):
         pass
