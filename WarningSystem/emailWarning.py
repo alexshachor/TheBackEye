@@ -21,7 +21,7 @@ class EmailWarning:
 
 
 def for_tests_only():
-    pass
+    EmailWarning()
 
 
 if __name__ == '__main__':
