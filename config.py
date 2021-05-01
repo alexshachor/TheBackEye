@@ -107,8 +107,8 @@ before running the application.
 use: in healthChecksService.
 """
 PREREQUISITE_INSTALLATIONS = {
-    'zoom': 'zoom.exe',
-    'manycam': 'manycam.exe'
+    'zoom': 'Zoom.exe',
+    'manycam': 'ManyCam.exe'
 }
 """
 enlist the prerequisite processes that must be running
@@ -116,5 +116,5 @@ before running the application.
 use: in healthChecksService.
 """
 PREREQUISITE_PROCESSES = {
-    'manycam': 'manycam.exe'
+    'manycam': 'ManyCam.exe'
 }
