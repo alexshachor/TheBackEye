@@ -105,4 +105,7 @@ class ValidationPage(tk.Frame):
             self.invalid_email = ovb.create_msg(self, 260, 275, 'Please try anther email.')
 
     def clean_entries(self):
-        pass
+        if self.invalid_email is not None:
+            self.invalid_email.destroy()
+        if self.invalid_code is not None:
+            self.invalid_code.destroy()
