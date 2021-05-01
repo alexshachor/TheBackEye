@@ -14,6 +14,11 @@ FONT_OUTPUT = c.APP['FONT_OUTPUT']
 class ValidationPage(tk.Frame):
 
     def __init__(self, parent, controller):
+        """
+        Init variables and calling functions.
+        :param parent: the parent frame
+        :param controller: gives the ability to switch between pages
+        """
         tk.Frame.__init__(self, parent)
         tk.Frame.config(self, bg='black')
         self.email_img = PhotoImage(file='.\PicUi\\send.png')
@@ -31,6 +36,9 @@ class ValidationPage(tk.Frame):
         self.email_b, self.check_b = self.buttons(controller)
 
     def background(self):
+        """
+        Init background.
+        """
         panel = tk.Label(self, image=self.img)
         panel.pack(expand=tk.YES, fill=tk.BOTH)
         pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
@@ -39,6 +47,9 @@ class ValidationPage(tk.Frame):
         return panel
 
     def input_output(self):
+        """
+        Init input output.
+        """
         email_l = tk.Label(self, text='Please enter your email', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
         email_l.place(bordermode=OUTSIDE, x=110, y=210)
         entry = Entry(self)
@@ -48,6 +59,10 @@ class ValidationPage(tk.Frame):
         return email_l, code_l, entry
 
     def buttons(self, controller):
+        """
+        Init buttons.
+        :param controller: gives the ability to switch between pages
+        """
         email_b = tk.Button(self, image=self.email_img, borderwidth=0, background='black',
                             command=lambda: self.email_button(controller))
         email_b.place(bordermode=OUTSIDE, x=118, y=300)
@@ -56,6 +71,10 @@ class ValidationPage(tk.Frame):
         return email_b, check_b
 
     def email_button(self, controller):
+        """
+        what to do if the user presses the email button
+        :param controller: gives the ability to switch between pages
+        """
         check_email = self.validation_controller.check_email(self.entry.get())
         if check_email != 'OK':
             self.invalid_email = ovb.create_msg(self, 260, 275, check_email)
@@ -72,6 +91,11 @@ class ValidationPage(tk.Frame):
             x.start()
 
     def check_button(self, controller):
+        """
+        after the email validation send & the student enter the
+        validation code, handle this logic.
+        :param controller: gives the ability to switch between pages
+        """
         check_code = self.validation_controller.check_code(self.entry.get())
         if check_code != 'OK':
             self.invalid_email = ovb.create_msg(self, 260, 275, check_code)
@@ -89,6 +113,9 @@ class ValidationPage(tk.Frame):
             controller.manage_frame(up.UploadPicPage)
 
     def send_validation_code(self):
+        """
+        this function will send the email im different thread.
+        """
         is_sent = self.validation_controller.send_validation_email(self.email)
         self.pb.destroy()
         if is_sent:
@@ -105,6 +132,9 @@ class ValidationPage(tk.Frame):
             self.invalid_email = ovb.create_msg(self, 260, 275, 'Please try anther email.')
 
     def clean_entries(self):
+        """
+        cleaning the page entries.
+        """
         if self.invalid_email is not None:
             self.invalid_email.destroy()
         if self.invalid_code is not None:
