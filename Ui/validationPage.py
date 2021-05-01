@@ -39,7 +39,13 @@ class ValidationPage(tk.Frame):
         return panel
 
     def input_output(self):
-        pass
+        email_l = tk.Label(self, text='Please enter your email', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        email_l.place(bordermode=OUTSIDE, x=110, y=210)
+        entry = Entry(self)
+        entry.place(bordermode=OUTSIDE, x=110, y=235, width=220, height=40)
+        code_l = tk.Label(self, text='Please enter the validation code', bg='black', bd=0, fg='yellow',
+                          font=FONT_OUTPUT)
+        return email_l, code_l, entry
 
     def buttons(self, controller):
         pass
