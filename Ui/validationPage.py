@@ -48,7 +48,12 @@ class ValidationPage(tk.Frame):
         return email_l, code_l, entry
 
     def buttons(self, controller):
-        pass
+        email_b = tk.Button(self, image=self.email_img, borderwidth=0, background='black',
+                            command=lambda: self.email_button(controller))
+        email_b.place(bordermode=OUTSIDE, x=118, y=300)
+        check_b = tk.Button(self, image=self.check_img, borderwidth=0, background='black',
+                            command=lambda: self.check_button(controller))
+        return email_b, check_b
 
     def email_button(self, controller):
         pass
