@@ -4,16 +4,31 @@ DEBUG = True
 TIMEOUT = 5
 CAM_SRC = 1
 
+"""
+enlist each action and its corresponding URL.
+use: every page that use httpService.
+"""
 URLS = {
     'post_measures': 'http://bla/bla',
     'post_stacked_measures': 'http://test',
     'lesson_configuration': 'http://Configuration/blabla',
-    'post_logs': 'http://logs/bla'
+    'post_logs': 'http://logs/bla',
+    'is_alive': 'http://www.example.com'
 }
 
+"""
+enlist the log files keys and theirs physical path.
+use: in loggerService and might be used to in each page that use loggerService 
+"""
 LOG_FILES = {
     'default': './Logs/back_eye.log'
 }
+
+"""
+describe the several options for the log files configuration,
+such as: mode, format, date foramt and log level.
+use: in loggerService.
+"""
 LOG_OPTIONS = {
     'file_mode': 'a',
     'format': '%(asctime)s,%(msecs)d %(levelname)s %(message)s',
@@ -57,6 +72,11 @@ USER_DATA = {
     'USERNAME': '',
     'ID': ''
 }
+
+"""
+enlist parameters that needed for head pose estimation.
+use: in headPose measurement.
+"""
 HEAD_POSE = {
     'video_file': './video/result.avi',
     'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar',
@@ -90,4 +110,22 @@ EMAIL = {
     'EMAIL': "TheBackEyeApp@gmail.com",
     'PASSWORD': "thebackeye12345",
     'USER_EMAIL': "rshalom8@gmail.com"
+}
+
+"""
+enlist the prerequisite programs that must be installed
+before running the application.
+use: in healthChecksService.
+"""
+PREREQUISITE_INSTALLATIONS = {
+    'zoom': 'Zoom.exe',
+    'manycam': 'ManyCam.exe'
+}
+"""
+enlist the prerequisite processes that must be running
+before running the application.
+use: in healthChecksService.
+"""
+PREREQUISITE_PROCESSES = {
+    'manycam': 'ManyCam.exe'
 }

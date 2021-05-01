@@ -288,7 +288,7 @@ def get_video_writer():
     get a video writer in order to write a video
     :return: a video writer.
     """
-    video_capture = cv2.VideoCapture(config.CAM_SRC)
+    video_capture = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     size = (int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     # print("fps:", fps, "size:", size)
@@ -303,13 +303,13 @@ def test_head_pose_measure():
     :return: void
     """
     dict_results = {}
-    video_capture = cv2.VideoCapture(config.CAM_SRC)
+    video_capture = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
     success, frame = video_capture.read()
     while success:
         HeadPose().run(frame, dict_results)
         print(dict_results)
         success, frame = video_capture.read()
-
+    video_capture.release()
 
 if __name__ == "__main__":
     test_head_pose_measure()
