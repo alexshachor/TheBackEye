@@ -106,8 +106,8 @@ def head(url):
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return False
-    except requests.exceptions.RequestException:
-        loggerService.get_logger().error(str(response.text))
+    except requests.exceptions.RequestException as e:
+        loggerService.get_logger().error(str(e))
         return False
     except Exception as e:
         loggerService.get_logger().error(

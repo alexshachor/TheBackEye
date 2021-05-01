@@ -309,7 +309,7 @@ def test_head_pose_measure():
         HeadPose().run(frame, dict_results)
         print(dict_results)
         success, frame = video_capture.read()
-
+    video_capture.release()
 
 if __name__ == "__main__":
     test_head_pose_measure()
