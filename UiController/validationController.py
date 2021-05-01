@@ -17,7 +17,13 @@ class ValidationController:
         return 'Invalid Email' if not re.search(REGEX, email) else 'OK'
 
     def check_code(self, code):
-        pass
+        if len(code) != 6:
+            return 'Code need to be in len six.'
+        if not code.isnumeric():
+            return 'Code need to be only numbers.'
+        if code != str(self.code):
+            return 'This is not the correct code.'
+        return 'OK'
 
     def send_email_to_server(self, email):
         pass
