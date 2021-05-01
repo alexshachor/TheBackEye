@@ -62,12 +62,22 @@ def check_camera_source():
 
 
 def check_if_program_installed(program_name):
+    """
+    check if a given program is install on the computer.
+    :param program_name: the name if the program
+    :return: True if the program installed and False otherwise.
+    """
     result = get_program_status(config.PREREQUISITE_PROGRAMS[program_name])
     loggerService.get_logger().info(f'is {program_name} installed = {result}')
     return {f'is_{program_name}_installed': result}
 
 
 def run_health_checks():
+    """
+    run all the health checks needed for the application to run
+    :return: list of pairs which the key is the health check name and value True or False
+    depending the health check result.
+    """
     health_checks = []
     results = []
 
