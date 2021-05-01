@@ -10,11 +10,11 @@ REGEX = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 class ValidationController:
 
     def __init__(self):
-        pass
+        self.code = random.randint(10 ** (LEN_CODE - 1), 10 ** LEN_CODE - 1)
 
     @staticmethod
     def check_email(email):
-        pass
+        return 'Invalid Email' if not re.search(REGEX, email) else 'OK'
 
     def check_code(self, code):
         pass
