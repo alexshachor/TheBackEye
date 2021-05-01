@@ -56,7 +56,20 @@ class ValidationPage(tk.Frame):
         return email_b, check_b
 
     def email_button(self, controller):
-        pass
+        check_email = self.validation_controller.check_email(self.entry.get())
+        if check_email != 'OK':
+            self.invalid_email = ovb.create_msg(self, 260, 275, check_email)
+        else:
+            self.email = self.entry.get()
+            self.bg.configure(image=self.img1)
+            self.bg.image = self.img1
+            # 3d progressbar
+            self.pb = atk.RadialProgressbar3d(self, fg='green', size=115)
+            self.pb.place(x=160, y=360)
+            self.pb.start()
+            x = threading.Thread(target=lambda: self.send_validation_code())
+            x.setDaemon(True)
+            x.start()
 
     def check_button(self, controller):
         pass
