@@ -1,6 +1,7 @@
 import random
 import config
 from EmailMessagingSystem import emailSystem as es
+from Services import httpService as hs
 import re
 
 LEN_CODE = 6
@@ -26,7 +27,11 @@ class ValidationController:
         return 'OK'
 
     def send_email_to_server(self, email):
-        pass
+        # TODO - send email to database
+        config.EMAIL['USER_EMAIL'] = email
+        if config.DEBUG:
+            return
+        hs.post('url/gh', config.EMAIL['USER_EMAIL'])
 
     def send_validation_email(self, email):
         pass
