@@ -34,4 +34,13 @@ class ValidationController:
         hs.post('url/gh', config.EMAIL['USER_EMAIL'])
 
     def send_validation_email(self, email):
-        pass
+        msg = """\
+                Subject: TheBackEye Validation Code
+
+                    This is your validation code:
+                    """ + str(self.code) + """
+                    please enter this code in the app.
+
+                TheBackEye Team
+                """
+        return es.EmailSystem().send_email(msg, email)
