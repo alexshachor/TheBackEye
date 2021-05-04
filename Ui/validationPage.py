@@ -27,6 +27,7 @@ class ValidationPage(tk.Frame):
         self.img1 = PhotoImage(file='.\PicUi\\validationPic1.png')
         self.email = ''
         self.count_flg = 0
+        self.button_flg = 0
         self.invalid_email = None
         self.invalid_code = None
         self.pb = None
@@ -82,10 +83,7 @@ class ValidationPage(tk.Frame):
             self.email = self.entry.get()
             self.bg.configure(image=self.img1)
             self.bg.image = self.img1
-            # 3d progressbar
-            self.pb = atk.RadialProgressbar3d(self, fg='green', size=115)
-            self.pb.place(x=160, y=360)
-            self.pb.start()
+            # TODO: show gif image
             x = threading.Thread(target=lambda: self.send_validation_code())
             x.setDaemon(True)
             x.start()
@@ -117,7 +115,8 @@ class ValidationPage(tk.Frame):
         this function will send the email im different thread.
         """
         is_sent = self.validation_controller.send_validation_email(self.email)
-        self.pb.destroy()
+        # TODO: uncomment line after creation of show gif
+        # self.pb.destroy()
         if is_sent:
             self.email_l.place_forget()
             self.entry.delete(0, 'end')
