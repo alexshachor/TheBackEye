@@ -4,7 +4,7 @@ from Ui import progressbar
 from UiController import logInPageController as lc
 from Ui import overViewButtons as ovb
 from Ui import takePicPage as tp
-from Ui import uploadPicPage as up
+from Ui import validationPage as vp
 import config as c
 import threading
 
@@ -97,7 +97,7 @@ class LogInPage(tk.Frame):
         has_pic = obg.has_pic()
         self.pb.destroy()
         self.clean_entries()
-        controller.manage_frame(tp.TakePicPage) if has_pic else controller.manage_frame(up.UploadPicPage)
+        controller.manage_frame(tp.TakePicPage) if has_pic else controller.manage_frame(vp.ValidationPage)
 
     def clean_entries(self):
         """
