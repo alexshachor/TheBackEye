@@ -14,10 +14,11 @@ def get_program(program):
         try:
             if p.name().lower() == program.lower():
                 return p
-        except psutil.NoSuchProcess:
-            continue
         except psutil.ZombieProcess:
             continue
+        except psutil.NoSuchProcess:
+            continue
+
     return None
 
 
@@ -26,9 +27,9 @@ def check_is_alive():
     check if the server is alive and respond.
     :return: pair of test kind and True or False if the test was success or failure.
     """
-    is_alive = httpService.head(config.URLS['is_alive'])
-    loggerService.get_logger().info(f'is alive = {is_alive}')
-    return {'is_alive': is_alive}
+    is_alive = httpService.head(config.URLS['is_server_alive'])
+    loggerService.get_logger().info(f'is server alive = {is_alive}')
+    return {'is_server_alive': is_alive}
 
 
 def check_camera_source():
