@@ -1,3 +1,5 @@
+import datetime
+
 import cv2
 from time import sleep
 import config
@@ -24,7 +26,16 @@ class RunMeasurements:
 
         # [fd.FaceDetector(),hp(),ot(),sd()]
         self.measurements = measurements
-        self.configuration = lesson_configuration
+        # TODO: take it from server instead of a mock
+        # self.lesson = lesson_configuration
+        self.lesson = {
+            'start': datetime.datetime.now() + datetime.timedelta(seconds=10),
+            'end': datetime.datetime.now() + datetime.timedelta(seconds=70),
+            'breaks': [(datetime.datetime.now() + datetime.timedelta(seconds=30),
+                        datetime.datetime.now() + datetime.timedelta(seconds=35)),
+                       (datetime.datetime.now() + datetime.timedelta(seconds=50),
+                        datetime.datetime.now() + datetime.timedelta(seconds=60))]
+        }
 
     def run(self):
         """************************************** Description of the Function - run:
@@ -38,19 +49,33 @@ class RunMeasurements:
 
         try:
             capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
-            # TODO: get the lesson time from self.configuration['duration'] and change the while accordingly
-            # TODO: add support for a break in the middle of the lesson
-            while True:
+            # assign current_break to be None if there are no breaks. otherwise, assign first break
+            current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+            current_time = datetime.datetime.now()
+
+            # if lesson start time is yet to be started, sleep for the time between
+            if current_time < self.lesson['start']:
+                sleep((self.lesson['start'] - current_time).seconds)
+
+            current_time = datetime.datetime.now()
+            loggerService.get_logger().info('lesson started')
+
+            # if current time is still in range of lesson time
+            while self.lesson['start'] <= current_time < self.lesson['end']:
+                # if it's time to break then sleep for the break duration
+                if current_break is not None and current_break[0] <= current_time < current_break[1]:
+                    sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
+                    current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+
                 ret, frame = capture_device.read()
                 if not ret:
                     loggerService.get_logger().fatal(f'cannot read from camera source. source value = {config.CAM_SRC}')
                     continue
                 result = self.run_measurement_processes(frame)
                 measurements_service.post_measurements(MeasurementsResult(result))
-                if config.DEBUG & cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
 
                 sleep(config.TIMEOUT)
+                current_time = datetime.datetime.now()
 
             capture_device.release()
             self.finish_lesson()
@@ -89,3 +114,4 @@ class RunMeasurements:
         """
         cv2.destroyAllWindows()
         loggerService.send_log_reports()
+        loggerService.get_logger().info('lesson ended')
