@@ -7,11 +7,19 @@ from Services import loggerService as ls
 class ShowGif(tk.Label):
 
     def __init__(self, frame):
+        """
+        initialize parameters & super class
+        :param frame: the frame in which the gif will be shown
+        """
         super().__init__(frame)
         self.frames = None
         self.delay = None
 
     def show(self, root):
+        """
+        load the gif as images
+        :param:im: a PIL Image instance or a string filename
+        """
         if isinstance(root, str):
             root = Image.open(root)
         frames_img = []
@@ -34,16 +42,25 @@ class ShowGif(tk.Label):
             self.show_next_frame()
 
     def stop(self):
+        """
+        close the animation gif
+        """
         self.config(image=None)
         self.frames = None
 
     def show_next_frame(self):
+        """
+        load the next frame after the amount of time passed
+        """
         if self.frames:
             self.config(image=next(self.frames))
             self.after(self.delay, self.show_next_frame)
 
 
 def for_tests_only():
+    """
+    this function is used only for tests.
+    """
     root = tk.Tk()
     panel = tk.Frame(root)
     panel.pack(expand=tk.YES, fill=tk.BOTH)
