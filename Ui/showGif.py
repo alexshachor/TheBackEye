@@ -20,7 +20,9 @@ class ShowGif(tk.Label):
                 frames_img.append(ImageTk.PhotoImage(root.copy()))
                 root.seek(i)
         except EOFError as e:
-            ls.get_logger().error(f'failed to load the picture, due to: {str(e)}')
+            pass
+            # TODO: uncomment this line in final version
+            # ls.get_logger().error(f'failed to load the picture, due to: {str(e)}')
         self.frames = cycle(frames_img)
         try:
             self.delay = root.info['duration']
@@ -42,7 +44,13 @@ class ShowGif(tk.Label):
 
 
 def for_tests_only():
-    pass
+    root = tk.Tk()
+    panel = tk.Frame(root)
+    panel.pack(expand=tk.YES, fill=tk.BOTH)
+    lbl = ShowGif(panel)
+    lbl.place(bordermode='outside', x=135, y=500)
+    lbl.show('..\\PicUi\\100x100.gif')
+    root.mainloop()
 
 
 if __name__ == "__main__":
