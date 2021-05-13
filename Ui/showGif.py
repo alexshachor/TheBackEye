@@ -5,8 +5,10 @@ from itertools import count, cycle
 
 class ShowGif(tk.Label):
 
-    def __init__(self, **kw):
-        pass
+    def __init__(self, frame):
+        super().__init__(frame)
+        self.frames = None
+        self.delay = None
 
     def load(self, root):
         pass
