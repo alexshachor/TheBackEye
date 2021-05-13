@@ -13,8 +13,9 @@ class ShowGif(tk.Label):
     def load(self, root):
         pass
 
-    def unload(self):
-        pass
+    def stop(self):
+        self.config(image=None)
+        self.frames = None
 
     def show_next_frame(self):
         pass
