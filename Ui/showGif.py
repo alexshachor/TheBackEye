@@ -36,7 +36,9 @@ class ShowGif(tk.Label):
         self.frames = None
 
     def show_next_frame(self):
-        pass
+        if self.frames:
+            self.config(image=next(self.frames))
+            self.after(self.delay, self.show_next_frame)
 
 
 def for_tests_only():
