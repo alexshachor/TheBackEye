@@ -49,7 +49,7 @@ class SleepDetector(am.AbstractMeasurement):
         """
         :return: the name of the measurement.
         """
-        return 'Sleep Detector'
+        return 'SleepDetector'
 
 
 def for_tests_only():
