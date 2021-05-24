@@ -18,7 +18,7 @@ class ShowGif(tk.Label):
     def show(self, root):
         """
         load the gif as images
-        :param:im: a PIL Image instance or a string filename
+        :param:root: a PIL Image instance or a string filename
         """
         if isinstance(root, str):
             root = Image.open(root)

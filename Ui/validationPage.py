@@ -1,10 +1,9 @@
 from tkinter import *
 import tkinter as tk
-import awesometkinter as atk
-from Ui import progressbar
 from UiController import validationController as vc
 from Ui import overViewButtons as ovb
 from Ui import uploadPicPage as up
+from Ui import showGif as sg
 import config as c
 import threading
 
@@ -83,7 +82,10 @@ class ValidationPage(tk.Frame):
             self.email = self.entry.get()
             self.bg.configure(image=self.img1)
             self.bg.image = self.img1
-            # TODO: show gif image
+            self.pb = sg.ShowGif(self)
+            self.pb.config(bg='black')
+            self.pb.show('.\\PicUi\\100x100.gif')
+            self.pb.place(x=160, y=360)
             x = threading.Thread(target=lambda: self.send_validation_code())
             x.setDaemon(True)
             x.start()
@@ -115,8 +117,8 @@ class ValidationPage(tk.Frame):
         this function will send the email im different thread.
         """
         is_sent = self.validation_controller.send_validation_email(self.email)
-        # TODO: uncomment line after creation of show gif
-        # self.pb.destroy()
+        self.pb.stop()
+        self.pb.destroy()
         if is_sent:
             self.email_l.place_forget()
             self.entry.delete(0, 'end')
