@@ -30,7 +30,11 @@ class HealthCheckPage(tk.Frame):
         self.buttons(controller)
 
     def background(self):
-        pass
+        panel = tk.Label(self, image=self.img)
+        panel.pack(expand=tk.YES, fill=tk.BOTH)
+        pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
+                                , bg='black', bd=0, fg='blue', font=FONT_OUTPUT)
+        pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=75)
 
     def input_output(self, controller):
         pass
