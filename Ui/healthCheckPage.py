@@ -37,7 +37,13 @@ class HealthCheckPage(tk.Frame):
         pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=75)
 
     def input_output(self, controller):
-        pass
+        x = threading.Thread(target=lambda: self.show_components(controller))
+        x.setDaemon(True)
+        x.start()
+        self.pb = sg.ImageLabel(self)
+        self.pb.config(bg='black')
+        self.pb.load('.\\PicUi\\64x64.gif')
+        self.pb.place(x=183, y=435)
 
     def show_components(self, controller):
         pass
