@@ -40,13 +40,36 @@ class HealthCheckPage(tk.Frame):
         x = threading.Thread(target=lambda: self.show_components(controller))
         x.setDaemon(True)
         x.start()
-        self.pb = sg.ImageLabel(self)
+        self.pb = sg.ShowGif(self)
         self.pb.config(bg='black')
-        self.pb.load('.\\PicUi\\64x64.gif')
+        self.pb.show('.\\PicUi\\64x64.gif')
         self.pb.place(x=183, y=435)
 
     def show_components(self, controller):
-        pass
+        x = 50
+        y = 150
+        i = 0
+        colors = ['blue', 'green', 'red', 'orange', 'black', 'grey']
+        map = self.health_controller.get_health_map()
+        for key, val in map.items():
+            time.sleep(1)
+            label = tk.Label(self, text=key, fg=colors[i], font=FONT_HEALTH, bg='white')
+            label.place(bordermode=OUTSIDE, x=x, y=y)
+            time.sleep(1)
+            label = tk.Label(self, image=self.v_img, borderwidth=0) if val else \
+                tk.Label(self, image=self.x_img, borderwidth=0)
+            label.place(bordermode=OUTSIDE, x=x + 280, y=y + 5)
+            y += 50
+            i += 1
+        self.pb.unload()
+        if self.health_controller.is_ready():
+            tk.Label(self, image=self.vv_img, borderwidth=0).place(x=180, y=435)
+            time.sleep(1)
+            controller.manage_frame(lip.LogInPage)
+        else:
+            # TODO: give the student an appropriate message & opportunity to send us
+            #  a message, then close the ui (or close the program).
+            tk.Label(self, image=self.xx_img, borderwidth=0).place(x=180, y=435)
 
     def buttons(self, controller):
         pass
