@@ -26,9 +26,11 @@ class UploadPicPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.select_img = PhotoImage(file='.\PicUi\\select_image.png')
         self.upload_img = PhotoImage(file='.\PicUi\\upload_image.png')
-        self.img = PhotoImage(file='.\PicUi\\as.png')
+        self.img = PhotoImage(file='.\PicUi\\upload.png')
         self.invalid_pic = None
         self.pb = None
+        self.user_images = []
+        self.img_places = []
         self.user_image = None
         self.background()
         self.upload = self.buttons(controller)
@@ -41,10 +43,10 @@ class UploadPicPage(tk.Frame):
         panel.pack(expand=tk.YES, fill=tk.BOTH)
         pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
                                 , bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        pure_sarcasm.place(bordermode=OUTSIDE, x=140, y=95)
+        pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=85)
         note = tk.Label(self, text='Note here!', bg='black', bd=0, fg='blue', font=FONT_MSG)
-        note.place(bordermode=OUTSIDE, x=40, y=105)
-        msg = 'Please upload a good photo of your pace\n''in png/jpg format.'
+        note.place(bordermode=OUTSIDE, x=40, y=120)
+        msg = 'Please upload a 5 good photos of your pace\n''in png/jpg format.'
         ovb.create_tool_tip(note, text=msg)
 
     def buttons(self, controller):
@@ -55,7 +57,7 @@ class UploadPicPage(tk.Frame):
         """
         select_img = Button(self, image=self.select_img, borderwidth=0, background='black',
                             command=self.open_img)
-        select_img.place(bordermode=OUTSIDE, x=118, y=130)
+        select_img.place(bordermode=OUTSIDE, x=118, y=450)
         upload = tk.Button(self, image=self.upload_img, borderwidth=0, background='black',
                            command=lambda: self.upload_button(controller))
         return upload
@@ -65,24 +67,35 @@ class UploadPicPage(tk.Frame):
         Open & show image from pc folders.
         """
         self.clean_entries()
+        self.user_images.clear()
+        for img in self.img_places:
+            img.place_forget()
+        self.img_places.clear()
         # Select the Imagename  from a folder
         x = self.open_file_name()
-        # Opens the image
-        try:
-            img = Image.open(x)
-        except:
-            self.invalid_pic = ovb.create_msg(self, 118, 174,'Please try uploading only an image file.')
+        if len(x) != 5:
+            self.invalid_pic = ovb.create_msg(self, 118, 500, 'Please upload 5 images.')
             return
-        self.user_image = img
-        # Resize the image and apply a high-quality down sampling filter
-        img = img.resize((300, 300), Image.ANTIALIAS)
-        # PhotoImage class is used to add image to widgets, icons etc
-        img = ImageTk.PhotoImage(img)
-        panel = Label(self, image=img)
-        # Set the image as img
-        panel.image = img
-        panel.place(bordermode=OUTSIDE, x=65, y=185)
-        self.upload.place(bordermode=OUTSIDE, x=118, y=500)
+        x_a = {0: 30, 2: 30, 1: 150, 3: 150, 4: 270}
+        y_a = {0: 160, 2: 280, 1: 160, 3: 280, 4: 160}
+        # Opens the image
+        for i in range(len(x)):
+            try:
+                img = Image.open(x[i])
+            except:
+                self.invalid_pic = ovb.create_msg(self, 118, 500, 'Please try uploading only an image file.')
+                return
+            self.user_images.append(img)
+            # Resize the image and apply a high-quality down sampling filter
+            img = img.resize((100, 100), Image.ANTIALIAS)
+            # PhotoImage class is used to add image to widgets, icons etc
+            img = ImageTk.PhotoImage(img)
+            panel = Label(self, image=img)
+            # Set the image as img
+            panel.image = img
+            panel.place(bordermode=OUTSIDE, x=x_a[i], y=y_a[i])
+            self.img_places.append(panel)
+        self.upload.place(bordermode=OUTSIDE, x=118, y=450)
 
     @staticmethod
     def open_file_name():
@@ -90,7 +103,7 @@ class UploadPicPage(tk.Frame):
         Open file dialog box to select image
         the dialogue box has a title "Open".
         """
-        filename = filedialog.askopenfilename(title='"pen')
+        filename = filedialog.askopenfilenames(title='open')
         return filename
 
     def upload_button(self, controller):
@@ -99,7 +112,7 @@ class UploadPicPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         """
         self.pb = progressbar.progressbar(self)
-        self.pb.place(bordermode=OUTSIDE, x=118, y=500, height=42, width=200)
+        self.pb.place(bordermode=OUTSIDE, x=130, y=450, height=42, width=200)
         self.pb.start()
         x = threading.Thread(target=lambda: self.send_user_pic(controller))
         x.setDaemon(True)
@@ -116,7 +129,7 @@ class UploadPicPage(tk.Frame):
             self.pb.destroy()
             controller.manage_frame(tp.TakePicPage)
         else:
-            self.invalid_pic = ovb.create_msg(self, 118, 490, send_pic)
+            self.invalid_pic = ovb.create_msg(self, 118, 500, send_pic)
 
     def clean_entries(self):
         """
