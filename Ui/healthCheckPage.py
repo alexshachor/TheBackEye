@@ -15,6 +15,11 @@ FONT_OUTPUT = c.APP['FONT_OUTPUT']
 class HealthCheckPage(tk.Frame):
 
     def __init__(self, parent, controller):
+        """
+        Init variables and calling functions.
+        :param parent: the parent frame
+        :param controller: gives the ability to switch between pages
+        """
         tk.Frame.__init__(self, parent)
         tk.Frame.config(self, bg='black')
         self.v_img = PhotoImage(file='.\PicUi\\v.png')
@@ -30,6 +35,9 @@ class HealthCheckPage(tk.Frame):
         self.buttons(controller)
 
     def background(self):
+        """
+        Init background.
+        """
         panel = tk.Label(self, image=self.img)
         panel.pack(expand=tk.YES, fill=tk.BOTH)
         pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
@@ -37,6 +45,9 @@ class HealthCheckPage(tk.Frame):
         pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=75)
 
     def input_output(self, controller):
+        """
+        Init input output.
+        """
         x = threading.Thread(target=lambda: self.show_components(controller))
         x.setDaemon(True)
         x.start()
@@ -46,6 +57,10 @@ class HealthCheckPage(tk.Frame):
         self.pb.place(x=183, y=435)
 
     def show_components(self, controller):
+        """
+        show all health components in nice order.
+        :param controller: gives the ability to switch between pages
+        """
         x = 50
         y = 150
         i = 0
