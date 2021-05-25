@@ -4,6 +4,7 @@ from Measurements import sleepDetector as sd
 from Services import httpService as hs
 from Core import runMeasurements as rm
 import config
+import time
 
 MSGS = {
     'FaceDetector': 'Please upload a pic with face in it.\n',
@@ -33,6 +34,7 @@ def upload_pic(pic):
     :return msg: return a msg for a good & bad pic.
     """
     if config.DEBUG:
+        time.sleep(3)
         return 'OK'
     measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
     run_measurements = rm.RunMeasurements(measurements, None)
