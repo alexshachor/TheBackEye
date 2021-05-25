@@ -22,8 +22,8 @@ class ValidationPage(tk.Frame):
         tk.Frame.config(self, bg='black')
         self.email_img = PhotoImage(file='.\PicUi\\send.png')
         self.check_img = PhotoImage(file='.\PicUi\\check_pic.png')
-        self.img = PhotoImage(file='.\PicUi\\validationPic.png')
-        self.img1 = PhotoImage(file='.\PicUi\\validationPic1.png')
+        self.img = PhotoImage(file='.\PicUi\\valid.png')
+        self.img1 = PhotoImage(file='.\PicUi\\valid1.png')
         self.email = ''
         self.count_flg = 0
         self.button_flg = 0
@@ -51,9 +51,9 @@ class ValidationPage(tk.Frame):
         Init input output.
         """
         email_l = tk.Label(self, text='Please enter your email', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        email_l.place(bordermode=OUTSIDE, x=110, y=210)
+        email_l.place(bordermode=OUTSIDE, x=110, y=190)
         entry = Entry(self)
-        entry.place(bordermode=OUTSIDE, x=110, y=235, width=220, height=40)
+        entry.place(bordermode=OUTSIDE, x=110, y=215, width=220, height=40)
         code_l = tk.Label(self, text='Please enter the validation code', bg='black', bd=0, fg='yellow',
                           font=FONT_OUTPUT)
         return email_l, code_l, entry
@@ -65,7 +65,7 @@ class ValidationPage(tk.Frame):
         """
         email_b = tk.Button(self, image=self.email_img, borderwidth=0, background='black',
                             command=lambda: self.email_button(controller))
-        email_b.place(bordermode=OUTSIDE, x=118, y=300)
+        email_b.place(bordermode=OUTSIDE, x=118, y=460)
         check_b = tk.Button(self, image=self.check_img, borderwidth=0, background='black',
                             command=lambda: self.check_button(controller))
         return email_b, check_b
@@ -77,7 +77,7 @@ class ValidationPage(tk.Frame):
         """
         check_email = self.validation_controller.check_email(self.entry.get())
         if check_email != 'OK':
-            self.invalid_email = ovb.create_msg(self, 260, 275, check_email)
+            self.invalid_email = ovb.create_msg(self, 260, 255, check_email)
         else:
             self.email = self.entry.get()
             self.bg.configure(image=self.img1)
@@ -98,16 +98,16 @@ class ValidationPage(tk.Frame):
         """
         check_code = self.validation_controller.check_code(self.entry.get())
         if check_code != 'OK':
-            self.invalid_email = ovb.create_msg(self, 260, 275, check_code)
+            self.invalid_email = ovb.create_msg(self, 260, 255, check_code)
             self.count_flg += 1
             if self.count_flg >= 3:
                 self.code_l.place_forget()
                 self.entry.delete(0, 'end')
-                self.email_l.place(bordermode=OUTSIDE, x=110, y=210)
+                self.email_l.place(bordermode=OUTSIDE, x=110, y=190)
                 self.check_b.place_forget()
-                self.email_b.place(bordermode=OUTSIDE, x=118, y=300)
+                self.email_b.place(bordermode=OUTSIDE, x=118, y=460)
                 self.clean_entries()
-                self.invalid_email = ovb.create_msg(self, 260, 275, 'To many attempts\nEnter email again.')
+                self.invalid_email = ovb.create_msg(self, 260, 255, 'To many attempts\nEnter email again.')
         else:
             self.validation_controller.send_email_to_server(self.email)
             controller.manage_frame(up.UploadPicPage)
@@ -122,15 +122,15 @@ class ValidationPage(tk.Frame):
         if is_sent:
             self.email_l.place_forget()
             self.entry.delete(0, 'end')
-            self.code_l.place(bordermode=OUTSIDE, x=110, y=210)
+            self.code_l.place(bordermode=OUTSIDE, x=110, y=190)
             self.email_b.place_forget()
-            self.check_b.place(bordermode=OUTSIDE, x=118, y=300)
+            self.check_b.place(bordermode=OUTSIDE, x=118, y=460)
             self.count_flg = 0
             self.clean_entries()
             self.bg.configure(image=self.img)
             self.bg.image = self.img
         else:
-            self.invalid_email = ovb.create_msg(self, 260, 275, 'Please try anther email.')
+            self.invalid_email = ovb.create_msg(self, 260, 255, 'Please try anther email.')
 
     def clean_entries(self):
         """
