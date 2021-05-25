@@ -61,7 +61,7 @@ class HealthCheckPage(tk.Frame):
             label.place(bordermode=OUTSIDE, x=x + 280, y=y + 5)
             y += 50
             i += 1
-        self.pb.unload()
+        self.pb.destroy()
         if self.health_controller.is_ready():
             tk.Label(self, image=self.vv_img, borderwidth=0).place(x=180, y=435)
             time.sleep(1)

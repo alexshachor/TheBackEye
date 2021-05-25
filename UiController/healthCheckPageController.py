@@ -10,7 +10,16 @@ class HealthCheckPageController:
         self.health_dict = {}
 
     def get_health_map(self):
-        pass
+        for i in range(len(self.health_list)):
+            val = self.health_list[i]
+            try:
+                key = list(val.keys())[0].split('is_')[1].replace('_', ' ').upper()
+            except:
+                key = list(val.keys())[0].replace('_', ' ').upper()
+            val = list(val.values())[0]
+            self.health_dict.update({key: val})
+            print(val, key) if config.DEBUG else None
+        return self.health_dict
 
     def is_ready(self):
         for key, val in self.health_dict.items():
