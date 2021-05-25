@@ -15,7 +15,19 @@ FONT_OUTPUT = c.APP['FONT_OUTPUT']
 class HealthCheckPage(tk.Frame):
 
     def __init__(self, parent, controller):
-        pass
+        tk.Frame.__init__(self, parent)
+        tk.Frame.config(self, bg='black')
+        self.v_img = PhotoImage(file='.\PicUi\\v.png')
+        self.x_img = PhotoImage(file='.\PicUi\\x.png')
+        self.img = PhotoImage(file='.\PicUi\\healthPic1.png')
+        self.vv_img = PhotoImage(file='.\PicUi\\vv.png')
+        self.xx_img = PhotoImage(file='.\PicUi\\xx.png')
+        self.invalid = None
+        self.pb = None
+        self.health_controller = hc.HealthCheckPageController()
+        self.background()
+        self.input_output(controller)
+        self.buttons(controller)
 
     def background(self):
         pass
