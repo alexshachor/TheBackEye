@@ -4,7 +4,9 @@ import config
 class HealthCheckPageController:
 
     def __init__(self):
-        pass
+        self.ready = True
+        self.health_list = health_list_tests()
+        self.health_dict = {}
 
     def get_health_map(self):
         pass
