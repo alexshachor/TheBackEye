@@ -27,12 +27,15 @@ class HealthCheckPage(tk.Frame):
         self.img = PhotoImage(file='.\PicUi\\healthPic1.png')
         self.vv_img = PhotoImage(file='.\PicUi\\vv.png')
         self.xx_img = PhotoImage(file='.\PicUi\\xx.png')
+        self.logout_img = PhotoImage(file='.\PicUi\\logout.png')
+        self.send_img = PhotoImage(file='.\PicUi\\send.png')
         self.invalid = None
         self.pb = None
+        self.input_txt = None
         self.health_controller = hc.HealthCheckPageController()
         self.background()
+        self.logout, self.send = None, None
         self.input_output(controller)
-        self.buttons(controller)
 
     def background(self):
         """
@@ -43,6 +46,15 @@ class HealthCheckPage(tk.Frame):
         pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
                                 , bg='black', bd=0, fg='blue', font=FONT_OUTPUT)
         pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=75)
+
+    def buttons(self):
+        logout = tk.Button(self, image=self.logout_img, borderwidth=0, background='black',
+                           command=lambda: self.logout_button())
+        send = tk.Button(self, image=self.send_img, borderwidth=0, background='black',
+                         command=lambda: self.send_button())
+        send.place(bordermode=OUTSIDE, x=115, y=420)
+        logout.place(bordermode=OUTSIDE, x=115, y=470)
+        return logout, send
 
     def input_output(self, controller):
         """
@@ -82,29 +94,7 @@ class HealthCheckPage(tk.Frame):
             time.sleep(1)
             controller.manage_frame(lip.LogInPage)
         else:
-            # TODO: give the student an appropriate message & opportunity to send us
-            #  a message, then close the ui (or close the program).
             tk.Label(self, image=self.xx_img, borderwidth=0).place(x=180, y=435)
+            time.sleep(2)
+            self.failed_in_health_check()
 
-    def buttons(self, controller):
-        pass
-        # """
-        # Init buttons.
-        # :param controller: gives the ability to switch between pages
-        # """
-        # email_b = tk.Button(self, image=self.email_img, borderwidth=0, background='black',
-        #                     command=lambda: self.email_button(controller))
-        # email_b.place(bordermode=OUTSIDE, x=118, y=300)
-        # check_b = tk.Button(self, image=self.check_img, borderwidth=0, background='black',
-        #                     command=lambda: self.check_button(controller))
-        # return email_b, check_b
-
-    def clean_entries(self):
-        pass
-        # """
-        # cleaning the page entries.
-        # """
-        # if self.invalid_email is not None:
-        #     self.invalid_email.destroy()
-        # if self.invalid_code is not None:
-        #     self.invalid_code.destroy()

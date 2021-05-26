@@ -31,7 +31,6 @@ class UploadPicPage(tk.Frame):
         self.pb = None
         self.user_images = []
         self.img_places = []
-        self.user_image = None
         self.background()
         self.upload = self.buttons(controller)
 
@@ -124,7 +123,7 @@ class UploadPicPage(tk.Frame):
         send him to the next page.
         :param controller: gives the ability to switch between pages
         """
-        send_pic = uc.upload_pic(self.user_image)
+        send_pic = uc.upload_pic(self.user_images)
         if send_pic == 'OK':
             self.pb.destroy()
             controller.manage_frame(tp.TakePicPage)

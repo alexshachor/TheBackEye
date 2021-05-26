@@ -27,21 +27,31 @@ def check_pic(results):
     return msg
 
 
-def upload_pic(pic):
+def upload_pic(pics):
     """
-    If its a good pic send to the server. return a msg for a good & bad pic.
-    :param pic: the pic from user
-    :return msg: return a msg for a good & bad pic.
+    If its a good pics send to the server. return a msg for a good & bad pics.
+    :param pics: the pics from user
+    :return msg: return a msg for a good & bad pics.
     """
     if config.DEBUG:
         time.sleep(3)
         return 'OK'
     measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
     run_measurements = rm.RunMeasurements(measurements, None)
-    result = run_measurements.run_measurement_processes(pic)
+    result = run_measurements.run_measurement_processes(pics)
     msg = check_pic(result)
     if msg == 'OK':
         # TODO: give real URL
-        hs.post_image_data('somm/url', config.USER_DATA, pic)
+        hs.post_image_data('somm/url', config.USER_DATA, pics)
     return msg
+
+    # processes = []
+    # for job in self.measurements:
+    #     process = mp.Process(target=job, args=(frame, dict_results))
+    #     process.start()
+    #     processes.append(process)
+    #
+    # for process in processes:
+    #     process.join()
+    #     process.close()
 
