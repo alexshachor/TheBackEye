@@ -10,6 +10,7 @@ import time
 
 FONT_HEALTH = c.APP['FONT_HEALTH']
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
+FONT_MSG = ("Impact", 12, "underline")
 
 
 class HealthCheckPage(tk.Frame):
@@ -98,3 +99,13 @@ class HealthCheckPage(tk.Frame):
             time.sleep(2)
             self.failed_in_health_check()
 
+    def failed_in_health_check(self):
+        fail_frame = Frame(self, width=390, height=430, background='black')
+        fail_frame.place(x=20, y=93)
+        self.logout, self.send = self.buttons()
+        msg = tk.Label(self, text='If you think that we have a problem in our side,'
+                                  '\nplease send a message via the text box below.'
+                                  , bg='black', bd=0, fg='yellow', font=FONT_MSG)
+        msg.place(bordermode=OUTSIDE, x=65, y=140)
+        self.input_txt = tk.Text(self, height=13, width=33)
+        self.input_txt.place(x=80, y=195)
