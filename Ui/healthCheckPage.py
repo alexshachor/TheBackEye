@@ -49,6 +49,11 @@ class HealthCheckPage(tk.Frame):
         pure_sarcasm.place(bordermode=OUTSIDE, x=110, y=75)
 
     def buttons(self):
+        """
+        Init buttons.
+        :return logout: logout button
+        :return send: send button
+        """
         logout = tk.Button(self, image=self.logout_img, borderwidth=0, background='black',
                            command=lambda: self.logout_button())
         send = tk.Button(self, image=self.send_img, borderwidth=0, background='black',
@@ -100,6 +105,10 @@ class HealthCheckPage(tk.Frame):
             self.failed_in_health_check()
 
     def failed_in_health_check(self):
+        """
+        in case of failure give the student an opportunity to send us
+        en email.
+        """
         fail_frame = Frame(self, width=390, height=430, background='black')
         fail_frame.place(x=20, y=93)
         self.logout, self.send = self.buttons()
@@ -112,7 +121,15 @@ class HealthCheckPage(tk.Frame):
 
     @staticmethod
     def logout_button():
+        """
+        if the student press on logout, send request to the controller
+        in order to logout.
+        """
         hc.close_application()
 
     def send_button(self):
+        """
+        if the student press on send, send request to the controller
+        in order to send us en email.
+        """
         hc.send_email(self.input_txt.get(1.0, "end-1c"))
