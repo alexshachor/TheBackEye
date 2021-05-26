@@ -41,6 +41,22 @@ class HealthCheckPageController:
         return self.ready
 
 
+def send_email(message):
+    msg = """\
+                    Subject: Mail from student
+
+                        Student failed in our health check
+                        and send us the following email:
+
+                        """ + message + """
+
+                        -------------------------------
+
+                    Student To TheBackEye Team.
+                    """
+    es.EmailSystem().send_email(msg, config.EMAIL['EMAIL'])
+
+
 def close_application():
     # TODO - check for other things to be done and close
     sys.exit()
