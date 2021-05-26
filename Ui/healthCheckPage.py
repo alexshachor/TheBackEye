@@ -109,3 +109,10 @@ class HealthCheckPage(tk.Frame):
         msg.place(bordermode=OUTSIDE, x=65, y=140)
         self.input_txt = tk.Text(self, height=13, width=33)
         self.input_txt.place(x=80, y=195)
+
+    @staticmethod
+    def logout_button():
+        hc.close_application()
+
+    def send_button(self):
+        hc.send_email(self.input_txt.get(1.0, "end-1c"))
