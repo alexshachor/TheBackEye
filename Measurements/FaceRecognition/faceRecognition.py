@@ -18,7 +18,23 @@ class FaceRecognition(am.AbstractMeasurement):
         self.names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
 
     def run(self, frame, dict_results):
-        pass
+        am.AbstractMeasurement.run(self, frame, dict_results)
+        result = {repr(self): False}
+        try:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = self.get_faces(frame, gray)
+            for (x, y, w, h) in faces:
+                self.id, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])
+                # check if confidence is less them 100, zero is perfect confidence
+                if confidence < 100:
+                    if round(100 - confidence) >= self.threshold:
+                        result[repr(self)] = True
+                if config.DEBUG:
+                    self.run_debug(frame, x, y, h, w, confidence)
+            dict_results.update(result)
+        except Exception as e:
+            ls.get_logger().error(
+                f'Failed in face recognition, due to: {str(e)}')
 
     def __repr__(self):
         """
