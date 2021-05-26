@@ -1,5 +1,7 @@
 import config
 from Services import healthChecksService as hcs
+import sys
+from EmailMessagingSystem import emailSystem as es
 
 
 class HealthCheckPageController:
@@ -37,6 +39,11 @@ class HealthCheckPageController:
             if not val:
                 self.ready = False
         return self.ready
+
+
+def close_application():
+    # TODO - check for other things to be done and close
+    sys.exit()
 
 
 def health_list_tests():
