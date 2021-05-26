@@ -75,7 +75,7 @@ def health_list_tests():
     function for tests.
     :return: a list that mimics the operation of the service get health.
     """
-    return [{'is_zoom_installed': True}, {'is_manycam_installed': True},
+    return [{'is_zoom_installed': False}, {'is_manycam_installed': True},
             {'is_manycam_running': True}, {'is_alive': True}, {'camera_source': True}]
 
 
