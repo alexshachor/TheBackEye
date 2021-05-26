@@ -42,6 +42,11 @@ class HealthCheckPageController:
 
 
 def send_email(message):
+    """
+    send us en email from the student if he failed in health
+    checks and want to connect us.
+    :param message: the message from the student
+    """
     msg = """\
                     Subject: Mail from student
 
@@ -58,6 +63,9 @@ def send_email(message):
 
 
 def close_application():
+    """
+    if the student failed in health checks close the program.
+    """
     # TODO - check for other things to be done and close
     sys.exit()
 
