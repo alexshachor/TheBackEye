@@ -52,11 +52,34 @@ class FaceRecognition(am.AbstractMeasurement):
         return faces
 
     def run_debug(self, img, x, y, h, w, confidence):
-        pass
+        name = str(self.names[self.id]) if confidence < 100 else 'unknown'
+        confidence = "  {0}%".format(round(100 - confidence))
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.putText(img, str(name), (x + 5, y - 5), font, 1, (255, 255, 255), 2)
+        cv2.putText(img, str(confidence), (x + 5, y + h - 5), font, 1, (255, 255, 0), 1)
 
 
 def for_tests_only():
-    pass
+    x = FaceRecognition()
+    dict_res = {}
+    # Initialize and start realtime video capture
+    cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+    # set video width
+    cam.set(3, 640)
+    # set video height
+    cam.set(4, 480)
+    while True:
+        ret, img = cam.read()
+        x.run(img, dict_res)
+        print(dict_res[x.__repr__()])
+        cv2.imshow('camera', img)
+        # Press 'ESC' for exiting video
+        k = cv2.waitKey(10) & 0xff
+        if cv2.waitKey(10) & 0xff == 27:
+            break
+    cam.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
