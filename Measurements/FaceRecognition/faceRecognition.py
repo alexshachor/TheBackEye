@@ -7,6 +7,9 @@ import config
 class FaceRecognition(am.AbstractMeasurement):
 
     def __init__(self):
+        """
+        initialize the parent class, model, threshold
+        """
         am.AbstractMeasurement.__init__(self)
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         self.recognizer.read('.\Models\\trainer.yml')
@@ -18,6 +21,12 @@ class FaceRecognition(am.AbstractMeasurement):
         self.names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
 
     def run(self, frame, dict_results):
+        """
+        report if we detect the student face. if yes
+        update the dict_results to false else true.
+        :param frame: frame to process
+        :param dict_results: a dictionary which the result will be put there
+        """
         am.AbstractMeasurement.run(self, frame, dict_results)
         result = {repr(self): False}
         try:
@@ -43,6 +52,12 @@ class FaceRecognition(am.AbstractMeasurement):
         return 'FaceRecognition'
 
     def get_faces(self, frame, gray):
+        """
+        run the model and return the faces it detected.
+        :param frame: frame to process
+        :param gray: cvt - the frame in gray color
+        :return: faces: the faces it detected
+        """
         faces = self.face_cascade.detectMultiScale(
             gray,
             scaleFactor=1.2,
@@ -52,6 +67,15 @@ class FaceRecognition(am.AbstractMeasurement):
         return faces
 
     def run_debug(self, img, x, y, h, w, confidence):
+        """
+        in debug mode, put txt & boxes on the image we examined
+        :param img: the image to put the txt on
+        :param x: the x point to draw on
+        :param y: the y point to draw on
+        :param h: the height of the rectangle to draw
+        :param w: the width of the rectangle to draw
+        :param confidence: the confidence of the result to draw
+        """
         name = str(self.names[self.id]) if confidence < 100 else 'unknown'
         confidence = "  {0}%".format(round(100 - confidence))
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -61,6 +85,10 @@ class FaceRecognition(am.AbstractMeasurement):
 
 
 def for_tests_only():
+    """
+    this function is used only for tests.
+    open the camera and start testing
+    """
     x = FaceRecognition()
     dict_res = {}
     # Initialize and start realtime video capture
