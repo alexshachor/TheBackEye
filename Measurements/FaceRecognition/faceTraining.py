@@ -30,11 +30,13 @@ class FaceTraining:
         return face_samples, id_s
 
     def __train(self):
-        pass
+        self.recognizer.train(self.faces, np.array(self.ids))
+        # Save the model into trainer/trainer.yml
+        self.recognizer.write('.\Models\\trainer.yml')
 
 
 def for_tests_only():
-    pass
+    FaceTraining()
 
 
 if __name__ == "__main__":
