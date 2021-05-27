@@ -16,9 +16,18 @@ class FaceTraining:
         self.__train()
         print('[INFO] faces trained. Exiting Program') if config.DEBUG else None
 
-    # function to get the images and label data
     def __get_images_labels(self):
-        pass
+        face_samples = []
+        id_s = []
+        for path in self.image_paths:
+            # convert it to grayscale
+            img = Image.open(path).convert('L')
+            img_numpy = np.array(img, 'uint8')
+            faces = self.detector.detectMultiScale(img_numpy)
+            for (x, y, w, h) in faces:
+                face_samples.append(img_numpy[y:y + h, x:x + w])
+                id_s.append(1)
+        return face_samples, id_s
 
     def __train(self):
         pass
