@@ -43,7 +43,13 @@ class FaceRecognition(am.AbstractMeasurement):
         return 'FaceRecognition'
 
     def get_faces(self, frame, gray):
-        pass
+        faces = self.face_cascade.detectMultiScale(
+            gray,
+            scaleFactor=1.2,
+            minNeighbors=5,
+            minSize=(int(0.1 * frame.shape[1]), int(0.1 * frame.shape[0])),
+        )
+        return faces
 
     def run_debug(self, img, x, y, h, w, confidence):
         pass
