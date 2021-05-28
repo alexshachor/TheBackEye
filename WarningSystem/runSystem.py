@@ -17,7 +17,7 @@ class RunSystem:
         self.dict_process = {
             'voice': mp.Process(target=vs.VoiceSystem, args=(self.failed_in,)),
             'flicker': mp.Process(target=fs.FlickerSystem),
-            'email': mp.Process(target=ew.EmailWarning)
+            'email': mp.Process(target=ew.EmailWarning, args=(self.failed_in,))
         }
         self.__init_failed_indices()
         self.__run_warning_system()
@@ -33,7 +33,7 @@ class RunSystem:
 
         for key, process in self.dict_process.items():
             if key == 'email':
-                if 'ObjectDetector'.upper() in self.failed_in:
+                if 'ObjectDetector'.upper() in self.failed_in or 'Speaker'.upper():
                     process.start()
                     processes.append(process)
             else:
@@ -59,7 +59,7 @@ def for_tests_only():
     """
     indices_dict = {
         'FaceDetector': True, 'ObjectDetector': False, 'SleepDetector': True,
-        'OnTop': False, 'HeadPose': True
+        'OnTop': True, 'HeadPose': True, 'Speaker': False
     }
     RunSystem(indices_dict)
 
