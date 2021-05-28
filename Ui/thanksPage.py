@@ -57,6 +57,21 @@ class TanksPage(tk.Frame):
         minute_entry.place(x=110, y=470)
         second_entry = Entry(self, width=3, font=("Arial", 18, ""), textvariable=self.second)
         second_entry.place(x=160, y=470)
-        self.submit()
+        self.time_logic()
         tp.successes()
 
+    def time_logic(self):
+        temp = int(self.hour.get()) * 3600 + int(self.minute.get()) * 60 + int(self.second.get())
+        while temp > -1:
+            mins, secs = divmod(temp, 60)
+            hours = 0
+            if mins > 60:
+                hours, mins = divmod(mins, 60)
+            # using format () method to store the value up to
+            self.hour.set("{0:2d}".format(hours))
+            self.minute.set("{0:2d}".format(mins))
+            self.second.set("{0:2d}".format(secs))
+            # updating the GUI window after decrementing the temp value every time
+            self.update()
+            time.sleep(1)
+            temp -= 1
