@@ -61,6 +61,9 @@ class TanksPage(tk.Frame):
         tp.successes()
 
     def time_logic(self):
+        """
+        this function calculate the time left & updates the view.
+        """
         temp = int(self.hour.get()) * 3600 + int(self.minute.get()) * 60 + int(self.second.get())
         while temp > -1:
             mins, secs = divmod(temp, 60)
