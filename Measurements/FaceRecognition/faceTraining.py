@@ -7,6 +7,9 @@ import config
 class FaceTraining:
 
     def __init__(self):
+        """
+        init the model for training and init the images path.
+        """
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         self.detector = cv2.CascadeClassifier('.\Models\haarcascade_frontalface_default.xml')
         self.image_paths = ['.\Images\\1.jpg', '.\Images\\2.jpg', '.\Images\\3.jpg',
@@ -17,6 +20,11 @@ class FaceTraining:
         print('[INFO] faces trained. Exiting Program') if config.DEBUG else None
 
     def __get_images_labels(self):
+        """
+        get the faces from the image & set the id of a face [we set it to 1]
+        :return: face_samples: the faces from the image
+        :return: id_s: the id of a face [we set it to 1]
+        """
         face_samples = []
         id_s = []
         for path in self.image_paths:
@@ -30,12 +38,18 @@ class FaceTraining:
         return face_samples, id_s
 
     def __train(self):
+        """
+        train the model on face data & id's & write the results to
+        yml file.
+        """
         self.recognizer.train(self.faces, np.array(self.ids))
-        # Save the model into trainer/trainer.yml
         self.recognizer.write('.\Models\\trainer.yml')
 
 
 def for_tests_only():
+    """
+    this function is used only for tests.
+    """
     FaceTraining()
 
 
