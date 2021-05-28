@@ -16,3 +16,26 @@ def get_time_remaining():
         return 'X', 'X'
     date_time_obj = str(time_left).split(':')
     return date_time_obj[0], date_time_obj[1]
+
+
+def get_debug_time():
+    """
+    create a time object in debug mode.
+    :return: combined: a datetime object
+    """
+    date = datetime.datetime.strptime('2021-05-28', "%Y-%m-%d")
+    t = datetime.time(19, 00)
+    combined = datetime.datetime.combine(date.date(), t)
+    return combined
+
+
+def for_tests_only():
+    """
+    this function is for tests only
+    """
+    hour, minute = get_time_remaining()
+    print(hour, minute)
+
+
+if __name__ == "__main__":
+    for_tests_only()
