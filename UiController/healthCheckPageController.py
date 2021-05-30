@@ -77,7 +77,7 @@ def health_list_tests():
     """
     return [{'is_zoom_installed': True}, {'is_manycam_installed': True},
             {'is_manycam_running': True}, {'is_alive': True}, {'camera_source': True},
-            {'speaker_source': True}]
+            {'is_sound_ok': True}]
 
 
 if __name__ == '__main__':

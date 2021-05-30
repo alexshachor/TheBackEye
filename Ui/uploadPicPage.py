@@ -24,8 +24,8 @@ class UploadPicPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         """
         tk.Frame.__init__(self, parent)
-        self.select_img = PhotoImage(file='.\PicUi\\select_image.png')
-        self.upload_img = PhotoImage(file='.\PicUi\\upload_image.png')
+        self.select_img = PhotoImage(file='.\PicUi\\s_images.png')
+        self.upload_img = PhotoImage(file='.\PicUi\\u_images.png')
         self.img = PhotoImage(file='.\PicUi\\upload.png')
         self.invalid_pic = None
         self.pb = None
@@ -111,7 +111,7 @@ class UploadPicPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         """
         self.pb = progressbar.progressbar(self)
-        self.pb.place(bordermode=OUTSIDE, x=130, y=450, height=42, width=200)
+        self.pb.place(bordermode=OUTSIDE, x=118, y=450, height=42, width=200)
         self.pb.start()
         x = threading.Thread(target=lambda: self.send_user_pic(controller))
         x.setDaemon(True)

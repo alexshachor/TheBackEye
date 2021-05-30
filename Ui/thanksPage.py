@@ -6,6 +6,7 @@ import config as c
 import time
 import threading
 
+
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
 FONT_MSG = c.APP['FONT_HEALTH']
 SHOW_MSG_TIME = 5
@@ -41,10 +42,13 @@ class TanksPage(tk.Frame):
         Show msg time.
         """
         hour, minute = tpc.get_time_remaining()
-        if hour == 'X':
+        if hour == 'V':
             time.sleep(SHOW_MSG_TIME)
             tp.successes()
             return
+        if hour == 'X':
+            # time.sleep(SHOW_MSG_TIME)
+            tpc.kill_program()
         self.hour.set(hour)
         self.minute.set(minute)
         self.second.set('00')
