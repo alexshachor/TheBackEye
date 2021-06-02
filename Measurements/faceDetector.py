@@ -3,6 +3,8 @@ import config
 from Measurements import abstractMeasurement as am
 from Services import loggerService
 import mediapipe as mp
+import glob
+import ntpath
 
 mp_drawing = mp.solutions.drawing_utils
 mp_face_mesh = mp.solutions.face_mesh
@@ -85,5 +87,24 @@ def test_face_detector_measure():
         success, frame = video_capture.read()
 
 
+def test_measurement_on_images(file_list):
+    """
+    test the faceDetector measurement by static labeled images and print the test results.
+    :param file_list: list of images to run the measurement on them.
+    :return: void
+    """
+    for idx, file in enumerate(file_list):
+        dict_results = {}
+        image = cv2.imread(file)
+        FaceDetector().run(image, dict_results)
+        is_there_face = "True" in file
+        print(f'file name: {ntpath.basename(file)}. face exist: {is_there_face}.'
+              f' measurement result: {dict_results["FaceDetector"]}.'
+              f' => test success: {is_there_face == dict_results["FaceDetector"]}')
+
+
 if __name__ == "__main__":
-    test_face_detector_measure()
+    # test_face_detector_measure()
+
+    file_list = glob.glob(r".\TestImages\FaceDetector\*.jpg")
+    test_measurement_on_images(file_list)
