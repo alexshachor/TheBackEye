@@ -1,3 +1,6 @@
+import glob
+import ntpath
+
 import config
 from Measurements import abstractMeasurement as am
 from Services import loggerService
@@ -311,5 +314,23 @@ def test_head_pose_measure():
         success, frame = video_capture.read()
     video_capture.release()
 
+def test_measurement_on_images(file_list):
+    """
+    test the headPose measurement by static labeled images and print the test results.
+    :param file_list: list of images to run the measurement on them.
+    :return: void.
+    """
+    for idx, file in enumerate(file_list):
+        dict_results = {}
+        image = cv2.imread(file)
+        HeadPose().run(image, dict_results)
+        is_head_to_screen = "True" in file
+        print(f'file name: {ntpath.basename(file)}. head facing the screen: {is_head_to_screen}.'
+              f' measurement result: {dict_results["HeadPose"]}.'
+              f' => test success: {is_head_to_screen == dict_results["HeadPose"]}')
+
+
 if __name__ == "__main__":
-    test_head_pose_measure()
+    # test_head_pose_measure()
+    file_list = glob.glob(r"..\TestImages\HeadPose\*.jpg")
+    test_measurement_on_images(file_list)
