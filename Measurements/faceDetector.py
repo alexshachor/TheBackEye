@@ -90,6 +90,11 @@ def test_face_detector_measure():
 
 
 def test_measurement_on_images(file_list):
+    """
+    test the faceDetector measurement by static labeled images. print the test results.
+    :param file_list: list of images to run the measurement on them
+    :return: void
+    """
     for idx, file in enumerate(file_list):
         dict_results = {}
         image = cv2.imread(file)
