@@ -3,6 +3,7 @@ from Measurements.HeadPose import headPose as hp
 from Measurements import sleepDetector as sd
 from Services import httpService as hs
 from Core import runMeasurements as rm
+import multiprocessing as mp
 import config
 import time
 
@@ -36,22 +37,28 @@ def upload_pic(pics):
     if config.DEBUG:
         time.sleep(3)
         return 'OK'
+    dict_results = {0: '', 1: '', 2: '', 3: '', 4: ''}
+    processes = []
+    for key, val in pics.items():
+        process = mp.Process(target=run_images_checks, args=(val, dict_results, key))
+        process.start()
+        processes.append(process)
+    for process in processes:
+        process.join()
+        process.close()
+    flg = all(elem == 'OK' for elem in dict_results.values())
+    if flg:
+        # TODO: give real URL
+        for pic in pics.items():
+            hs.post_image_data('somm/url', config.USER_DATA, pic)
+        return 'OK'
+    return dict_results
+
+
+def run_images_checks(image, dict_res, i):
     measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
     run_measurements = rm.RunMeasurements(measurements, None)
-    result = run_measurements.run_measurement_processes(pics)
+    result = run_measurements.run_measurement_processes(image)
     msg = check_pic(result)
-    if msg == 'OK':
-        # TODO: give real URL
-        hs.post_image_data('somm/url', config.USER_DATA, pics)
-    return msg
-
-    # processes = []
-    # for job in self.measurements:
-    #     process = mp.Process(target=job, args=(frame, dict_results))
-    #     process.start()
-    #     processes.append(process)
-    #
-    # for process in processes:
-    #     process.join()
-    #     process.close()
+    dict_res[i] = msg
 

@@ -29,7 +29,7 @@ class UploadPicPage(tk.Frame):
         self.img = PhotoImage(file='.\PicUi\\upload.png')
         self.invalid_pic = None
         self.pb = None
-        self.user_images = []
+        self.user_images = {}
         self.img_places = []
         self.background()
         self.upload = self.buttons(controller)
@@ -84,7 +84,7 @@ class UploadPicPage(tk.Frame):
             except:
                 self.invalid_pic = ovb.create_msg(self, 118, 500, 'Please try uploading only an image file.')
                 return
-            self.user_images.append(img)
+            self.user_images[i] = img
             # Resize the image and apply a high-quality down sampling filter
             img = img.resize((100, 100), Image.ANTIALIAS)
             # PhotoImage class is used to add image to widgets, icons etc
