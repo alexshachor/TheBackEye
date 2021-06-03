@@ -35,7 +35,7 @@ def get_debug_time():
     create a time object in debug mode.
     :return: combined: a datetime object
     """
-    date = datetime.datetime.strptime('2021-05-30', "%Y-%m-%d")
+    date = datetime.datetime.strptime('2021-06-03', "%Y-%m-%d")
     # date = datetime.datetime.
     t = datetime.time(22, 45)
     combined = datetime.datetime.combine(date.date(), t)

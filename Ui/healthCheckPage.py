@@ -88,7 +88,7 @@ class HealthCheckPage(tk.Frame):
             time.sleep(1)
             label = tk.Label(self, text=key, fg=colors[i], font=FONT_HEALTH, bg='white')
             label.place(bordermode=OUTSIDE, x=x, y=y)
-            time.sleep(1)
+            # time.sleep(1)
             label = tk.Label(self, image=self.v_img, borderwidth=0) if val else \
                 tk.Label(self, image=self.x_img, borderwidth=0)
             label.place(bordermode=OUTSIDE, x=x + 280, y=y + 5)

@@ -8,6 +8,7 @@ from Ui import takePicPage as tp
 from Ui import overViewButtons as ovb
 import config as c
 import threading
+import time
 
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
 FONT_MSG = c.APP['FONT_MSG']
@@ -133,6 +134,8 @@ class UploadPicPage(tk.Frame):
             for key, val in send_pic.items():
                 if val != '':
                     self.invalid_pic = ovb.create_msg(self, self.x_a[key], self.y_a[key] + 105, val)
+            # TODO: delete the line below, after all measurements can run
+            controller.manage_frame(tp.TakePicPage)if c.DEBUG else None
 
     def clean_entries(self):
         """
