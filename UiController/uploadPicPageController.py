@@ -52,6 +52,13 @@ def upload_pic(pics):
 
 
 def run_images_checks(image, dict_res, i):
+    """
+    processes func to run measurements for each image.
+    :param image: the image to run measurements on
+    :param dict_res: dict of msgs for the images if all measurements return true,
+    the msg will be ''
+    :param i: key to put the msg into in the dict of msgs
+    """
     if not config.DEBUG:
         measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
         run_measurements = rm.RunMeasurements(measurements, None)

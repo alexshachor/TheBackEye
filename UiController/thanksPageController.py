@@ -22,6 +22,9 @@ def get_time_remaining():
 
 
 def kill_program():
+    """
+    kill the program from a thread.
+    """
     current_system_pid = os.getpid()
     this_sys = psutil.Process(current_system_pid)
     this_sys.terminate()
