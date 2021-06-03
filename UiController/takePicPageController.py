@@ -1,6 +1,6 @@
 from PIL import Image
 from UiController import uiController
-from Measurements import faceRecognition as fr
+from Measurements.FaceRecognition import faceRecognition as fr
 from Core import runMeasurements as rm
 import config
 import time

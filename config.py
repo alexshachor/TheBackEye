@@ -56,7 +56,7 @@ APP = {
     'HEIGHT': 550,
     'FONT_OUTPUT': ("Ariel", 10),
     'FONT_MSG': ("Ariel", 10, "bold"),
-    'FONT_HEALTH': ("Impact", 22, "bold", "underline")
+    'FONT_HEALTH': ("Impact", 19, "bold", "underline")
 }
 
 """
