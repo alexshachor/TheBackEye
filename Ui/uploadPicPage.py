@@ -31,6 +31,7 @@ class UploadPicPage(tk.Frame):
         self.pb = None
         self.user_images = {}
         self.img_places = []
+        self.x_a, self.y_a = None, None
         self.background()
         self.upload = self.buttons(controller)
 
@@ -75,8 +76,8 @@ class UploadPicPage(tk.Frame):
         if len(x) != 5:
             self.invalid_pic = ovb.create_msg(self, 118, 500, 'Please upload 5 images.')
             return
-        x_a = {0: 30, 2: 30, 1: 150, 3: 150, 4: 270}
-        y_a = {0: 160, 2: 280, 1: 160, 3: 280, 4: 160}
+        self.x_a = {0: 30, 2: 30, 1: 150, 3: 150, 4: 270}
+        self.y_a = {0: 160, 2: 285, 1: 160, 3: 285, 4: 160}
         # Opens the image
         for i in range(len(x)):
             try:
@@ -92,7 +93,7 @@ class UploadPicPage(tk.Frame):
             panel = Label(self, image=img)
             # Set the image as img
             panel.image = img
-            panel.place(bordermode=OUTSIDE, x=x_a[i], y=y_a[i])
+            panel.place(bordermode=OUTSIDE, x=self.x_a[i], y=self.y_a[i])
             self.img_places.append(panel)
         self.upload.place(bordermode=OUTSIDE, x=118, y=450)
 
@@ -124,11 +125,14 @@ class UploadPicPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         """
         send_pic = uc.upload_pic(self.user_images)
+        self.pb.destroy()
+        self.upload.place_forget()
         if send_pic == 'OK':
-            self.pb.destroy()
             controller.manage_frame(tp.TakePicPage)
         else:
-            self.invalid_pic = ovb.create_msg(self, 118, 500, send_pic)
+            for key, val in send_pic.items():
+                if val != '':
+                    self.invalid_pic = ovb.create_msg(self, self.x_a[key], self.y_a[key] + 105, val)
 
     def clean_entries(self):
         """

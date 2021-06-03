@@ -5,7 +5,7 @@ from Services import httpService as hs
 from Core import runMeasurements as rm
 import multiprocessing as mp
 import config
-import time
+import random
 
 MSGS = {
     'FaceDetector': 'Please upload a pic with face in it.\n',
@@ -23,7 +23,6 @@ def check_pic(results):
     msg = ''
     for key, val in results.items():
         if not val:
-            # TODO: after measurements complete check if it work
             msg += MSGS[key]
     return msg
 
@@ -32,12 +31,9 @@ def upload_pic(pics):
     """
     If its a good pics send to the server. return a msg for a good & bad pics.
     :param pics: the pics from user
-    :return msg: return a msg for a good & bad pics.
+    :return msg: return a dict of msgs for a good & bad pics for all images.
     """
-    if config.DEBUG:
-        time.sleep(3)
-        return 'OK'
-    dict_results = {0: '', 1: '', 2: '', 3: '', 4: ''}
+    dict_results = mp.Manager().dict()
     processes = []
     for key, val in pics.items():
         process = mp.Process(target=run_images_checks, args=(val, dict_results, key))
@@ -46,7 +42,7 @@ def upload_pic(pics):
     for process in processes:
         process.join()
         process.close()
-    flg = all(elem == 'OK' for elem in dict_results.values())
+    flg = all(elem == '' for elem in dict_results.values())
     if flg:
         # TODO: give real URL
         for pic in pics.items():
@@ -56,9 +52,13 @@ def upload_pic(pics):
 
 
 def run_images_checks(image, dict_res, i):
-    measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
-    run_measurements = rm.RunMeasurements(measurements, None)
-    result = run_measurements.run_measurement_processes(image)
+    if not config.DEBUG:
+        measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
+        run_measurements = rm.RunMeasurements(measurements, None)
+        result = run_measurements.run_measurement_processes(image)
+    else:
+        result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))
+                  , 'HeadPose': bool(random.getrandbits(1))}
     msg = check_pic(result)
     dict_res[i] = msg
 
