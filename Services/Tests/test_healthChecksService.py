@@ -58,6 +58,26 @@ class TestHealthChecksService(unittest.TestCase):
         result = healthChecksService.check_camera_source()
         self.assertEqual(result, {'camera_source': True})
 
+    def test_run_health_checks(self):
+        # test success health checks calls
+        expected_result = [{'is_zoom_installed': False},
+                           {'is_manycam_installed': True},
+                           {'is_manycam_running': True},
+                           {'is_server_alive': True},
+                           {'camera_source': True}]
+        with patch('requests.head') as mocled_head:
+            # test success call
+            mocled_head.return_value.ok = True
+            result = healthChecksService.run_health_checks()
+            self.assertTrue(result[3]['is_server_alive'])
+            self.assertEqual(result, expected_result)
+
+            # test failure call
+            mocled_head.return_value.ok = False
+            result = healthChecksService.run_health_checks()
+            self.assertFalse(result[3]['is_server_alive'])
+            self.assertNotEqual(result, expected_result)
+
 
 if __name__ == '__main__':
     unittest.main()
