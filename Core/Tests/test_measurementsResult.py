@@ -9,7 +9,7 @@ class TestMeasurementsResult(unittest.TestCase):
         # test success call for init
         m_result = ['1', 2]
         mr = MeasurementsResult(m_result)
-        self.assertIsInstance(mr.result, cls=list)
+        self.assertIsInstance(mr.result, cls=type(m_result))
         self.assertEqual(mr.result, m_result)
         self.assertIsInstance(mr.time, cls=datetime)
 
