@@ -5,6 +5,7 @@ from Services import loggerService
 import mediapipe as mp
 import glob
 import ntpath
+from tabulate import tabulate
 
 mp_drawing = mp.solutions.drawing_utils
 mp_face_mesh = mp.solutions.face_mesh
@@ -93,14 +94,19 @@ def test_measurement_on_images(file_list):
     :param file_list: list of images to run the measurement on them.
     :return: void
     """
+    test_details_list = []
     for idx, file in enumerate(file_list):
         dict_results = {}
         image = cv2.imread(file)
         FaceDetector().run(image, dict_results)
-        is_there_face = "True" in file
-        print(f'file name: {ntpath.basename(file)}. face exist: {is_there_face}.'
-              f' measurement result: {dict_results["FaceDetector"]}.'
-              f' => test success: {is_there_face == dict_results["FaceDetector"]}')
+        file_name = ntpath.basename(file)
+        is_there_face = "True" in file_name
+        test_details_list.append([file_name, is_there_face, dict_results["FaceDetector"],
+                                  is_there_face == dict_results["FaceDetector"]])
+
+    # print test results in a readable table format
+    headers = ['File Name', 'Face Exist', 'Measurement Result', 'Test Result']
+    print(tabulate(test_details_list, headers))
 
 
 if __name__ == "__main__":

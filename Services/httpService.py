@@ -5,7 +5,7 @@ import requests
 from Services import loggerService
 
 
-def get(url, params):
+def get(url, params = None):
     """
     get response from server by the given url and its params
     :param url: get the data from the url
@@ -17,8 +17,8 @@ def get(url, params):
             raise ValueError(f'cannot get, url is missing')
         response = requests.get(url, params)
         response.raise_for_status()
-        data = response.json()
-        return data
+        # data = response.json()
+        return response
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return None
@@ -87,7 +87,7 @@ def post_image_data(url, data, image_file):
         return False
     except Exception as e:
         loggerService.get_logger().error(
-            f'post call to url: {url}, data: {data} has failed with status: {response.status_code}, due to: {str(e)}')
+            f'post call to url: {url}, data: {data} has failed, due to: {str(e)}')
         return False
 
 
@@ -102,7 +102,7 @@ def head(url):
             raise ValueError(f'cannot make head call, url is missing')
         response = requests.head(url)
         response.raise_for_status()
-        return True
+        return True if response.ok else False
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return False
