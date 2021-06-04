@@ -1,12 +1,7 @@
-import base64
-import os
 import unittest
-from unittest import mock
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from Services import httpService
 from mock import mock_open
-
-MOCKED_FILE = os.path.join(os.path.dirname(__file__), 'mockedFile.txt')
 
 
 class TestHttpService(unittest.TestCase):
