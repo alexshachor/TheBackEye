@@ -76,10 +76,20 @@ def check_if_program_installed(program_name):
     :param program_name: the name if the program
     :return: True if the program installed and False otherwise.
     """
-    result = (get_program(config.PREREQUISITE_INSTALLATIONS[program_name]) is not None)
-    loggerService.get_logger().info(f'is {program_name} installed = {result}')
-    return {f'is_{program_name}_installed': result}
-
+    try:
+        if not config.PREREQUISITE_INSTALLATIONS[program_name]:
+            raise ValueError(f"cannot find program: {program_name} in config")
+        result = (get_program(config.PREREQUISITE_INSTALLATIONS[program_name]) is not None)
+        loggerService.get_logger().info(f'is {program_name} installed = {result}')
+    except ValueError as e:
+        loggerService.get_logger().error(str(e))
+        result = False
+    except Exception as e:
+        loggerService.get_logger().error(
+            f'exception has occurred , due to: {str(e)}')
+        result = False
+    finally:
+        return {f'is_{program_name}_installed': result}
 
 def check_if_process_is_running(process_name):
     """
@@ -87,9 +97,21 @@ def check_if_process_is_running(process_name):
     :param process_name: the name of the process.
     :return: True if the process is running and False otherwise.
     """
-    p = get_program(config.PREREQUISITE_PROCESSES[process_name])
-    loggerService.get_logger().info(f'{process_name} status: {p.status()}')
-    return {f'is_{process_name}_running': p.status() == 'running'}
+    try:
+        if not config.PREREQUISITE_INSTALLATIONS[process_name]:
+            raise ValueError(f"cannot find process: {process_name} in config")
+        p = get_program(config.PREREQUISITE_PROCESSES[process_name])
+        loggerService.get_logger().info(f'{process_name} status: {p.status()}')
+        result = (p.status() == 'running')
+    except ValueError as e:
+        loggerService.get_logger().error(str(e))
+        result = False
+    except Exception as e:
+        loggerService.get_logger().error(
+            f'exception has occurred , due to: {str(e)}')
+        result = False
+    finally:
+        return {f'is_{process_name}_running': result}
 
 
 def run_health_checks():
