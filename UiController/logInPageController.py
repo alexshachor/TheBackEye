@@ -26,9 +26,9 @@ class LoginController:
             return obj + ' Can not be empty.'
         if obj == 'Name':
             if string.replace(' ', '').isalpha():
-                if not string.split(' ')[1]:
-                    return 'Please enter a full name.'
-                return 'OK' if ' ' in string else 'Please enter a full name with space.'
+                if len(string.split(' ')) == 1:
+                    return 'Please enter a full name with space.'
+                return 'OK' if (' ' in string and string.split(' ')[1] != '') else 'Please enter a full name.'
             return 'Name should not contain any numbers'
         else:
             if len(string) == 9:
