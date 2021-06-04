@@ -2,7 +2,7 @@ import unittest
 from UiController import logInPageController as lc
 
 
-class TestHealthCheckPageController(unittest.TestCase):
+class TestLoginPageController(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -20,7 +20,7 @@ class TestHealthCheckPageController(unittest.TestCase):
         print('tearDown\n')
 
     def test_check_validation_name(self):
-        print('test_get_health_map')
+        print('test_check_validation_name')
         res = self.lc.check_validation('Name', 'asd')
         self.assertEqual(res, 'Please enter a full name with space.')
 
@@ -33,8 +33,8 @@ class TestHealthCheckPageController(unittest.TestCase):
         res = self.lc.check_validation('Name', 'asd hg')
         self.assertEqual(res, 'OK')
 
-    def test_check_validation_if(self):
-        print('test_get_health_map')
+    def test_check_validation_id(self):
+        print('test_check_validation_id')
         res = self.lc.check_validation('Id', '123')
         self.assertEqual(res, 'ID need to be at len 9.')
 
