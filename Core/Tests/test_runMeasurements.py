@@ -3,7 +3,7 @@ from datetime import datetime
 from Core.measurementsResult import MeasurementsResult
 
 
-class TestMeasurementsResult(unittest.TestCase):
+class TestRunMeasurements(unittest.TestCase):
 
     def test_init(self):
         # test success call for init
