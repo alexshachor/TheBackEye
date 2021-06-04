@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from Services import healthChecksService
 
+
 class TestHealthChecksService(unittest.TestCase):
 
     def test_check_is_alive(self):
@@ -9,13 +10,12 @@ class TestHealthChecksService(unittest.TestCase):
             # test success call
             mocled_head.return_value.ok = True
             result = healthChecksService.check_is_alive()
-            self.assertEqual(result,{'is_server_alive': True})
+            self.assertEqual(result, {'is_server_alive': True})
 
             # test failure call
             mocled_head.return_value.ok = False
             result = healthChecksService.check_is_alive()
             self.assertEqual(result, {'is_server_alive': False})
-
 
     def test_check_if_program_installed(self):
         real_program = 'manycam'
@@ -23,12 +23,11 @@ class TestHealthChecksService(unittest.TestCase):
 
         # test success call
         result = healthChecksService.check_if_program_installed(real_program)
-        self.assertEqual(result,{f'is_{real_program}_installed': True})
+        self.assertEqual(result, {f'is_{real_program}_installed': True})
 
         # test failure call
         result = healthChecksService.check_if_program_installed(fake_program)
         self.assertEqual(result, {f'is_{fake_program}_installed': False})
-
 
     def test_check_if_process_is_running(self):
         real_process = 'manycam'
@@ -41,6 +40,24 @@ class TestHealthChecksService(unittest.TestCase):
         # test failure call
         result = healthChecksService.check_if_process_is_running(fake_process)
         self.assertEqual(result, {f'is_{fake_process}_running': False})
+
+    def test_get_program(self):
+        real_program = 'ManyCam.exe'
+        fake_program = 'blabla.exe'
+
+        # test success call
+        result = healthChecksService.get_program(real_program)
+        self.assertTrue(result)
+
+        # test failure call
+        result = healthChecksService.get_program(fake_program)
+        self.assertIsNone(result)
+
+    def test_check_camera_source(self):
+        # test success call
+        result = healthChecksService.check_camera_source()
+        self.assertEqual(result, {'camera_source': True})
+
 
 if __name__ == '__main__':
     unittest.main()
