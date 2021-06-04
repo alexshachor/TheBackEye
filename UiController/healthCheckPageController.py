@@ -1,5 +1,7 @@
 import config
 from Services import healthChecksService as hcs
+import sys
+from EmailMessagingSystem import emailSystem as es
 
 
 class HealthCheckPageController:
@@ -39,13 +41,43 @@ class HealthCheckPageController:
         return self.ready
 
 
+def send_email(message):
+    """
+    send us en email from the student if he failed in health
+    checks and want to connect us.
+    :param message: the message from the student
+    """
+    msg = """\
+                    Subject: Mail from student
+
+                        Student failed in our health check
+                        and send us the following email:
+
+                        """ + message + """
+
+                        -------------------------------
+
+                    Student To TheBackEye Team.
+                    """
+    es.EmailSystem().send_email(msg, config.EMAIL['EMAIL'])
+
+
+def close_application():
+    """
+    if the student failed in health checks close the program.
+    """
+    # TODO - check for other things to be done and close
+    sys.exit()
+
+
 def health_list_tests():
     """
     function for tests.
     :return: a list that mimics the operation of the service get health.
     """
     return [{'is_zoom_installed': True}, {'is_manycam_installed': True},
-            {'is_manycam_running': True}, {'is_alive': True}, {'camera_source': True}]
+            {'is_manycam_running': True}, {'is_alive': True}, {'camera_source': True},
+            {'is_sound_ok': True}]
 
 
 if __name__ == '__main__':

@@ -50,7 +50,8 @@ class VoiceSystem:
             self.msg = self.indices_msgs['MANY_FAILURES']
             return
         for i in self.indices_list:
-            self.msg += self.indices_msgs[i] + ' '
+            if i != 'SPEAKER':
+                self.msg += self.indices_msgs[i] + ' '
 
     def __run_voice_system(self):
         """
