@@ -1,6 +1,5 @@
 import unittest
 from datetime import datetime
-from unittest.mock import patch, mock_open
 from Core.measurementsResult import MeasurementsResult
 
 
