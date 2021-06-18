@@ -56,13 +56,12 @@ class ValidationController:
         :param email: the email address to send
         :return: bool indicating if the email sent
         """
+        subject = 'TheBackEye Validation Code'
         msg = """\
-                Subject: TheBackEye Validation Code
-
                     This is your validation code:
                     """ + str(self.code) + """
                     please enter this code in the app.
 
                 TheBackEye Team
                 """
-        return es.EmailSystem().send_email(msg, email)
+        return es.EmailSystem().send_email(subject, msg, email)

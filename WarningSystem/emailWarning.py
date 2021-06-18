@@ -11,6 +11,7 @@ class EmailWarning:
         """
         self.__msg = self.__create_msg(failed_measurements)
         self.__user_email = config.EMAIL['USER_EMAIL']
+        self.subject = 'TheBackEye Warning System!'
         self.__send_msg()
 
     @staticmethod
@@ -21,9 +22,6 @@ class EmailWarning:
         if 'Speaker'.upper() in map_measurements:
             tmp_msg += 'Our system detected that your speaker turned off,\n'
         msg = """\
-        
-            Subject: TheBackEye Warning\n
-                 
             Hi
             """ + tmp_msg + """
             please return to learning mode.
@@ -36,7 +34,7 @@ class EmailWarning:
         """
         send the email to the user via EmailSystem
         """
-        es.EmailSystem().send_email(self.__msg, self.__user_email)
+        es.EmailSystem().send_email(self.subject, self.__msg, self.__user_email)
 
 
 def for_tests_only():

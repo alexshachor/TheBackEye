@@ -47,19 +47,18 @@ def send_email(message):
     checks and want to connect us.
     :param message: the message from the student
     """
+    subject = 'Mail from student'
     msg = """\
-                    Subject: Mail from student
+                Student failed in our health check
+                and send us the following email:
 
-                        Student failed in our health check
-                        and send us the following email:
+                """ + message + """
 
-                        """ + message + """
+                -------------------------------
 
-                        -------------------------------
-
-                    Student To TheBackEye Team.
-                    """
-    es.EmailSystem().send_email(msg, config.EMAIL['EMAIL'])
+            Student To TheBackEye Team.
+            """
+    es.EmailSystem().send_email(subject, msg, config.EMAIL['EMAIL'])
 
 
 def close_application():

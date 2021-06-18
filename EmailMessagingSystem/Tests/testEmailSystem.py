@@ -20,12 +20,12 @@ class TestEmailSystem(unittest.TestCase):
 
     def test_send_email_correctly(self):
         print('test_send_email_correctly')
-        res1 = es.EmailSystem().send_email('abra cadabra', 'abra@cadabra.com')
+        res1 = es.EmailSystem().send_email('hi' ,'abra cadabra', 'abra@cadabra.com')
         self.assertEqual(res1, True)
 
     def test_send_email_numbers(self):
         print('test_send_email_numbers')
-        res2 = es.EmailSystem().send_email('abra cadabra', '1234')
+        res2 = es.EmailSystem().send_email('vat', 'abra cadabra', '1234')
         self.assertEqual(res2, False)
 
 
