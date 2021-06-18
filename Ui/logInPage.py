@@ -30,7 +30,7 @@ class LogInPage(tk.Frame):
         # In these functions I will create & place all of the components
         # in the appropriate places, and run logic according to the user's requirements.
         self.background()
-        self.name, self.id = self.input_output()
+        self.name, self.id, self.class_code = self.input_output()
         self.buttons(controller)
 
     def background(self):
@@ -48,14 +48,18 @@ class LogInPage(tk.Frame):
         Init input output.
         """
         name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        name.place(bordermode=OUTSIDE, x=110, y=210)
+        name.place(bordermode=OUTSIDE, x=110, y=185)
         e_name = Entry(self)
-        e_name.place(bordermode=OUTSIDE, x=110, y=235, width=220, height=40)
+        e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
         id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        id.place(bordermode=OUTSIDE, x=110, y=295)
+        id.place(bordermode=OUTSIDE, x=110, y=255)
         e_id = Entry(self)
-        e_id.place(bordermode=OUTSIDE, x=110, y=320, width=220, height=40)
-        return e_name, e_id
+        e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
+        class_code = tk.Label(self, text='Class Code:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        class_code.place(bordermode=OUTSIDE, x=110, y=325)
+        e_class_code = Entry(self)
+        e_class_code.place(bordermode=OUTSIDE, x=110, y=345, width=220, height=40)
+        return e_name, e_id, e_class_code
 
     def buttons(self, controller):
         """
@@ -74,11 +78,17 @@ class LogInPage(tk.Frame):
         obg = lc.LoginController(self.name.get(), self.id.get())
         msg = obg.check_validation('Name', self.name.get())
         if msg != 'OK':
-            self.invalid_name = ovb.create_msg(self, 260, 275, msg)
+            self.invalid_name = ovb.create_msg(self, 260, 245, msg)
+            return
         msg1 = obg.check_validation('ID', self.id.get())
         if msg1 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 360, msg1)
-        if msg == 'OK' and msg1 == 'OK':
+            self.invalid_id = ovb.create_msg(self, 260, 315, msg1)
+            return
+        msg2 = obg.check_class_code(self.class_code.get())
+        if msg2 != 'OK':
+            self.invalid_id = ovb.create_msg(self, 260, 315, msg1)
+            return
+        if msg == 'OK' and msg1 == 'OK' and msg2 != 'OK':
             c.USER_DATA['USERNAME'] = self.name.get()
             c.USER_DATA['ID'] = self.id.get()
             self.pb = progressbar.progressbar(self)
