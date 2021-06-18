@@ -84,11 +84,15 @@ class HealthCheckPage(tk.Frame):
         i = 0
         colors = ['blue', 'green', 'red', 'orange', 'black', 'grey']
         map = self.health_controller.get_health_map()
-        for key, val in map.items():
-            time.sleep(1)
+        for key in map.keys():
             label = tk.Label(self, text=key, fg=colors[i], font=FONT_HEALTH, bg='white')
             label.place(bordermode=OUTSIDE, x=x, y=y)
-            # time.sleep(1)
+            y += 35
+            i += 1
+        y = 150
+        i = 0
+        for val in map.values():
+            time.sleep(1)
             label = tk.Label(self, image=self.v_img, borderwidth=0) if val else \
                 tk.Label(self, image=self.x_img, borderwidth=0)
             label.place(bordermode=OUTSIDE, x=x + 280, y=y + 5)
