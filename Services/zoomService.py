@@ -5,14 +5,18 @@ import platform
 class ZoomService:
 
     def __init__(self, link):
-        pass
+        self.link = link
+        self.domain_name, self.password, self.code = self.__decode_link()
 
     def join(self):
         pass
 
     @staticmethod
     def quit():
-        pass
+        if platform.system() == 'Windows':
+            os.system('taskkill /f /im Zoom.exe')
+        else:
+            os.system('killall zoom.us')
 
     def __decode_link(self):
         pass
