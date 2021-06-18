@@ -86,9 +86,9 @@ class LogInPage(tk.Frame):
             return
         msg2 = obg.check_class_code(self.class_code.get())
         if msg2 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 315, msg1)
+            self.invalid_id = ovb.create_msg(self, 260, 385, msg1)
             return
-        if msg == 'OK' and msg1 == 'OK' and msg2 != 'OK':
+        if msg == 'OK' and msg1 == 'OK' and msg2 == 'OK':
             c.USER_DATA['USERNAME'] = self.name.get()
             c.USER_DATA['ID'] = self.id.get()
             self.pb = progressbar.progressbar(self)
@@ -104,7 +104,7 @@ class LogInPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         :param obg: the login controller
         """
-        has_pic = obg.has_pic()
+        has_pic = obg.has_pic_and_email()
         self.pb.destroy()
         self.clean_entries()
         controller.manage_frame(tp.TakePicPage) if has_pic else controller.manage_frame(vp.ValidationPage)
