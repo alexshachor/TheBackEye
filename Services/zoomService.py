@@ -42,7 +42,8 @@ class ZoomService:
 
 
 def for_tests_only():
-    pass
+    meeting = ZoomService('https://us04web.zoom.us/j/79870014162?pwd=TklmK2hJNVhoUElxWHBVRzlTdnpCdz09')
+    meeting.join()
 
 
 if __name__ == '__main__':
