@@ -25,7 +25,20 @@ class ZoomService:
             os.system('killall zoom.us')
 
     def __decode_link(self):
-        pass
+        # extract meeting info from zoom url
+        try:
+            password = self.link.split('pwd=')[1]
+        except:
+            password = ''
+        try:
+            code = self.link.split('/j/')[1].split('?pwd=')[0]
+        except:
+            code = "NOT FOUND" if code == "" else code.strip()
+        try:
+            domain_name = self.link.split("//")[1].split("/j")[0]
+        except:
+            domain_name = ''
+        return domain_name, password, code
 
 
 def for_tests_only():
