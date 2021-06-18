@@ -36,12 +36,20 @@ class LoginController:
             return 'ID need to be at len 9.'
 
     @staticmethod
-    def has_pic():
+    def check_class_code(class_code):
+        # TODO: send the class code to the server [to get lesson by class code] and if it returns
+        # a lesson store it in the static class and return OK else return their is no class with this class code.
+        return 'OK' if config.DEBUG else None
+
+    @staticmethod
+    def has_pic_and_email():
         """
-        Check if we already have pics for this student.
+        Check if we already have email and pics for this student.
         """
         if config.DEBUG:
             time.sleep(2)
-            return False
-        # TODO - send name and id to the server to check if we have already pic
-        #  for this student if true return true else false (recognazie student by id and name).
+            return 'ToValidation'
+        # TODO - check in the static class if the student has mail already if no return ToValidation.
+        # TODO - send student id to the server to check if we have already pic if no return ToUpload
+        # if yes store them in the face recognition images folder and train the model on them and return
+        #  ToSnapshot.
