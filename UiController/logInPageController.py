@@ -48,7 +48,7 @@ class LoginController:
         """
         if config.DEBUG:
             time.sleep(2)
-            return False
+            return 'ToValidation'
         # TODO - check in the static class if the student has mail already if no return ToValidation.
         # TODO - send student id to the server to check if we have already pic if no return ToUpload
         # if yes store them in the face recognition images folder and train the model on them and return

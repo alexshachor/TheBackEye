@@ -5,6 +5,7 @@ from UiController import logInPageController as lc
 from Ui import overViewButtons as ovb
 from Ui import takePicPage as tp
 from Ui import validationPage as vp
+from Ui import uploadPicPage as up
 import config as c
 import threading
 
@@ -107,7 +108,12 @@ class LogInPage(tk.Frame):
         has_pic = obg.has_pic_and_email()
         self.pb.destroy()
         self.clean_entries()
-        controller.manage_frame(tp.TakePicPage) if has_pic else controller.manage_frame(vp.ValidationPage)
+        if has_pic == 'ToValidation':
+            controller.manage_frame(vp.ValidationPage)
+        elif has_pic == 'ToUpload':
+            controller.manage_frame(up.UploadPicPage)
+        elif has_pic == 'ToSnapshot':
+            controller.manage_frame(tp.TakePicPage)
 
     def clean_entries(self):
         """
