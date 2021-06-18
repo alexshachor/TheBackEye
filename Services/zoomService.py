@@ -9,7 +9,13 @@ class ZoomService:
         self.domain_name, self.password, self.code = self.__decode_link()
 
     def join(self):
-        pass
+        if platform.system() == 'Windows':
+            command = f'start {self.link}' if self.code == "NOT FOUND" else \
+                f'start zoommtg://{self.domain_name}/join?confno={self.code}?"&"pwd={self.password}'
+        else:
+            command = f'open {self.link}' if self.code == "NOT FOUND" else \
+                f'open "zoommtg://{self.domain_name}/join?confno={self.code}?&pwd={self.password}"'
+        os.system(command)
 
     @staticmethod
     def quit():
