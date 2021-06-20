@@ -3,7 +3,8 @@ import json
 
 import requests
 from Services import loggerService
-
+import urllib3
+urllib3.disable_warnings()
 
 def get(url, params = None):
     """
@@ -15,7 +16,7 @@ def get(url, params = None):
     try:
         if not url:
             raise ValueError(f'cannot get, url is missing')
-        response = requests.get(url, params)
+        response = requests.get(url, params,verify=False)
         response.raise_for_status()
         # data = response.json()
         return response
@@ -41,7 +42,7 @@ def post(url, data):
     try:
         if not data or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
-        response = requests.post(url, data)
+        response = requests.post(url, data,verify=False)
         response.raise_for_status()
         return response.ok
     except ValueError as e:
@@ -76,7 +77,7 @@ def post_image_data(url, data, image_file):
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
         payload = json.dumps({"image": im_b64, 'data': data})
-        response = requests.post(url, data=payload, headers=headers)
+        response = requests.post(url, data=payload, headers=headers,verify=False)
         response.raise_for_status()
         return response.ok
     except ValueError as e:
@@ -100,7 +101,7 @@ def head(url):
     try:
         if not url:
             raise ValueError(f'cannot make head call, url is missing')
-        response = requests.head(url)
+        response = requests.head(url,verify=False)
         response.raise_for_status()
         return True if response.ok else False
     except ValueError as e:
