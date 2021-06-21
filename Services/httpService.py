@@ -34,29 +34,29 @@ def get(url, params=None):
         return None
 
 
-def post(url, data):
+def post(url, json):
     """
     post the given data to the given url
     :param url: post the data to this url
-    :param data: data to send the server
-    :return: True if succeed and False otherwise
+    :param json: json data to send the server
+    :return: response from server if succeed and None otherwise
     """
     try:
-        if not data or not url:
+        if not json or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
-        response = requests.post(url, data, verify=False)
+        response = requests.post(url, json=json, verify=False)
         response.raise_for_status()
-        return response.ok
+        return response
     except ValueError as e:
         loggerService.get_logger().error(str(e))
-        return False
+        return None
     except requests.exceptions.RequestException:
         loggerService.get_logger().error(str(response.text))
-        return False
+        return None
     except Exception as e:
         loggerService.get_logger().error(
-            f'post call to url: {url}, data: {data} has failed with status: {response.status_code}, due to: {str(e)}')
-        return False
+            f'post call to url: {url}, data: {json} has failed with status: {response.status_code}, due to: {str(e)}')
+        return None
 
 
 def put(url, json):
@@ -64,7 +64,7 @@ def put(url, json):
     put - update the given data to the given url
     :param url: put the data to this url
     :param json: json data to send the server for update
-    :return: True if succeed and False otherwise
+    :return: response from server if succeed and None otherwise
     """
     try:
         if not json or not url:

@@ -17,21 +17,45 @@ class TestHttpService(unittest.TestCase):
             mocked_post.return_value.ok = True
             result = httpService.post(self.mocked_url, self.mocked_data)
             mocked_post.assert_called_with(self.mocked_url, self.mocked_data)
-            self.assertTrue(result)
+            self.assertIsNotNone(result)
+            self.assertTrue(result.ok)
 
             # test case of url is None
             result = httpService.post(None, self.mocked_data)
-            self.assertFalse(result)
+            self.assertIsNone(result)
 
             # test case of data is None
             result = httpService.post(self.mocked_url, None)
-            self.assertFalse(result)
+            self.assertIsNone(result)
 
             # test case of failure call
             mocked_post.return_value.ok = False
             result = httpService.post(self.mocked_url, self.mocked_data)
             mocked_post.assert_called_with(self.mocked_url, self.mocked_data)
-            self.assertFalse(result)
+            self.assertIsNone(result)
+
+    def test_put(self):
+        with patch('requests.put') as mocked_put:
+            # test success call
+            mocked_put.return_value.ok = True
+            result = httpService.post(self.mocked_url, self.mocked_data)
+            mocked_put.assert_called_with(self.mocked_url, self.mocked_data)
+            self.assertIsNotNone(result)
+            self.assertTrue(result.ok)
+
+            # test case of url is None
+            result = httpService.post(None, self.mocked_data)
+            self.assertIsNone(result)
+
+            # test case of data is None
+            result = httpService.post(self.mocked_url, None)
+            self.assertIsNone(result)
+
+            # test case of failure call
+            mocked_put.return_value.ok = False
+            result = httpService.post(self.mocked_url, self.mocked_data)
+            mocked_put.assert_called_with(self.mocked_url, self.mocked_data)
+            self.assertIsNone(result)
 
     def test_post_image_data(self):
         with patch('requests.post') as mocked_post:
