@@ -43,7 +43,7 @@ def post(url, json):
     """
     try:
         if not json or not url:
-            raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
+            raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {json}')
         response = requests.post(url, json=json, verify=False)
         response.raise_for_status()
         return response
