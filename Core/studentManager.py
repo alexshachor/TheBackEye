@@ -1,7 +1,8 @@
 import config
 from Services import httpService
+import copy
 
-student = None
+student_from_server = None
 
 
 class StudentManager:
@@ -16,37 +17,37 @@ class StudentManager:
         :param password: the student's password
         :return: student details dictionary
         """
-        global student
+        global student_from_server
         if password:
             url = config.URLS['get_student'] + password
             result = httpService.get(url)
             if result:
-                student = result.json()
+                student_from_server = result.json()
 
-        return student
+        return copy.deepcopy(student_from_server)
 
     @staticmethod
-    def update_student():
+    def update_student(student_updated):
         """
         Get specific student from remote
-        :param password: the student's password
+        :param student: student to update
         :return: student details dictionary
         """
-        global student
-        if student:
+        global student_from_server
+        if student_updated:
             url = config.URLS['put_student']
-            result = httpService.put(url, student)
+            result = httpService.put(url, student_updated)
             if result:
-                student = result.json()
+                student_from_server = result.json()
 
-        return student
+        return copy.deepcopy(student_from_server)
 
 
 if __name__ == '__main__':
-    res_get = StudentManager.get_student("123456789")
-    if res_get:
-        print(StudentManager.get_student())
-        res_get['person']['firstName'] = 'Moshe'
-        res_put = StudentManager.update_student()
-        if res_put:
-            print(StudentManager.get_student())
+    student = StudentManager.get_student("123456789")
+    if student:
+        print('got student from server: ', student)
+        # change something in student details
+        student['person']['firstName'] = student['person']['firstName'] + 'DDD'
+        print('got student after update: ', StudentManager.update_student(student))
+        print('get from server after update: ', StudentManager.get_student("123456789"))
