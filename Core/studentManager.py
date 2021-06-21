@@ -29,9 +29,9 @@ class StudentManager:
     @staticmethod
     def update_student(student_updated):
         """
-        Get specific student from remote
-        :param student: student to update
-        :return: student details dictionary
+        Update student in remote
+        :param student_updated: student to update
+        :return: updated student details dictionary
         """
         global student_from_server
         if student_updated:
@@ -40,7 +40,7 @@ class StudentManager:
             if result:
                 student_from_server = result.json()
 
-        return copy.deepcopy(student_from_server)
+        return StudentManager.get_student()
 
 
 if __name__ == '__main__':
@@ -48,6 +48,6 @@ if __name__ == '__main__':
     if student:
         print('got student from server: ', student)
         # change something in student details
-        student['person']['firstName'] = student['person']['firstName'] + 'DDD'
+        student['person']['firstName'] = student['person']['firstName'] + 'X'
         print('got student after update: ', StudentManager.update_student(student))
         print('get from server after update: ', StudentManager.get_student("123456789"))
