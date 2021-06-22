@@ -25,8 +25,8 @@ class LogInPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.login_img = PhotoImage(file='.\PicUi\\login_b.png')
         self.img = PhotoImage(file='.\PicUi\\login_background.png')
-        self.invalid_name = None
-        self.invalid_id = None
+        self.invalid_password = None
+        self.invalid_code = None
         self.pb = None
         # In these functions I will create & place all of the components
         # in the appropriate places, and run logic according to the user's requirements.
@@ -57,13 +57,13 @@ class LogInPage(tk.Frame):
         # e_id = Entry(self)
         # e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
         password = tk.Label(self, text='Password:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        password.place(bordermode=OUTSIDE, x=110, y=185)
+        password.place(bordermode=OUTSIDE, x=110, y=210)
         e_password = Entry(self)
-        e_password.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
+        e_password.place(bordermode=OUTSIDE, x=110, y=235, width=220, height=40)
         class_code = tk.Label(self, text='Class Code:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        class_code.place(bordermode=OUTSIDE, x=110, y=325)
+        class_code.place(bordermode=OUTSIDE, x=110, y=295)
         e_class_code = Entry(self)
-        e_class_code.place(bordermode=OUTSIDE, x=110, y=345, width=220, height=40)
+        e_class_code.place(bordermode=OUTSIDE, x=110, y=320, width=220, height=40)
         return e_password, e_class_code
 
     def buttons(self, controller):
@@ -83,9 +83,9 @@ class LogInPage(tk.Frame):
         obg = lc.LoginController(self.password.get(), self.class_code.get())
         msg = obg.check_validation()
         if msg['Class Code'] != '':
-            self.invalid_name = ovb.create_msg(self, 260, 245, msg['Class Code'])
+            self.invalid_code = ovb.create_msg(self, 260, 360, msg['Class Code'])
         if msg['Password'] != '':
-            self.invalid_id = ovb.create_msg(self, 260, 315, msg['Password'])
+            self.invalid_password = ovb.create_msg(self, 260, 275, msg['Password'])
         if msg['Password'] == '' and msg['Class Code'] == '':
             self.pb = progressbar.progressbar(self)
             self.pb.place(bordermode=OUTSIDE, x=118, y=420, height=30, width=200)
@@ -119,10 +119,10 @@ class LogInPage(tk.Frame):
         """
         self.password.delete(0, 'end')
         self.class_code.delete(0, 'end')
-        if self.invalid_id is not None:
-            self.invalid_id.destroy()
-        if self.invalid_name is not None:
-            self.invalid_name.destroy()
+        if self.invalid_password is not None:
+            self.invalid_password.destroy()
+        if self.invalid_code is not None:
+            self.invalid_code.destroy()
 
 
 
