@@ -6,34 +6,27 @@ class LoginController:
     """
     This class is responsible for the page login.
     """
-    def __init__(self, name, id):
+    def __init__(self, password, class_code):
         """
         Init variables.
         :param name: the student name
         :param id: the student id
         """
-        self.name = name
-        self.id = id
+        self.password = password
+        self.class_code = class_code
 
-    @staticmethod
-    def check_validation(obj, string):
+    def check_validation(self):
         """
-        Check validation of student id or name.
-        :param obj: name or id
-        :param string: what to check
+        Check validation of student password & class_code.
         """
-        if len(string) == 0:
-            return obj + ' Can not be empty.'
-        if obj == 'Name':
-            if string.replace(' ', '').isalpha():
-                if len(string.split(' ')) == 1:
-                    return 'Please enter a full name with space.'
-                return 'OK' if (' ' in string and string.split(' ')[1] != '') else 'Please enter a full name.'
-            return 'Name should not contain any numbers'
-        else:
-            if len(string) == 9:
-                return 'OK' if string.isnumeric() else 'ID should not contain any letters.'
-            return 'ID need to be at len 9.'
+        if len(self.class_code) == 0:
+            return 'Class Code cannot be empty.'
+        if len(self.password) == 0:
+            return 'Password Code cannot be empty.'
+        if not all(ord(c) < 128 for c in self.class_code):
+            return 'Class Code not in ascii.'
+        if not all(ord(c) < 128 for c in self.password):
+            return 'Password not in ascii.'
 
     @staticmethod
     def check_class_code(class_code):
