@@ -31,7 +31,7 @@ class LogInPage(tk.Frame):
         # In these functions I will create & place all of the components
         # in the appropriate places, and run logic according to the user's requirements.
         self.background()
-        self.name, self.id, self.class_code = self.input_output()
+        self.password, self.class_code = self.input_output()
         self.buttons(controller)
 
     def background(self):
@@ -48,19 +48,23 @@ class LogInPage(tk.Frame):
         """
         Init input output.
         """
-        name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        name.place(bordermode=OUTSIDE, x=110, y=185)
-        e_name = Entry(self)
-        e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
-        id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        id.place(bordermode=OUTSIDE, x=110, y=255)
-        e_id = Entry(self)
-        e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
+        # name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        # name.place(bordermode=OUTSIDE, x=110, y=185)
+        # e_name = Entry(self)
+        # e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
+        # id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        # id.place(bordermode=OUTSIDE, x=110, y=255)
+        # e_id = Entry(self)
+        # e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
+        password = tk.Label(self, text='Password:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        password.place(bordermode=OUTSIDE, x=110, y=185)
+        e_password = Entry(self)
+        e_password.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
         class_code = tk.Label(self, text='Class Code:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
         class_code.place(bordermode=OUTSIDE, x=110, y=325)
         e_class_code = Entry(self)
         e_class_code.place(bordermode=OUTSIDE, x=110, y=345, width=220, height=40)
-        return e_name, e_id, e_class_code
+        return e_password, e_class_code
 
     def buttons(self, controller):
         """
@@ -76,7 +80,7 @@ class LogInPage(tk.Frame):
         The logic that occurs when the user clicks login.
         :param controller: gives the ability to switch between pages
         """
-        obg = lc.LoginController(self.name.get(), self.id.get())
+        obg = lc.LoginController(self.password.get(), self.class_code.get())
         msg = obg.check_validation('Name', self.name.get())
         if msg != 'OK':
             self.invalid_name = ovb.create_msg(self, 260, 245, msg)
@@ -119,8 +123,8 @@ class LogInPage(tk.Frame):
         """
         Clearing the page.
         """
-        self.name.delete(0, 'end')
-        self.id.delete(0, 'end')
+        self.password.delete(0, 'end')
+        self.class_code.delete(0, 'end')
         if self.invalid_id is not None:
             self.invalid_id.destroy()
         if self.invalid_name is not None:
