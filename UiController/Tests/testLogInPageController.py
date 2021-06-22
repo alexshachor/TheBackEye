@@ -14,35 +14,37 @@ class TestLoginPageController(unittest.TestCase):
 
     def setUp(self):
         print('setUp')
-        self.lc = lc.LoginController('Alex Shahor,', '123456789')
 
     def tearDown(self):
         print('tearDown\n')
 
-    def test_check_validation_name(self):
-        print('test_check_validation_name')
-        res = self.lc.check_validation('Name', 'asd')
-        self.assertEqual(res, 'Please enter a full name with space.')
+    def test_check_validation_password(self):
+        print('test_check_validation_password')
+        self.lc = lc.LoginController('', '123456789')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Password'], 'Password cannot be empty.\n')
 
-        res = self.lc.check_validation('Name', 'asd ')
-        self.assertEqual(res, 'Please enter a full name.')
+        self.lc = lc.LoginController('רא', '123456789')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Password'], 'Password not in ascii.\n')
 
-        res = self.lc.check_validation('Name', 'asd hg6')
-        self.assertEqual(res, 'Name should not contain any numbers')
+        self.lc = lc.LoginController('123', '123456789')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Password'], '')
 
-        res = self.lc.check_validation('Name', 'asd hg')
-        self.assertEqual(res, 'OK')
+    def test_check_validation_code(self):
+        print('test_check_validation_code')
+        self.lc = lc.LoginController('123', '')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Class Code'], 'Class Code cannot be empty.\n')
 
-    def test_check_validation_id(self):
-        print('test_check_validation_id')
-        res = self.lc.check_validation('Id', '123')
-        self.assertEqual(res, 'ID need to be at len 9.')
+        self.lc = lc.LoginController('123', 'שדג')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Class Code'], 'Class Code not in ascii.\n')
 
-        res = self.lc.check_validation('Id', '12345678y')
-        self.assertEqual(res, 'ID should not contain any letters.')
-
-        res = self.lc.check_validation('Id', '123456789')
-        self.assertEqual(res, 'OK')
+        self.lc = lc.LoginController('123', '123456789')
+        res = self.lc.check_validation()
+        self.assertEqual(res['Class Code'], '')
 
 
 if __name__ == '__main__':

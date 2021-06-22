@@ -25,13 +25,13 @@ class LogInPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.login_img = PhotoImage(file='.\PicUi\\login_b.png')
         self.img = PhotoImage(file='.\PicUi\\login_background.png')
-        self.invalid_name = None
-        self.invalid_id = None
+        self.invalid_password = None
+        self.invalid_code = None
         self.pb = None
         # In these functions I will create & place all of the components
         # in the appropriate places, and run logic according to the user's requirements.
         self.background()
-        self.name, self.id, self.class_code = self.input_output()
+        self.password, self.class_code = self.input_output()
         self.buttons(controller)
 
     def background(self):
@@ -48,19 +48,23 @@ class LogInPage(tk.Frame):
         """
         Init input output.
         """
-        name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        name.place(bordermode=OUTSIDE, x=110, y=185)
-        e_name = Entry(self)
-        e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
-        id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        id.place(bordermode=OUTSIDE, x=110, y=255)
-        e_id = Entry(self)
-        e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
+        # name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        # name.place(bordermode=OUTSIDE, x=110, y=185)
+        # e_name = Entry(self)
+        # e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
+        # id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        # id.place(bordermode=OUTSIDE, x=110, y=255)
+        # e_id = Entry(self)
+        # e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
+        password = tk.Label(self, text='Password:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
+        password.place(bordermode=OUTSIDE, x=110, y=210)
+        e_password = Entry(self)
+        e_password.place(bordermode=OUTSIDE, x=110, y=235, width=220, height=40)
         class_code = tk.Label(self, text='Class Code:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        class_code.place(bordermode=OUTSIDE, x=110, y=325)
+        class_code.place(bordermode=OUTSIDE, x=110, y=295)
         e_class_code = Entry(self)
-        e_class_code.place(bordermode=OUTSIDE, x=110, y=345, width=220, height=40)
-        return e_name, e_id, e_class_code
+        e_class_code.place(bordermode=OUTSIDE, x=110, y=320, width=220, height=40)
+        return e_password, e_class_code
 
     def buttons(self, controller):
         """
@@ -76,22 +80,13 @@ class LogInPage(tk.Frame):
         The logic that occurs when the user clicks login.
         :param controller: gives the ability to switch between pages
         """
-        obg = lc.LoginController(self.name.get(), self.id.get())
-        msg = obg.check_validation('Name', self.name.get())
-        if msg != 'OK':
-            self.invalid_name = ovb.create_msg(self, 260, 245, msg)
-            return
-        msg1 = obg.check_validation('ID', self.id.get())
-        if msg1 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 315, msg1)
-            return
-        msg2 = obg.check_class_code(self.class_code.get())
-        if msg2 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 385, msg1)
-            return
-        if msg == 'OK' and msg1 == 'OK' and msg2 == 'OK':
-            c.USER_DATA['USERNAME'] = self.name.get()
-            c.USER_DATA['ID'] = self.id.get()
+        obg = lc.LoginController(self.password.get(), self.class_code.get())
+        msg = obg.check_validation()
+        if msg['Class Code'] != '':
+            self.invalid_code = ovb.create_msg(self, 260, 360, msg['Class Code'])
+        if msg['Password'] != '':
+            self.invalid_password = ovb.create_msg(self, 260, 275, msg['Password'])
+        if msg['Password'] == '' and msg['Class Code'] == '':
             self.pb = progressbar.progressbar(self)
             self.pb.place(bordermode=OUTSIDE, x=118, y=420, height=30, width=200)
             self.pb.start()
@@ -105,9 +100,12 @@ class LogInPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         :param obg: the login controller
         """
+        student_data = obg.chech_student_data_in_server()
         has_pic = obg.has_pic_and_email()
         self.pb.destroy()
         self.clean_entries()
+        if student_data != 'OK':
+            return
         if has_pic == 'ToValidation':
             controller.manage_frame(vp.ValidationPage)
         elif has_pic == 'ToUpload':
@@ -119,12 +117,12 @@ class LogInPage(tk.Frame):
         """
         Clearing the page.
         """
-        self.name.delete(0, 'end')
-        self.id.delete(0, 'end')
-        if self.invalid_id is not None:
-            self.invalid_id.destroy()
-        if self.invalid_name is not None:
-            self.invalid_name.destroy()
+        self.password.delete(0, 'end')
+        self.class_code.delete(0, 'end')
+        if self.invalid_password is not None:
+            self.invalid_password.destroy()
+        if self.invalid_code is not None:
+            self.invalid_code.destroy()
 
 
 
