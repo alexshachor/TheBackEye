@@ -14,22 +14,23 @@ class LoginController:
         """
         self.password = password
         self.class_code = class_code
+        self.msg = {'Class Code': '', 'Password': ''}
 
     def check_validation(self):
         """
         Check validation of student password & class_code.
         """
         if len(self.class_code) == 0:
-            return 'Class Code cannot be empty.'
+            self.msg['Class Code'] += 'Class Code cannot be empty.\n'
         if len(self.password) == 0:
-            return 'Password Code cannot be empty.'
+            self.msg['Password'] += 'Password cannot be empty.\n'
         if not all(ord(c) < 128 for c in self.class_code):
-            return 'Class Code not in ascii.'
+            self.msg['Class Code'] += 'Class Code not in ascii.\n'
         if not all(ord(c) < 128 for c in self.password):
-            return 'Password not in ascii.'
+            self.msg['Password'] += 'Password not in ascii.\n'
+        return self.msg
 
-    @staticmethod
-    def check_class_code(class_code):
+    def chech_student_data_in_server(self):
         # TODO: send the class code to the server [to get lesson by class code] and if it returns
         # a lesson store it in the static class and return OK else return their is no class with this class code.
         return 'OK' if config.DEBUG else None

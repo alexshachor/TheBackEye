@@ -81,21 +81,12 @@ class LogInPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         """
         obg = lc.LoginController(self.password.get(), self.class_code.get())
-        msg = obg.check_validation('Name', self.name.get())
-        if msg != 'OK':
-            self.invalid_name = ovb.create_msg(self, 260, 245, msg)
-            return
-        msg1 = obg.check_validation('ID', self.id.get())
-        if msg1 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 315, msg1)
-            return
-        msg2 = obg.check_class_code(self.class_code.get())
-        if msg2 != 'OK':
-            self.invalid_id = ovb.create_msg(self, 260, 385, msg1)
-            return
-        if msg == 'OK' and msg1 == 'OK' and msg2 == 'OK':
-            c.USER_DATA['USERNAME'] = self.name.get()
-            c.USER_DATA['ID'] = self.id.get()
+        msg = obg.check_validation()
+        if msg['Class Code'] != '':
+            self.invalid_name = ovb.create_msg(self, 260, 245, msg['Class Code'])
+        if msg['Password'] != '':
+            self.invalid_id = ovb.create_msg(self, 260, 315, msg['Password'])
+        if msg['Password'] == '' and msg['Class Code'] == '':
             self.pb = progressbar.progressbar(self)
             self.pb.place(bordermode=OUTSIDE, x=118, y=420, height=30, width=200)
             self.pb.start()
@@ -109,9 +100,12 @@ class LogInPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         :param obg: the login controller
         """
+        student_data = obg.chech_student_data_in_server()
         has_pic = obg.has_pic_and_email()
         self.pb.destroy()
         self.clean_entries()
+        if student_data != 'OK':
+            return
         if has_pic == 'ToValidation':
             controller.manage_frame(vp.ValidationPage)
         elif has_pic == 'ToUpload':
