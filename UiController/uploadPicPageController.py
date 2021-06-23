@@ -2,8 +2,6 @@ from Measurements import faceDetector as fd
 from Measurements.SleepDetector import sleepDetector as sd
 import multiprocessing as mp
 import tkinter as tk
-import config
-import random
 import cv2
 import threading
 import numpy

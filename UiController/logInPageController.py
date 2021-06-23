@@ -1,5 +1,6 @@
 import time
 import config
+import os
 
 
 class LoginController:
@@ -47,3 +48,8 @@ class LoginController:
         # TODO - send student id to the server to check if we have already pic if no return ToUpload
         # if yes store them in the face recognition images folder and train the model on them and return
         #  ToSnapshot.
+
+        # check if the student already has images
+        files = os.listdir('Measurements/FaceRecognition/Images')
+        if files == ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg']:
+            return 'ToSnapshot'
