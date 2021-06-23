@@ -1,11 +1,12 @@
 from Measurements import faceDetector as fd
-from Measurements.HeadPose import headPose as hp
-from Measurements import sleepDetector as sd
-from Services import httpService as hs
-from Core import runMeasurements as rm
+from Measurements.SleepDetector import sleepDetector as sd
 import multiprocessing as mp
+import tkinter as tk
 import config
 import random
+import cv2
+import threading
+import numpy
 
 MSGS = {
     'FaceDetector': 'Please upload a pic with face in it.\n',
@@ -36,7 +37,8 @@ def upload_pic(pics):
     dict_results = mp.Manager().dict()
     processes = []
     for key, val in pics.items():
-        process = mp.Process(target=run_images_checks, args=(val, dict_results, key))
+        img = cv2.cvtColor(numpy.asarray(val), cv2.COLOR_RGB2BGR)
+        process = mp.Process(target=run_images_checks, args=(img, dict_results, key))
         process.start()
         processes.append(process)
     for process in processes:
@@ -45,8 +47,8 @@ def upload_pic(pics):
     flg = all(elem == '' for elem in dict_results.values())
     if flg:
         # TODO: give real URL
-        for pic in pics.items():
-            hs.post_image_data('somm/url', config.USER_DATA, pic)
+        # for pic in pics.items():
+        #     hs.post_image_data('somm/url', config.USER_DATA, pic)
         return 'OK'
     return dict_results
 
@@ -59,13 +61,33 @@ def run_images_checks(image, dict_res, i):
     the msg will be ''
     :param i: key to put the msg into in the dict of msgs
     """
-    if not config.DEBUG:
-        measurements = [fd.FaceDetector(), sd.SleepDetector(), hp.HeadPose()]
-        run_measurements = rm.RunMeasurements(measurements, None)
-        result = run_measurements.run_measurement_processes(image)
+    if config.DEBUG:
+        # measurements = [fd.FaceDetector(), sd.SleepDetector()]
+        # run_measurements = rm.RunMeasurements(measurements, None)
+        # result = run_measurements.run_measurement_processes(image)
+        result = {}
+        sd.SleepDetector().run(image, result)
+        fd.FaceDetector().run(image, result)
+        # hp.HeadPose().run(image, result)
     else:
         result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))
                   , 'HeadPose': bool(random.getrandbits(1))}
     msg = check_pic(result)
     dict_res[i] = msg
+
+
+def send_user_pic():
+    upload_pic({'0': r"C:\Users\User\Downloads\1.jpg", '1': r"C:\Users\User\Downloads\2.jpg"})
+
+
+def try_func():
+    x = threading.Thread(target=lambda: send_user_pic())
+    x.setDaemon(True)
+    x.start()
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    w = tk.Button(root, width=640, height=480, command=try_func).pack()
+    root.mainloop()
 

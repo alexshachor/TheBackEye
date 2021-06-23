@@ -2,6 +2,7 @@ from Measurements import abstractMeasurement as am
 from Services import loggerService as ls
 import config
 import cv2
+import os
 
 
 class SleepDetector(am.AbstractMeasurement):
@@ -11,7 +12,8 @@ class SleepDetector(am.AbstractMeasurement):
         initialize the parent class and eye_cascade model.
         """
         am.AbstractMeasurement.__init__(self)
-        self.path = '../MeasurementsFilesAndModels/haarcascade_eye_tree_eyeglasses.xml'
+        script_dir = os.path.dirname(__file__)
+        self.path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
         try:
             self.eye_cascade = cv2.CascadeClassifier(self.path)
         except FileNotFoundError as f:
