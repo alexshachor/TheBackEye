@@ -2,6 +2,7 @@ import cv2
 from Measurements import abstractMeasurement as am
 from Services import loggerService as ls
 import config
+import os
 
 
 class FaceRecognition(am.AbstractMeasurement):
@@ -12,8 +13,10 @@ class FaceRecognition(am.AbstractMeasurement):
         """
         am.AbstractMeasurement.__init__(self)
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
-        self.recognizer.read('.\Models\\trainer.yml')
-        self.cascade_path = '.\Models\haarcascade_frontalface_default.xml'
+        script_dir = os.path.dirname(__file__)
+        self.path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
+        self.recognizer.read(os.path.join(script_dir, 'Models/trainer.yml'))
+        self.cascade_path = os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml')
         self.face_cascade = cv2.CascadeClassifier(self.cascade_path)
         self.threshold = 45
         self.id = 0
