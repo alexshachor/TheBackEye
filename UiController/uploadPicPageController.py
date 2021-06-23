@@ -8,6 +8,7 @@ import cv2
 import threading
 import numpy
 from ImageProcessing import superResolution as sr
+from Measurements.FaceRecognition import faceTraining as ft
 from PIL import ImageTk, Image
 
 MSGS = {
@@ -40,7 +41,7 @@ def upload_pic(pics):
     processes = []
     for key, val in pics.items():
         img = cv2.cvtColor(numpy.asarray(val), cv2.COLOR_RGB2BGR)
-        process = mp.Process(target=run_images_checks, args=(img, dict_results, key))
+        process = mp.Process(target=run_images_checks, args=(img, dict_results, pics, key))
         process.start()
         processes.append(process)
     for process in processes:
@@ -51,11 +52,22 @@ def upload_pic(pics):
         # TODO: give real URL
         # for pic in pics.items():
         #     hs.post_image_data('somm/url', config.USER_DATA, pic)
+        save_pic_and_train_face_recognition(pics)
         return 'OK'
     return dict_results
 
 
-def run_images_checks(image, dict_res, i):
+def save_pic_and_train_face_recognition(pics):
+    # save the pictures
+    i = 1
+    for img in pics.values():
+        img.save("Measurements/FaceRecognition/Images/" + str(i) + ".jpg")
+        i += 1
+    # train the face recognition model on the saved images
+    ft.FaceTraining()
+
+
+def run_images_checks(image, dict_res, pics, i):
     """
     processes func to run measurements for each image.
     :param image: the image to run measurements on
@@ -69,6 +81,7 @@ def run_images_checks(image, dict_res, i):
     # run_measurements = rm.RunMeasurements(measurements, None)
     # result = run_measurements.run_measurement_processes(image)
     image = sr.SuperResolution(image, 'MEDIUM').to_super_resolution()
+    pics[i] = image
     result = {}
     sd.SleepDetector().run(image, result)
     fd.FaceDetector().run(image, result)

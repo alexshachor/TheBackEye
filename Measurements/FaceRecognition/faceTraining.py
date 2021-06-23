@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from PIL import Image
 import config
+import os
 
 
 class FaceTraining:
@@ -10,10 +11,12 @@ class FaceTraining:
         """
         init the model for training and init the images path.
         """
+        script_dir = os.path.dirname(__file__)
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
-        self.detector = cv2.CascadeClassifier('.\Models\haarcascade_frontalface_default.xml')
-        self.image_paths = ['.\Images\\1.jpg', '.\Images\\2.jpg', '.\Images\\3.jpg',
-                            '.\Images\\4.jpg', '.\Images\\5.jpg']
+        self.detector = cv2.CascadeClassifier(os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml'))
+        self.image_paths = [os.path.join(script_dir, 'Images/1.jpg'), os.path.join(script_dir, 'Images/2.jpg'),
+                            os.path.join(script_dir, 'Images/3.jpg'), os.path.join(script_dir, 'Images/4.jpg'),
+                            os.path.join(script_dir, 'Images/5.jpg')]
         print('[INFO] Training faces. It will take a few seconds.') if config.DEBUG else None
         self.faces, self.ids = self.__get_images_labels()
         self.__train()
@@ -43,7 +46,8 @@ class FaceTraining:
         yml file.
         """
         self.recognizer.train(self.faces, np.array(self.ids))
-        self.recognizer.write('.\Models\\trainer.yml')
+        script_dir = os.path.dirname(__file__)
+        self.recognizer.write(os.path.join(script_dir, 'Models/trainer.yml'))
 
 
 def for_tests_only():
