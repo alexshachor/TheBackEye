@@ -1,42 +1,37 @@
 import time
 import config
+import os
 
 
 class LoginController:
     """
     This class is responsible for the page login.
     """
-    def __init__(self, name, id):
+    def __init__(self, password, class_code):
         """
         Init variables.
         :param name: the student name
         :param id: the student id
         """
-        self.name = name
-        self.id = id
+        self.password = password
+        self.class_code = class_code
+        self.msg = {'Class Code': '', 'Password': ''}
 
-    @staticmethod
-    def check_validation(obj, string):
+    def check_validation(self):
         """
-        Check validation of student id or name.
-        :param obj: name or id
-        :param string: what to check
+        Check validation of student password & class_code.
         """
-        if len(string) == 0:
-            return obj + ' Can not be empty.'
-        if obj == 'Name':
-            if string.replace(' ', '').isalpha():
-                if len(string.split(' ')) == 1:
-                    return 'Please enter a full name with space.'
-                return 'OK' if (' ' in string and string.split(' ')[1] != '') else 'Please enter a full name.'
-            return 'Name should not contain any numbers'
-        else:
-            if len(string) == 9:
-                return 'OK' if string.isnumeric() else 'ID should not contain any letters.'
-            return 'ID need to be at len 9.'
+        if len(self.class_code) == 0:
+            self.msg['Class Code'] += 'Class Code cannot be empty.\n'
+        if len(self.password) == 0:
+            self.msg['Password'] += 'Password cannot be empty.\n'
+        if not all(ord(c) < 128 for c in self.class_code):
+            self.msg['Class Code'] += 'Class Code not in ascii.\n'
+        if not all(ord(c) < 128 for c in self.password):
+            self.msg['Password'] += 'Password not in ascii.\n'
+        return self.msg
 
-    @staticmethod
-    def check_class_code(class_code):
+    def chech_student_data_in_server(self):
         # TODO: send the class code to the server [to get lesson by class code] and if it returns
         # a lesson store it in the static class and return OK else return their is no class with this class code.
         return 'OK' if config.DEBUG else None
@@ -53,3 +48,8 @@ class LoginController:
         # TODO - send student id to the server to check if we have already pic if no return ToUpload
         # if yes store them in the face recognition images folder and train the model on them and return
         #  ToSnapshot.
+
+        # check if the student already has images
+        files = os.listdir('Measurements/FaceRecognition/Images')
+        if files == ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg']:
+            return 'ToSnapshot'

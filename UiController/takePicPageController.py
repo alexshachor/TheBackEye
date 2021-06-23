@@ -1,9 +1,9 @@
 from PIL import Image
 from UiController import uiController
 from Measurements.FaceRecognition import faceRecognition as fr
-from Core import runMeasurements as rm
-import config
-import time
+from ImageProcessing import superResolution as sr
+import cv2
+import numpy
 
 
 def check_recognition(path):
@@ -12,14 +12,12 @@ def check_recognition(path):
     :param path: path to the snapshot image
     :return msg: True or false according to FaceRecognition result
     """
-    if config.DEBUG:
-        time.sleep(2)
-        return True
-    measurements = rm.RunMeasurements([fr.FaceRecognition()], None)
-    # TODO - check if image need to be change into frame.
     img = Image.open(path)
-    face_recognition_res = measurements.run_measurement_processes(img)
-    return face_recognition_res['FaceRecognition']
+    face_recognition_res = {}
+    img = cv2.cvtColor(numpy.asarray(img), cv2.COLOR_RGB2BGR)
+    img = sr.SuperResolution(img, 'MEDIUM').to_bicubic()
+    fr.FaceRecognition().run(img, face_recognition_res)
+    return face_recognition_res[fr.FaceRecognition().__repr__()]
 
 
 def successes():
@@ -27,3 +25,7 @@ def successes():
     Go and destroy the Ui.
     """
     uiController.destructor()
+
+
+if __name__ == '__main__':
+    print(check_recognition(r"C:\Users\User\Downloads\1.jpg"))

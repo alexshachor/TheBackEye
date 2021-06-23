@@ -9,7 +9,7 @@ import threading
 
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
 FONT_MSG = c.APP['FONT_HEALTH']
-SHOW_MSG_TIME = 5
+SHOW_MSG_TIME = 10
 
 
 class TanksPage(tk.Frame):
@@ -43,11 +43,17 @@ class TanksPage(tk.Frame):
         """
         hour, minute = tpc.get_time_remaining()
         if hour == 'V':
+            label = tk.Label(self, text='You are going to enter the lesson.'
+                             , bg='black', bd=0, fg='blue', font=FONT_MSG)
+            label.place(bordermode=OUTSIDE, x=50, y=420)
             time.sleep(SHOW_MSG_TIME)
             tp.successes()
             return
         if hour == 'X':
-            # time.sleep(SHOW_MSG_TIME)
+            label = tk.Label(self, text='No lesson currently taking place\n(probably you are late).'
+                             , bg='red', bd=0, fg='black', font=FONT_MSG)
+            label.place(bordermode=OUTSIDE, x=40, y=420)
+            time.sleep(SHOW_MSG_TIME)
             tpc.kill_program()
         self.hour.set(hour)
         self.minute.set(minute)
