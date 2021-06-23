@@ -8,6 +8,7 @@ student_from_server = None
 class StudentManager:
     """
     This class manages the student details that come from remote.
+    Student object is describe the student's personal details.
     """
 
     @staticmethod

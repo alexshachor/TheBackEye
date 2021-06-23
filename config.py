@@ -14,8 +14,9 @@ URLS = {
     'lesson_configuration': 'http://Configuration/blabla',
     'post_logs': 'http://logs/bla',
     'is_server_alive': 'http://www.example.com',
-    'get_student':'https://localhost:44377/api/Student/',
-    'put_student':'https://localhost:44377/api/Student/'
+    'get_student':'https://localhost:44378/api/Person/',
+    'put_student':'https://localhost:44378/api/Person/',
+    'get_lesson':'https://localhost:44378/api/Lesson/'
 }
 
 """
