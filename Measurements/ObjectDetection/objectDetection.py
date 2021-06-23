@@ -99,7 +99,7 @@ def for_tests_only():
     """
     x = ObjectDetection()
     dict_res = {}
-    image = cv2.imread('../../ImageProcessing/SavedImages/3.jpg')
+    image = cv2.imread('../../ImageProcessing/SavedImages/2.png')
     x.run(image, dict_res)
     print(dict_res[x.__repr__()])
 
