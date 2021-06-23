@@ -1,7 +1,7 @@
 from Measurements import abstractMeasurement as am
 from Services import loggerService as ls
 import config
-import time
+import os
 import cv2
 
 
@@ -13,9 +13,10 @@ class ObjectDetection(am.AbstractMeasurement):
         & list of the prohibited objects from the list of obj.
         """
         am.AbstractMeasurement.__init__(self)
-        self.class_file = '../MeasurementsFilesAndModels/objects.names'
-        self.config_path = '../MeasurementsFilesAndModels/objects_config.pbtxt'
-        self.weights_path = '../MeasurementsFilesAndModels/objects_weights.pb'
+        script_dir = os.path.dirname(__file__)
+        self.class_file = os.path.join(script_dir, 'Files/objects.names')
+        self.config_path = os.path.join(script_dir, 'Files/objects_config.pbtxt')
+        self.weights_path = os.path.join(script_dir, 'Files/objects_weights.pb')
         self.prohibited_objects = config.PROHIBITED_OBJECTS
         self.model = None
         # Threshold to detect object
@@ -98,7 +99,7 @@ def for_tests_only():
     """
     x = ObjectDetection()
     dict_res = {}
-    image = cv2.imread('..\ImageProcessing\\SavedImages\\3.jpg')
+    image = cv2.imread('../../ImageProcessing/SavedImages/3.jpg')
     x.run(image, dict_res)
     print(dict_res[x.__repr__()])
 
