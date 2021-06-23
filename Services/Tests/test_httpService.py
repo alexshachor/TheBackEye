@@ -16,22 +16,46 @@ class TestHttpService(unittest.TestCase):
             # test success call
             mocked_post.return_value.ok = True
             result = httpService.post(self.mocked_url, self.mocked_data)
-            mocked_post.assert_called_with(self.mocked_url, self.mocked_data)
-            self.assertTrue(result)
+            mocked_post.assert_called_with(self.mocked_url, json=self.mocked_data, verify=False)
+            self.assertIsNotNone(result)
+            self.assertTrue(result.ok)
 
             # test case of url is None
             result = httpService.post(None, self.mocked_data)
-            self.assertFalse(result)
+            self.assertIsNone(result)
 
             # test case of data is None
             result = httpService.post(self.mocked_url, None)
-            self.assertFalse(result)
+            self.assertIsNone(result)
 
             # test case of failure call
             mocked_post.return_value.ok = False
             result = httpService.post(self.mocked_url, self.mocked_data)
-            mocked_post.assert_called_with(self.mocked_url, self.mocked_data)
-            self.assertFalse(result)
+            mocked_post.assert_called_with(self.mocked_url, json=self.mocked_data,verify=False)
+            self.assertFalse(result.ok)
+
+    def test_put(self):
+        with patch('requests.put') as mocked_put:
+            # test success call
+            mocked_put.return_value.ok = True
+            result = httpService.put(self.mocked_url, self.mocked_data)
+            mocked_put.assert_called_with(self.mocked_url, json=self.mocked_data, verify=False)
+            self.assertIsNotNone(result)
+            self.assertTrue(result.ok)
+
+            # test case of url is None
+            result = httpService.put(None, self.mocked_data)
+            self.assertIsNone(result)
+
+            # test case of data is None
+            result = httpService.put(self.mocked_url, None)
+            self.assertIsNone(result)
+
+            # test case of failure call
+            mocked_put.return_value.ok = False
+            result = httpService.put(self.mocked_url, self.mocked_data)
+            mocked_put.assert_called_with(self.mocked_url, json=self.mocked_data, verify=False)
+            self.assertFalse(result.ok)
 
     def test_post_image_data(self):
         with patch('requests.post') as mocked_post:
@@ -64,7 +88,7 @@ class TestHttpService(unittest.TestCase):
             mocked_get.return_value.ok = True
             mocked_get.return_value.text = self.mocked_success_text
             result = httpService.get(self.mocked_url)
-            mocked_get.assert_called_with(self.mocked_url, None)
+            mocked_get.assert_called_with(self.mocked_url, None, verify=False)
             self.assertEqual(result.ok, True)
             self.assertEqual(result.text, self.mocked_success_text)
 
@@ -76,7 +100,7 @@ class TestHttpService(unittest.TestCase):
             mocked_get.return_value.ok = False
             mocked_get.return_value.text = self.mocked_failure_text
             result = httpService.get(self.mocked_url)
-            mocked_get.assert_called_with(self.mocked_url, None)
+            mocked_get.assert_called_with(self.mocked_url, None, verify=False)
             self.assertEqual(result.ok, False)
             self.assertEqual(result.text, self.mocked_failure_text)
 
@@ -85,7 +109,7 @@ class TestHttpService(unittest.TestCase):
             # test success call
             mocked_head.return_value.ok = True
             result = httpService.head(self.mocked_url)
-            mocked_head.assert_called_with(self.mocked_url)
+            mocked_head.assert_called_with(self.mocked_url, verify=False)
             self.assertTrue(result, True)
 
             # test case of url is None
@@ -96,7 +120,7 @@ class TestHttpService(unittest.TestCase):
             mocked_head.return_value.ok = False
             mocked_head.return_value.text = self.mocked_failure_text
             result = httpService.head(self.mocked_url)
-            mocked_head.assert_called_with(self.mocked_url)
+            mocked_head.assert_called_with(self.mocked_url, verify=False)
             self.assertFalse(result)
 
 

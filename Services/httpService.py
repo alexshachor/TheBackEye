@@ -3,9 +3,12 @@ import json
 
 import requests
 from Services import loggerService
+import urllib3
+
+urllib3.disable_warnings()
 
 
-def get(url, params = None):
+def get(url, params=None):
     """
     get response from server by the given url and its params
     :param url: get the data from the url
@@ -15,7 +18,7 @@ def get(url, params = None):
     try:
         if not url:
             raise ValueError(f'cannot get, url is missing')
-        response = requests.get(url, params)
+        response = requests.get(url, params, verify=False)
         response.raise_for_status()
         # data = response.json()
         return response
@@ -31,29 +34,54 @@ def get(url, params = None):
         return None
 
 
-def post(url, data):
+def post(url, json):
     """
     post the given data to the given url
     :param url: post the data to this url
-    :param data: data to send the server
-    :return: True if succeed and False otherwise
+    :param json: json data to send the server
+    :return: response from server if succeed and None otherwise
     """
     try:
-        if not data or not url:
-            raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {data}')
-        response = requests.post(url, data)
+        if not json or not url:
+            raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {json}')
+        response = requests.post(url, json=json, verify=False)
         response.raise_for_status()
-        return response.ok
+        return response
     except ValueError as e:
         loggerService.get_logger().error(str(e))
-        return False
+        return None
     except requests.exceptions.RequestException:
         loggerService.get_logger().error(str(response.text))
-        return False
+        return None
     except Exception as e:
         loggerService.get_logger().error(
-            f'post call to url: {url}, data: {data} has failed with status: {response.status_code}, due to: {str(e)}')
-        return False
+            f'post call to url: {url}, data: {json} has failed with status: {response.status_code}, due to: {str(e)}')
+        return None
+
+
+def put(url, json):
+    """
+    put - update the given data to the given url
+    :param url: put the data to this url
+    :param json: json data to send the server for update
+    :return: response from server if succeed and None otherwise
+    """
+    try:
+        if not json or not url:
+            raise ValueError(f'cannot put, one of the params is missing. url: {url}, data: {json}')
+        response = requests.put(url, json=json, verify=False)
+        response.raise_for_status()
+        return response
+    except ValueError as e:
+        loggerService.get_logger().error(str(e))
+        return None
+    except requests.exceptions.RequestException:
+        loggerService.get_logger().error(str(response.text))
+        return None
+    except Exception as e:
+        loggerService.get_logger().error(
+            f'put call to url: {url}, data: {json} has failed with status: {response.status_code}, due to: {str(e)}')
+        return None
 
 
 def post_image_data(url, data, image_file):
@@ -76,7 +104,7 @@ def post_image_data(url, data, image_file):
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
         payload = json.dumps({"image": im_b64, 'data': data})
-        response = requests.post(url, data=payload, headers=headers)
+        response = requests.post(url, data=payload, headers=headers, verify=False)
         response.raise_for_status()
         return response.ok
     except ValueError as e:
@@ -100,7 +128,7 @@ def head(url):
     try:
         if not url:
             raise ValueError(f'cannot make head call, url is missing')
-        response = requests.head(url)
+        response = requests.head(url, verify=False)
         response.raise_for_status()
         return True if response.ok else False
     except ValueError as e:
@@ -113,4 +141,3 @@ def head(url):
         loggerService.get_logger().error(
             f'head call to url: {url} has failed with status: {response.status_code}, due to: {str(e)}')
         return False
-
