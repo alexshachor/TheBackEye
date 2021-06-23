@@ -3,6 +3,8 @@ from Services import loggerService as ls
 import config
 import cv2
 import os
+from PIL import ImageTk, Image
+import numpy
 
 
 class SleepDetector(am.AbstractMeasurement):
@@ -70,6 +72,14 @@ def for_tests_only():
             break
     cap.release()
     cv2.destroyAllWindows()
+
+
+def for_test_only_image():
+    img = Image.open(r"C:\Users\User\Downloads\9.jpg")
+    img = cv2.cvtColor(numpy.asarray(img), cv2.COLOR_RGB2BGR)
+    dict = {}
+    SleepDetector().run(img, dict)
+    print(dict[SleepDetector().__repr__()])
 
 
 if __name__ == '__main__':

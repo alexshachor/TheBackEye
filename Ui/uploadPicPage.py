@@ -134,8 +134,6 @@ class UploadPicPage(tk.Frame):
             for key, val in send_pic.items():
                 if val != '':
                     self.invalid_pic = ovb.create_msg(self, self.x_a[key], self.y_a[key] + 105, val)
-            # TODO: delete the line below, after all measurements can run
-            controller.manage_frame(tp.TakePicPage)if c.DEBUG else None
 
     def clean_entries(self):
         """
