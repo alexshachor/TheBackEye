@@ -7,6 +7,8 @@ import random
 import cv2
 import threading
 import numpy
+from ImageProcessing import superResolution as sr
+from PIL import ImageTk, Image
 
 MSGS = {
     'FaceDetector': 'Please upload a pic with face in it.\n',
@@ -61,23 +63,29 @@ def run_images_checks(image, dict_res, i):
     the msg will be ''
     :param i: key to put the msg into in the dict of msgs
     """
-    if config.DEBUG:
-        # measurements = [fd.FaceDetector(), sd.SleepDetector()]
-        # run_measurements = rm.RunMeasurements(measurements, None)
-        # result = run_measurements.run_measurement_processes(image)
-        result = {}
-        sd.SleepDetector().run(image, result)
-        fd.FaceDetector().run(image, result)
-        # hp.HeadPose().run(image, result)
-    else:
-        result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))
-                  , 'HeadPose': bool(random.getrandbits(1))}
+    # if config.DEBUG:
+    # TODO: check way the measurements do not work and delete unnecessary code hear.
+    # measurements = [fd.FaceDetector(), sd.SleepDetector()]
+    # run_measurements = rm.RunMeasurements(measurements, None)
+    # result = run_measurements.run_measurement_processes(image)
+    image = sr.SuperResolution(image, 'MEDIUM').to_super_resolution()
+    result = {}
+    sd.SleepDetector().run(image, result)
+    fd.FaceDetector().run(image, result)
+    # hp.HeadPose().run(image, result)
+
+    # else:
+    #     result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))
+    #               , 'HeadPose': bool(random.getrandbits(1))}
     msg = check_pic(result)
     dict_res[i] = msg
+    # print(result)
+    # print(msg)
+    # print(dict_res)
 
 
 def send_user_pic():
-    upload_pic({'0': r"C:\Users\User\Downloads\1.jpg", '1': r"C:\Users\User\Downloads\2.jpg"})
+    upload_pic({'0': Image.open(r"C:\Users\User\Downloads\1.jpg"), '1': Image.open(r"C:\Users\User\Downloads\2.jpg")})
 
 
 def try_func():

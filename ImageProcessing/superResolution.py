@@ -1,11 +1,12 @@
 import cv2
 import time
+import os
 import config
 
 
 class SuperResolution:
 
-    def __init__(self, img, quality):
+    def __init__(self, img, quality, debug=False):
         """
         initialize params for this class.
         :param: img: the image to improve
@@ -18,6 +19,7 @@ class SuperResolution:
                        'HIGH': 'LapSRN_x8.pb'}
         self.model_name = ''
         self.model_scale = {'LOW': 3, 'MEDIUM': 4, 'HIGH': 8}
+        self.debug = debug
 
     def to_bicubic(self):
         """
@@ -28,7 +30,7 @@ class SuperResolution:
         bicubic = cv2.resize(self.image, (self.image.shape[1], self.image.shape[0]),
                              interpolation=cv2.INTER_CUBIC)
         end = time.time()
-        if config.DEBUG:
+        if self.debug:
             print('[INFO] Bicubic interpolation took {:.2f} seconds'.format(end - start))
             cv2.imshow("Original", self.image)
             cv2.imshow("Bicubic", bicubic)
@@ -46,7 +48,7 @@ class SuperResolution:
         start = time.time()
         scaled_image = model.upsample(self.image)
         end = time.time()
-        if config.DEBUG:
+        if self.debug:
             print("[INFO] width: {}, height: {} - Before scaling".format(self.image.shape[1], self.image.shape[0]))
             print("[INFO] width: {}, height: {} - After scaling".format(scaled_image.shape[1], scaled_image.shape[0]))
             print('[INFO] Super resolution interpolation took {:.2f} seconds'.format(end - start))
@@ -64,7 +66,8 @@ class SuperResolution:
         self.model_name = model_file.split('_')[0].lower()
         scale = self.model_scale[self.quality]
         super_resolution = cv2.dnn_superres.DnnSuperResImpl_create()
-        super_resolution.readModel(self.path + model_file)
+        script_dir = os.path.dirname(__file__)
+        super_resolution.readModel(os.path.join(script_dir, "Models/" + model_file))
         super_resolution.setModel(self.model_name, scale)
         return super_resolution
 
@@ -74,8 +77,8 @@ def for_tests_only():
     A test func to this page only..
     """
     image = cv2.imread('.\SavedImages\\butterfly.png')
-    SuperResolution(image, 'HIGH').to_bicubic()
-    SuperResolution(image, 'HIGH').to_super_resolution()
+    SuperResolution(image, 'LOW').to_bicubic()
+    SuperResolution(image, 'MEDIUM', True).to_super_resolution()
 
 
 if __name__ == '__main__':
