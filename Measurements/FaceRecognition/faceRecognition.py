@@ -38,6 +38,7 @@ class FaceRecognition(am.AbstractMeasurement):
             for (x, y, w, h) in faces:
                 self.id, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])
                 # check if confidence is less them 100, zero is perfect confidence
+                print(round(100 - confidence)) if config.DEBUG else None
                 if confidence < 100:
                     if round(100 - confidence) >= self.threshold:
                         result[repr(self)] = True

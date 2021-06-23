@@ -1,6 +1,7 @@
 import tkinter as tk
 # from Ui import healthCheckPage as hcp
-from Ui import uploadPicPage as hcp
+# from Ui import uploadPicPage as hcp
+from Ui import takePicPage as hcp
 from config import APP
 import config as c
 
@@ -16,10 +17,10 @@ class TheBackEyeView(tk.Tk):
         self.container.pack(side='top', fill='both', expand=True)
 
         self.frames = {}
-        frame = hcp.UploadPicPage(self.container, self)
-        self.frames[hcp.UploadPicPage] = frame
+        frame = hcp.TakePicPage(self.container, self)
+        self.frames[hcp.TakePicPage] = frame
         frame.place(width=APP['WIDTH'], height=APP['HEIGHT'])
-        self.show_frame(hcp.UploadPicPage)
+        self.show_frame(hcp.TakePicPage)
 
     def show_frame(self, con):
         """
