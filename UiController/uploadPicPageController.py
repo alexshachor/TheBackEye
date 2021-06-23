@@ -12,7 +12,7 @@ from PIL import ImageTk, Image
 MSGS = {
     'FaceDetector': 'Please upload a pic with face in it.\n',
     'SleepDetector': 'Please upload a pic with eyes open.\n',
-    'HeadPose': 'Pleas upload a pic when you look strata at the camera.\n'
+    'HeadPose': 'Pleas upload a pic when you look straight to the camera.\n'
 }
 
 
@@ -56,6 +56,10 @@ def upload_pic(pics):
 
 
 def save_pic_and_train_face_recognition(pics):
+    """
+    save the images & train the face recognition model on this images for future using.
+    :param pics: images to train and save
+    """
     # save the pictures
     i = 1
     for img in pics.values():
@@ -69,6 +73,7 @@ def run_images_checks(image, dict_res, pics, i):
     """
     processes func to run measurements for each image.
     :param image: the image to run measurements on
+    :param pics: the images dict
     :param dict_res: dict of msgs for the images if all measurements return true,
     the msg will be ''
     :param i: key to put the msg into in the dict of msgs
@@ -78,8 +83,11 @@ def run_images_checks(image, dict_res, pics, i):
     # measurements = [fd.FaceDetector(), sd.SleepDetector()]
     # run_measurements = rm.RunMeasurements(measurements, None)
     # result = run_measurements.run_measurement_processes(image)
-    image = sr.SuperResolution(image, 'MEDIUM').to_super_resolution()
+
+    # update the images in the pics dict to images in super resolution
+    image = sr.SuperResolution(image, 'LOW').to_bicubic()
     pics[i] = image
+    # run the measurements over the image
     result = {}
     sd.SleepDetector().run(image, result)
     fd.FaceDetector().run(image, result)
