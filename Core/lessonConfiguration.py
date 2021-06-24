@@ -4,6 +4,7 @@ import copy
 
 lesson_from_server = None
 
+
 class LessonConfiguration:
     """
     This class manages the lesson configuration that come from remote.
@@ -17,7 +18,7 @@ class LessonConfiguration:
         :param lesson_code: the lesson's password
         :return: lesson details dictionary
         """
-        global student_from_server
+        global lesson_from_server
         if lesson_code:
             url = config.URLS['get_lesson'] + lesson_code
             result = httpService.get(url)
