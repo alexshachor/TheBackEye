@@ -2,6 +2,7 @@ import psutil
 import cv2
 import config
 from Services import httpService, loggerService
+from Measurements.soundCheck import SoundCheck as sc
 
 
 def get_program(program):
@@ -113,6 +114,29 @@ def check_if_process_is_running(process_name):
     finally:
         return {f'is_{process_name}_running': result}
 
+def check_if_sound_is_ok():
+    """
+    check if a the sound is not on mute and the sound level at least in minimum level.
+    :return: True if the sound is ok and False otherwise.
+    """
+    try:
+        result = {}
+        sound_check = sc()
+        sound_check.run(None,result)
+        is_sound_ok = result[repr(sound_check)]
+        loggerService.get_logger().info(f'is sound ok: {is_sound_ok}')
+    except ValueError as e:
+        loggerService.get_logger().error(str(e))
+        is_sound_ok = False
+    except Exception as e:
+        loggerService.get_logger().error(
+            f'exception has occurred , due to: {str(e)}')
+        is_sound_ok = False
+    finally:
+        return {f'is_sound_ok': is_sound_ok}
+
+
+
 
 def run_health_checks():
     """
@@ -120,7 +144,7 @@ def run_health_checks():
     :return: list of pairs which the key is the health check name and value True or False
     depending the health check result.
     """
-    health_checks = [check_is_alive, check_camera_source]
+    health_checks = [check_is_alive, check_camera_source, check_if_sound_is_ok]
     results = []
 
     try:

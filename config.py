@@ -133,3 +133,10 @@ use: in healthChecksService.
 PREREQUISITE_PROCESSES = {
     'manycam': 'ManyCam.exe'
 }
+
+"""
+specify the expected volume (in dB) for the sound check 
+"""
+SOUND_CHECK = {
+    'min_volume':0.34
+}
