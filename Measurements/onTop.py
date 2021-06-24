@@ -6,11 +6,13 @@ import psutil
 import win32process
 import win32con
 from win32api import GetSystemMetrics
+from Core.lessonConfiguration import LessonConfiguration as lc
 import time
 
 # If it False: If the desired program is not ON TOP, it will be.
 # If it True: Report only.
-REPORT_ONLY = False
+res = lc.get_lesson()['isActive']
+REPORT_ONLY = not res
 # The volume that a program considered to be On Top.
 DESIRED_SIZE = 77
 
