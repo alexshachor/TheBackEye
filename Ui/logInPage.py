@@ -100,11 +100,15 @@ class LogInPage(tk.Frame):
         :param controller: gives the ability to switch between pages
         :param obg: the login controller
         """
-        student_data = obg.chech_student_data_in_server()
+        student_data = obg.check_student_data_in_server()
         has_pic = obg.has_pic_and_email()
         self.pb.destroy()
         self.clean_entries()
-        if student_data != 'OK':
+        if student_data['Class Code'] != '':
+            self.invalid_code = ovb.create_msg(self, 260, 360, student_data['Class Code'])
+        if student_data['Password'] != '':
+            self.invalid_password = ovb.create_msg(self, 260, 275, student_data['Password'])
+        if student_data['Class Code'] != '' or student_data['Password'] != '':
             return
         if has_pic == 'ToValidation':
             controller.manage_frame(vp.ValidationPage)

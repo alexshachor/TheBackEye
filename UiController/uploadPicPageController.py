@@ -1,5 +1,6 @@
 from Measurements import faceDetector as fd
 from Measurements.SleepDetector import sleepDetector as sd
+from Measurements.HeadPose import headPose as hp
 import multiprocessing as mp
 import tkinter as tk
 import cv2
@@ -47,9 +48,6 @@ def upload_pic(pics):
         process.close()
     flg = all(elem == '' for elem in dict_results.values())
     if flg:
-        # TODO: give real URL
-        # for pic in pics.items():
-        #     hs.post_image_data('somm/url', config.USER_DATA, pic)
         save_pic_and_train_face_recognition(pics)
         return 'OK'
     return dict_results
@@ -91,7 +89,7 @@ def run_images_checks(image, dict_res, pics, i):
     result = {}
     sd.SleepDetector().run(image, result)
     fd.FaceDetector().run(image, result)
-    # hp.HeadPose().run(image, result)
+    hp.HeadPose().run(image, result)
 
     # else:
     #     result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))

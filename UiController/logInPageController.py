@@ -1,6 +1,6 @@
-import time
-import config
 import os
+from Core.studentManager import StudentManager as sm
+from Core.lessonConfiguration import LessonConfiguration as lc
 
 
 class LoginController:
@@ -31,25 +31,28 @@ class LoginController:
             self.msg['Password'] += 'Password not in ascii.\n'
         return self.msg
 
-    def chech_student_data_in_server(self):
-        # TODO: send the class code to the server [to get lesson by class code] and if it returns
-        # a lesson store it in the static class and return OK else return their is no class with this class code.
-        return 'OK' if config.DEBUG else None
+    def check_student_data_in_server(self):
+        msg = {'Class Code': '', 'Password': ''}
+        password_res = sm.get_student(self.password)
+        if password_res is None:
+            msg['Password'] = 'This Password dedent exists in our system, please try again.'
+        code_res = lc.get_lesson(self.class_code)
+        if code_res is None:
+            msg['Class Code'] = 'This Class Code dedent exists in our system, please try again.'
+        return msg
 
     @staticmethod
     def has_pic_and_email():
         """
         Check if we already have email and pics for this student.
         """
-        if config.DEBUG:
-            time.sleep(2)
+        res = sm.get_student()
+        if res['email'] == '':
             return 'ToValidation'
-        # TODO - check in the static class if the student has mail already if no return ToValidation.
-        # TODO - send student id to the server to check if we have already pic if no return ToUpload
-        # if yes store them in the face recognition images folder and train the model on them and return
-        #  ToSnapshot.
-
-        # check if the student already has images
-        files = os.listdir('Measurements/FaceRecognition/Images')
-        if files == ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg']:
-            return 'ToSnapshot'
+        else:
+            # check if the student already has images
+            files = os.listdir('Measurements/FaceRecognition/Images')
+            if files == ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg']:
+                return 'ToSnapshot'
+            else:
+                return 'ToUpload'
