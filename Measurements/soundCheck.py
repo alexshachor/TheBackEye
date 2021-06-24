@@ -4,9 +4,6 @@ import config
 from Measurements import abstractMeasurement as am
 from Services import loggerService
 from Core.lessonConfiguration import LessonConfiguration as lc
-import numpy as np
-import math
-
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
