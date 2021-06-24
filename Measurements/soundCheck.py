@@ -57,7 +57,6 @@ class SoundCheck(am.AbstractMeasurement):
             if is_mute or current_volume < self.min_sound_level:
                 run_result[repr(self)] = False
                 # if it's an active lesson, then should open up the volume to expected level
-                self.is_active_lesson = True
                 if self.is_active_lesson:
                     # if it's on mute - set mute to False
                     if is_mute:
