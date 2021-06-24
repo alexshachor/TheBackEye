@@ -2,6 +2,7 @@ import config
 import datetime
 import os
 import psutil
+from Core.lessonConfiguration import LessonConfiguration as lc
 
 
 def get_time_remaining():
@@ -10,9 +11,9 @@ def get_time_remaining():
     :return: date_time_obj[0]: hours
     :return: date_time_obj[1]: minutes
     """
-    # TODO: get the time remaining from lesson configuration & get the real late_time
-    lesson_start_time = get_debug_time() if config.DEBUG else None
-    late_time = 10 if config.DEBUG else None
+    res = lc.get_lesson()
+    lesson_start_time = datetime.datetime.fromisoformat(res['startTime'])
+    late_time = int(res['maxLate'])
     time_left = (lesson_start_time - datetime.datetime.now()).total_seconds() / 60
     if str(time_left)[0] == '-':
         return ('V', 'V') if late_time - (-1*time_left) > 0 else ('X', 'X')

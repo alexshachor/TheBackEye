@@ -1,7 +1,6 @@
 import random
-import config
 from EmailMessagingSystem import emailSystem as es
-from Services import httpService as hs
+from Core.studentManager import StudentManager as sm
 import re
 
 LEN_CODE = 6
@@ -44,11 +43,9 @@ class ValidationController:
         after email validation send the email to the server.
         :param email: the email to send to the server
         """
-        # TODO - send email to database & delete the two lines below [if config.DEBUG]
-        config.EMAIL['USER_EMAIL'] = email
-        if config.DEBUG:
-            return
-        hs.post('url/gh', config.EMAIL['USER_EMAIL'])
+        res = sm.get_student()
+        res['email'] = email
+        up_res = sm.update_student(res)
 
     def send_validation_email(self, email):
         """
