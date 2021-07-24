@@ -15,9 +15,9 @@ class SleepDetector(am.AbstractMeasurement):
         """
         am.AbstractMeasurement.__init__(self)
         script_dir = os.path.dirname(__file__)
-        self.path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
+        self.__path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
         try:
-            self.eye_cascade = cv2.CascadeClassifier(self.path)
+            self.__eye_cascade = cv2.CascadeClassifier(self.__path)
         except FileNotFoundError as f:
             ls.get_logger().error(str(f))
         except Exception as e:
@@ -35,8 +35,8 @@ class SleepDetector(am.AbstractMeasurement):
         result = {repr(self): False}
         try:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            eyes = self.eye_cascade.detectMultiScale(frame, scaleFactor=1.1,
-                                                     minNeighbors=1, minSize=(1, 1))
+            eyes = self.__eye_cascade.detectMultiScale(frame, scaleFactor=1.1,
+                                                       minNeighbors=1, minSize=(1, 1))
         except Exception as e:
             ls.get_logger().error(
                 f'Failed to identify the eyes, due to: {str(e)}')
