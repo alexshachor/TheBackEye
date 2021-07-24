@@ -1,7 +1,6 @@
 import cv2
 import time
 import os
-import config
 
 
 class SuperResolution:

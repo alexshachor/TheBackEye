@@ -9,15 +9,15 @@ class EmailSystem:
         """
         init the email & password & port of the sender
         """
-        self.sender = config.EMAIL['EMAIL']
-        self.password = config.EMAIL['PASSWORD']
+        self.__sender = config.EMAIL['EMAIL']
+        self.__password = config.EMAIL['PASSWORD']
         # initializing the server connection
-        self.yag = yagmail.SMTP(user=self.sender, password=self.password)
-        self.success = False
+        self.__yag = yagmail.SMTP(user=self.__sender, password=self.__password)
+        self.__success = False
 
     def send_email(self, subject, msg, recipient_email):
         """
-        send the email to the asked recipient.
+        send the email to the recipient address.
         :param: msg: the msg to the recipient
         :param: recipient_email: the email address of the recipient
         :param: subject: the subject of the email
@@ -26,14 +26,14 @@ class EmailSystem:
         """
         try:
             # sending the email
-            self.yag.send(to=recipient_email, subject=subject, contents=msg)
-            self.success = True
-            print("sent email!") if config.DEBUG else None
+            self.__yag.send(to=recipient_email, subject=subject, contents=msg)
+            self.__success = True
+            print("Email sent successfully!") if config.DEBUG else None
         except ValueError as v:
             ls.get_logger().error(str(v))
         except Exception as e:
             ls.get_logger().error(f'failed to send the email, due to: {str(e)}')
-        return self.success
+        return self.__success
 
 
 def for_tests_only():
