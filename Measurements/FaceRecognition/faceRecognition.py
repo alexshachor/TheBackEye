@@ -12,16 +12,16 @@ class FaceRecognition(am.AbstractMeasurement):
         initialize the parent class, model, threshold
         """
         am.AbstractMeasurement.__init__(self)
-        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.__recognizer = cv2.face.LBPHFaceRecognizer_create()
         script_dir = os.path.dirname(__file__)
-        self.path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
-        self.recognizer.read(os.path.join(script_dir, 'Models/trainer.yml'))
-        self.cascade_path = os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml')
-        self.face_cascade = cv2.CascadeClassifier(self.cascade_path)
-        self.threshold = 45
-        self.id = 0
-        # names related to ids - example, Shalom: id=3
-        self.names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
+        self.__path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
+        self.__recognizer.read(os.path.join(script_dir, 'Models/trainer.yml'))
+        self.__cascade_path = os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml')
+        self.__face_cascade = cv2.CascadeClassifier(self.__cascade_path)
+        self.__threshold = 45
+        self.__id = 0
+        # names related to ids - example, Shalom: id=3, this line used only for testing
+        self.__names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
 
     def run(self, frame, dict_results):
         """
@@ -34,13 +34,13 @@ class FaceRecognition(am.AbstractMeasurement):
         result = {repr(self): False}
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = self.get_faces(frame, gray)
+            faces = self.__get_faces(frame, gray)
             for (x, y, w, h) in faces:
-                self.id, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])
+                self.__id, confidence = self.__recognizer.predict(gray[y:y + h, x:x + w])
                 # check if confidence is less them 100, zero is perfect confidence
                 print(round(100 - confidence)) if config.DEBUG else None
                 if confidence < 100:
-                    if round(100 - confidence) >= self.threshold:
+                    if round(100 - confidence) >= self.__threshold:
                         result[repr(self)] = True
                 if config.DEBUG:
                     self.run_debug(frame, x, y, h, w, confidence)
@@ -55,17 +55,15 @@ class FaceRecognition(am.AbstractMeasurement):
         """
         return 'FaceRecognition'
 
-    def get_faces(self, frame, gray):
+    def __get_faces(self, frame, gray):
         """
         run the model and return the faces it detected.
         :param frame: frame to process
         :param gray: cvt - the frame in gray color
         :return: faces: the faces it detected
         """
-        faces = self.face_cascade.detectMultiScale(
-            gray,
-            scaleFactor=1.2,
-            minNeighbors=5,
+        faces = self.__face_cascade.detectMultiScale(
+            gray, scaleFactor=1.2, minNeighbors=5,
             minSize=(int(0.1 * frame.shape[1]), int(0.1 * frame.shape[0])),
         )
         return faces
@@ -80,7 +78,7 @@ class FaceRecognition(am.AbstractMeasurement):
         :param w: the width of the rectangle to draw
         :param confidence: the confidence of the result to draw
         """
-        name = str(self.names[self.id]) if confidence < 100 else 'unknown'
+        name = str(self.__names[self.__id]) if confidence < 100 else 'unknown'
         confidence = "  {0}%".format(round(100 - confidence))
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
