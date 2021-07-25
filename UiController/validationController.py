@@ -13,7 +13,7 @@ class ValidationController:
         """
         initialize the validation controller.
         """
-        self.code = random.randint(10 ** (LEN_CODE - 1), 10 ** LEN_CODE - 1)
+        self.__code = random.randint(10 ** (LEN_CODE - 1), 10 ** LEN_CODE - 1)
 
     @staticmethod
     def check_email(email):
@@ -34,7 +34,7 @@ class ValidationController:
             return 'Code need to be in len: ' + str(LEN_CODE) + '.'
         if not code.isnumeric():
             return 'Code need to be only numbers.'
-        if code != str(self.code):
+        if code != str(self.__code):
             return 'This is not the correct code.'
         return 'OK'
 
@@ -56,7 +56,7 @@ class ValidationController:
         subject = 'TheBackEye Validation Code'
         msg = """\
                     This is your validation code:
-                    """ + str(self.code) + """
+                    """ + str(self.__code) + """
                     please enter this code in the app.
 
                 TheBackEye Team

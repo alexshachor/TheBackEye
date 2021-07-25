@@ -1,11 +1,9 @@
 from tkinter import *
 import tkinter as tk
-from UiController import takePicPageController as tp
 from UiController import thanksPageController as tpc
 import config as c
 import time
 import threading
-
 
 FONT_OUTPUT = c.APP['FONT_OUTPUT']
 FONT_MSG = c.APP['FONT_HEALTH']
@@ -16,6 +14,7 @@ class TanksPage(tk.Frame):
     """
     This class is responsible for displaying the Tanks Page.
     """
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.img = PhotoImage(file='.\PicUi\\tanks_background.png')
@@ -30,31 +29,35 @@ class TanksPage(tk.Frame):
         """
         panel = tk.Label(self, image=self.img)
         panel.pack(expand=tk.YES, fill=tk.BOTH)
-        # pure_sarcasm = tk.Label(self, text='A system for helping and improving learning!'
-        #                         , bg='black', bd=0, fg='green', font=FONT_OUTPUT)
-        # pure_sarcasm.place(bordermode=OUTSIDE, x=135, y=85)
-        x = threading.Thread(target=self.show_time)
+        x = threading.Thread(target=self.handle_time)
         x.setDaemon(True)
         x.start()
 
-    def show_time(self):
+    def handle_time(self):
         """
         Show msg time.
         """
         hour, minute = tpc.get_time_remaining()
+        if self.handle_late_student(hour):
+            return
+        self.handle_earliness_student(hour, minute)
+
+    def handle_late_student(self, hour):
         if hour == 'V':
             label = tk.Label(self, text='You are going to enter the lesson.'
                              , bg='black', bd=0, fg='blue', font=FONT_MSG)
             label.place(bordermode=OUTSIDE, x=50, y=420)
             time.sleep(SHOW_MSG_TIME)
-            tp.successes()
-            return
+            tpc.successes()
+            return True
         if hour == 'X':
             label = tk.Label(self, text='No lesson currently taking place\n(probably you are late).'
                              , bg='red', bd=0, fg='black', font=FONT_MSG)
             label.place(bordermode=OUTSIDE, x=40, y=420)
             time.sleep(SHOW_MSG_TIME)
             tpc.kill_program()
+
+    def handle_earliness_student(self, hour, minute):
         self.hour.set(hour)
         self.minute.set(minute)
         self.second.set('00')
@@ -68,7 +71,7 @@ class TanksPage(tk.Frame):
         second_entry = Entry(self, width=3, font=("Arial", 18, ""), textvariable=self.second)
         second_entry.place(x=160, y=470)
         self.time_logic()
-        tp.successes()
+        tpc.successes()
 
     def time_logic(self):
         """

@@ -48,14 +48,6 @@ class LogInPage(tk.Frame):
         """
         Init input output.
         """
-        # name = tk.Label(self, text='Full Name:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        # name.place(bordermode=OUTSIDE, x=110, y=185)
-        # e_name = Entry(self)
-        # e_name.place(bordermode=OUTSIDE, x=110, y=205, width=220, height=40)
-        # id = tk.Label(self, text='Your ID:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
-        # id.place(bordermode=OUTSIDE, x=110, y=255)
-        # e_id = Entry(self)
-        # e_id.place(bordermode=OUTSIDE, x=110, y=275, width=220, height=40)
         password = tk.Label(self, text='Password:', bg='black', bd=0, fg='yellow', font=FONT_OUTPUT)
         password.place(bordermode=OUTSIDE, x=110, y=210)
         e_password = Entry(self)
@@ -101,7 +93,7 @@ class LogInPage(tk.Frame):
         :param obg: the login controller
         """
         student_data = obg.check_student_data_in_server()
-        has_pic = obg.has_pic_and_email()
+        page_to_jump = obg.page_to_jump()
         self.pb.destroy()
         self.clean_entries()
         if student_data['Class Code'] != '':
@@ -110,11 +102,11 @@ class LogInPage(tk.Frame):
             self.invalid_password = ovb.create_msg(self, 260, 275, student_data['Password'])
         if student_data['Class Code'] != '' or student_data['Password'] != '':
             return
-        if has_pic == 'ToValidation':
+        if page_to_jump == 'ToValidation':
             controller.manage_frame(vp.ValidationPage)
-        elif has_pic == 'ToUpload':
+        elif page_to_jump == 'ToUpload':
             controller.manage_frame(up.UploadPicPage)
-        elif has_pic == 'ToSnapshot':
+        elif page_to_jump == 'ToSnapshot':
             controller.manage_frame(tp.TakePicPage)
 
     def clean_entries(self):

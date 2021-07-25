@@ -32,7 +32,7 @@ def check_pic(results):
 
 def upload_pic(pics):
     """
-    If its a good pics send to the server. return a msg for a good & bad pics.
+    If its a good pics save it. return a msg for a good & bad pics.
     :param pics: the pics from user
     :return msg: return a dict of msgs for a good & bad pics for all images.
     """
@@ -76,29 +76,16 @@ def run_images_checks(image, dict_res, pics, i):
     the msg will be ''
     :param i: key to put the msg into in the dict of msgs
     """
-    # if config.DEBUG:
-    # TODO: check way the measurements do not work and delete unnecessary code hear.
-    # measurements = [fd.FaceDetector(), sd.SleepDetector()]
-    # run_measurements = rm.RunMeasurements(measurements, None)
-    # result = run_measurements.run_measurement_processes(image)
-
     # update the images in the pics dict to images in super resolution
-    image = sr.SuperResolution(image, 'LOW').to_bicubic()
+    image = sr.SuperResolution(image, 0)
     pics[i] = image
     # run the measurements over the image
     result = {}
     sd.SleepDetector().run(image, result)
     fd.FaceDetector().run(image, result)
     hp.HeadPose().run(image, result)
-
-    # else:
-    #     result = {'FaceDetector': bool(random.getrandbits(1)), 'SleepDetector': bool(random.getrandbits(1))
-    #               , 'HeadPose': bool(random.getrandbits(1))}
     msg = check_pic(result)
     dict_res[i] = msg
-    # print(result)
-    # print(msg)
-    # print(dict_res)
 
 
 def send_user_pic():

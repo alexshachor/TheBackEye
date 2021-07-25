@@ -1,5 +1,4 @@
 from PIL import Image
-from UiController import uiController
 from Measurements.FaceRecognition import faceRecognition as fr
 from ImageProcessing import superResolution as sr
 import cv2
@@ -15,16 +14,9 @@ def check_recognition(path):
     img = Image.open(path)
     face_recognition_res = {}
     img = cv2.cvtColor(numpy.asarray(img), cv2.COLOR_RGB2BGR)
-    img = sr.SuperResolution(img, 'MEDIUM').to_bicubic()
+    img = sr.SuperResolution(img, 0)
     fr.FaceRecognition().run(img, face_recognition_res)
     return face_recognition_res[fr.FaceRecognition().__repr__()]
-
-
-def successes():
-    """
-    Go and destroy the Ui.
-    """
-    uiController.destructor()
 
 
 if __name__ == '__main__':

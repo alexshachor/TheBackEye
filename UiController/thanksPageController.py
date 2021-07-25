@@ -1,8 +1,8 @@
-import config
 import datetime
 import os
 import psutil
 from Core.lessonConfiguration import LessonConfiguration as lc
+from UiController import uiController
 
 
 def get_time_remaining():
@@ -29,6 +29,13 @@ def kill_program():
     current_system_pid = os.getpid()
     this_sys = psutil.Process(current_system_pid)
     this_sys.terminate()
+
+
+def successes():
+    """
+    Go and destroy the Ui.
+    """
+    uiController.destructor()
 
 
 def get_debug_time():

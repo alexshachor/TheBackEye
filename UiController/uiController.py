@@ -11,30 +11,30 @@ class TheBackEyeView(tk.Tk):
     """
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.container = tk.Frame(self)
-        self.container.pack(side='top', fill='both', expand=True)
+        self.__container = tk.Frame(self)
+        self.__container.pack(side='top', fill='both', expand=True)
 
-        self.frames = {}
-        frame = hcp.HealthCheckPage(self.container, self)
-        self.frames[hcp.HealthCheckPage] = frame
+        self.__frames = {}
+        frame = hcp.HealthCheckPage(self.__container, self)
+        self.__frames[hcp.HealthCheckPage] = frame
         frame.place(width=APP['WIDTH'], height=APP['HEIGHT'])
-        self.show_frame(hcp.HealthCheckPage)
+        self.__show_frame(hcp.HealthCheckPage)
 
-    def show_frame(self, con):
+    def __show_frame(self, con):
         """
         Promote the requested page to the top of the queue.
         :param con: page
         """
-        frame = self.frames[con]
+        frame = self.__frames[con]
         frame.tkraise()
 
-    def add_frame(self, con):
+    def __add_frame(self, con):
         """
         Add new page to the queue.
         :param con: page
         """
-        frame = con(self.container, self)
-        self.frames[con] = frame
+        frame = con(self.__container, self)
+        self.__frames[con] = frame
         frame.place(width=APP['WIDTH'], height=APP['HEIGHT'])
 
     def remove_frame(self, con):
@@ -42,7 +42,7 @@ class TheBackEyeView(tk.Tk):
         Remove page from the queue.
         :param con: page
         """
-        self.frames.pop(con)
+        self.__frames.pop(con)
 
     def manage_frame(self, con):
         """
@@ -50,9 +50,9 @@ class TheBackEyeView(tk.Tk):
         :param con: page
         """
         if con in self.frames:
-            self.remove_frame(con)
-        self.add_frame(con)
-        self.show_frame(con)
+            self.__remove_frame(con)
+        self.__add_frame(con)
+        self.__show_frame(con)
 
 
 def run():
