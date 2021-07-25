@@ -9,8 +9,8 @@ from win32api import GetSystemMetrics
 from Core.lessonConfiguration import LessonConfiguration as lc
 import time
 
-# If it False: If the desired program is not ON TOP, it will be.
-# If it True: Report only.
+# If it True: If the desired program is not ON TOP, it will be.
+# If it False: Report only.
 res = lc.get_lesson()['isActive']
 REPORT_ONLY = not res
 # The volume that a program considered to be On Top.
@@ -24,8 +24,8 @@ class OnTop(am.AbstractMeasurement):
         initialize the parent class and size screen.
         """
         am.AbstractMeasurement.__init__(self)
-        self.screen_width = GetSystemMetrics(0)
-        self.screen_height = GetSystemMetrics(1)
+        self.__screen_width = GetSystemMetrics(0)
+        self.__screen_height = GetSystemMetrics(1)
 
     def run(self, frame, dict_results):
         """
@@ -37,7 +37,7 @@ class OnTop(am.AbstractMeasurement):
         result = {repr(self): False}
         try:
             am.AbstractMeasurement.run(self, frame, dict_results)
-            result[repr(self)] = self.check_and_act()
+            result[repr(self)] = self.__check_and_act()
         except Exception as e:
             ls.get_logger().error(
                 f'Failed to identify which program on top, due to: {str(e)}')
@@ -45,7 +45,7 @@ class OnTop(am.AbstractMeasurement):
             return
         dict_results.update(result)
 
-    def check_and_act(self):
+    def __check_and_act(self):
         """
         check which program is in the foreground, report it and
         follow the parameters [Should you close the other programs?].
@@ -62,15 +62,15 @@ class OnTop(am.AbstractMeasurement):
                 f'Failed to identify process up front, due to: {str(e)}')
         if program_name == DESIRED_PROGRAM['EXPECTED_ON_TOP']:
             is_on_top = True
-            if self.is_in_good_size():
+            if self.__is_in_good_size():
                 return True
         # If we got here the student is not watching the desired program and we act
         # according to the settings.
         if not REPORT_ONLY:
-            self.handle_active_teacher(is_on_top)
+            self.__handle_active_teacher(is_on_top)
         return False
 
-    def is_in_good_size(self):
+    def __is_in_good_size(self):
         """
         check if window size of the program is not smaller than the
         desired volume.
@@ -79,7 +79,7 @@ class OnTop(am.AbstractMeasurement):
         rect = w.GetWindowRect(w.GetForegroundWindow())
         x, y = rect[0], rect[1]
         width, height = rect[2] + x if x < 0 else rect[2] - x, rect[3] - y
-        screen_volume = self.screen_width * self.screen_height
+        screen_volume = self.__screen_width * self.__screen_height
         foreground_window_volume = width * height
         accepted_percentage = ((100 - DESIRED_SIZE) * screen_volume) / 100
         if screen_volume - foreground_window_volume < accepted_percentage:
@@ -87,7 +87,7 @@ class OnTop(am.AbstractMeasurement):
         return False
 
     @staticmethod
-    def handle_active_teacher(is_on_top):
+    def __handle_active_teacher(is_on_top):
         """
         if the window is small enlarge it. If this is not the correct
         window you'll bring the correct window.

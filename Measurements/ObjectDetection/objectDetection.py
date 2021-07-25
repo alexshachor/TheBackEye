@@ -14,16 +14,16 @@ class ObjectDetection(am.AbstractMeasurement):
         """
         am.AbstractMeasurement.__init__(self)
         script_dir = os.path.dirname(__file__)
-        self.class_file = os.path.join(script_dir, 'Files/objects.names')
-        self.config_path = os.path.join(script_dir, 'Files/objects_config.pbtxt')
-        self.weights_path = os.path.join(script_dir, 'Files/objects_weights.pb')
-        self.prohibited_objects = config.PROHIBITED_OBJECTS
-        self.model = None
+        self.__class_file = os.path.join(script_dir, 'Files/objects.names')
+        self.__config_path = os.path.join(script_dir, 'Files/objects_config.pbtxt')
+        self.__weights_path = os.path.join(script_dir, 'Files/objects_weights.pb')
+        self.__prohibited_objects = config.PROHIBITED_OBJECTS
+        self.__model = None
         # Threshold to detect object
-        self.threshold = 0.45
-        self.init_model()
+        self.__threshold = 0.45
+        self.__init_model()
         try:
-            self.objects = [line.strip() for line in open(self.class_file, 'rt')]
+            self.__objects = [line.strip() for line in open(self.__class_file, 'rt')]
         except ValueError as v:
             ls.get_logger().error(str(v))
         except Exception as e:
@@ -39,16 +39,16 @@ class ObjectDetection(am.AbstractMeasurement):
         am.AbstractMeasurement.run(self, frame, dict_results)
         result = {repr(self): False}
         try:
-            objects, confidence, box = self.model.detect(frame, confThreshold=self.threshold)
+            objects, confidence, box = self.__model.detect(frame, confThreshold=self.__threshold)
             # Check for prohibited objects.
             for obj in objects.flatten():
-                if self.objects[obj - 1].upper() in self.prohibited_objects:
+                if self.__objects[obj - 1].upper() in self.__prohibited_objects:
                     dict_results.update(result)
                     break
             result[repr(self)] = True
             dict_results.update(result)
             if config.DEBUG:
-                self.run_debug(objects, confidence, box)
+                self.__run_debug(objects, confidence, box)
         except Exception as e:
             ls.get_logger().error(
                 f'Failed to detect objects, due to: {str(e)}')
@@ -59,7 +59,7 @@ class ObjectDetection(am.AbstractMeasurement):
         """
         return 'ObjectDetection'
 
-    def run_debug(self, objects, confidence, box):
+    def __run_debug(self, objects, confidence, box):
         """
         if we in debug mode open a pop up window and show the obj
         the system detect with boxes painted over them.
@@ -70,23 +70,23 @@ class ObjectDetection(am.AbstractMeasurement):
         """
         for obj, conf, b in zip(objects.flatten(), confidence.flatten(), box):
             cv2.rectangle(self.frame, b, color=(0, 145, 145), thickness=1)
-            cv2.putText(self.frame, self.objects[obj - 1].upper(), (b[0] + 10, b[1] + 30),
+            cv2.putText(self.frame, self.__objects[obj - 1].upper(), (b[0] + 10, b[1] + 30),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
             cv2.putText(self.frame, str(round(conf * 100, 2)), (b[0], b[1] + 70),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow("Output", self.frame)
         cv2.waitKey(0)
 
-    def init_model(self):
+    def __init_model(self):
         """
         this func will init model input size & scale
         """
         try:
-            self.model = cv2.dnn_DetectionModel(self.weights_path, self.config_path)
-            self.model.setInputSize(320, 320)
-            self.model.setInputScale(1.0 / 100.5)
-            self.model.setInputMean((100.5, 100.5, 100.5))
-            self.model.setInputSwapRB(True)
+            self.__model = cv2.dnn_DetectionModel(self.__weights_path, self.__config_path)
+            self.__model.setInputSize(320, 320)
+            self.__model.setInputScale(1.0 / 100.5)
+            self.__model.setInputMean((100.5, 100.5, 100.5))
+            self.__model.setInputSwapRB(True)
         except ValueError as v:
             ls.get_logger().error(str(v))
         except Exception as e:

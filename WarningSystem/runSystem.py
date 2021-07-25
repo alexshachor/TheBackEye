@@ -12,12 +12,12 @@ class RunSystem:
         to the warning system.
         :param indices_dict: dictionary of indices
         """
-        self.indices_dict = indices_dict
-        self.failed_in = []
-        self.dict_process = {
-            'voice': mp.Process(target=vs.VoiceSystem, args=(self.failed_in,)),
+        self.__indices_dict = indices_dict
+        self.__failed_in = []
+        self.__dict_process = {
+            'voice': mp.Process(target=vs.VoiceSystem, args=(self.__failed_in,)),
             'flicker': mp.Process(target=fs.FlickerSystem),
-            'email': mp.Process(target=ew.EmailWarning, args=(self.failed_in,))
+            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,))
         }
         self.__init_failed_indices()
         self.__run_warning_system()
@@ -27,13 +27,13 @@ class RunSystem:
         run the warning system in parallel.
         """
         # assign all processes and start each one of them
-        if not self.failed_in:
+        if not self.__failed_in:
             return
         processes = []
 
-        for key, process in self.dict_process.items():
+        for key, process in self.__dict_process.items():
             if key == 'email':
-                if 'ObjectDetector'.upper() in self.failed_in or 'Speaker'.upper():
+                if 'ObjectDetector'.upper() in self.__failed_in or 'SoundCheck'.upper() in self.__failed_in:
                     process.start()
                     processes.append(process)
             else:
@@ -48,9 +48,9 @@ class RunSystem:
         """
         initialize the indices that the student failed in.
         """
-        for key, val in self.indices_dict.items():
+        for key, val in self.__indices_dict.items():
             if not val:
-                self.failed_in.append(key.upper())
+                self.__failed_in.append(key.upper())
 
 
 def for_tests_only():
@@ -59,7 +59,7 @@ def for_tests_only():
     """
     indices_dict = {
         'FaceDetector': True, 'ObjectDetector': False, 'SleepDetector': True,
-        'OnTop': True, 'HeadPose': True, 'Speaker': False
+        'OnTop': True, 'HeadPose': True, 'SoundCheck': False
     }
     RunSystem(indices_dict)
 

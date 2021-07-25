@@ -13,12 +13,12 @@ class VoiceSystem:
         given the teacher an option to to give us unique messages for the student.
         :param indices_list: list of indices the student failed in
         """
-        self.indices_list = indices_list
-        self.indices_msgs = self.__init_indices_msgs() if config.TEACHER_MSGS is None else config.TEACHER_MSGS
-        self.msg = ''
-        self.general_msg = ' Please return to learning mode!.'
+        self.__indices_list = indices_list
+        self.__indices_msgs = self.__init_indices_msgs() if config.TEACHER_MSGS is None else config.TEACHER_MSGS
+        self.__msg = ''
+        self.__general_msg = ' Please return to learning mode!.'
         # Object voice creation.
-        self.engine = pyttsx3.init()
+        self.__engine = pyttsx3.init()
         self.__init_msg()
         self.__set_voice()
         self.__debug_voice() if config.DEBUG else None
@@ -46,25 +46,25 @@ class VoiceSystem:
         """
         initialize the messages into a one long string for the voice model.
         """
-        if len(self.indices_list) > GENERAL_WARNING:
-            self.msg = self.indices_msgs['MANY_FAILURES']
+        if len(self.__indices_list) > GENERAL_WARNING:
+            self.msg = self.__indices_msgs['MANY_FAILURES']
             return
-        for i in self.indices_list:
-            if i != 'SPEAKER':
-                self.msg += self.indices_msgs[i] + ' '
+        for i in self.__indices_list:
+            if i != 'SoundCheck'.upper():
+                self.msg += self.__indices_msgs[i] + ' '
 
     def __run_voice_system(self):
         """
         run the voice system & if in debug mode, record the voice system
         into a mp3 file.
         """
-        self.engine.say(self.msg)
-        self.engine.say(self.general_msg)
-        self.engine.runAndWait()
+        self.__engine.say(self.msg)
+        self.__engine.say(self.__general_msg)
+        self.__engine.runAndWait()
         if config.DEBUG:
-            self.engine.save_to_file(self.msg + self.general_msg, '.\\Mp3Files\\test.mp3')
-            self.engine.runAndWait()
-        self.engine.stop()
+            self.__engine.save_to_file(self.msg + self.__general_msg, '.\\Mp3Files\\test.mp3')
+            self.__engine.runAndWait()
+        self.__engine.stop()
 
     def __debug_voice(self):
         """
@@ -72,15 +72,15 @@ class VoiceSystem:
         voice model.
         """
         # RATE: getting details of current speaking rate.
-        rate = self.engine.getProperty('rate')
+        rate = self.__engine.getProperty('rate')
         # Printing current voice rate.
         print(rate)
         # VOLUME: getting details of the current volume level (maximum=1, minimum=0).
-        volume = self.engine.getProperty('volume')
+        volume = self.__engine.getProperty('volume')
         # Printing the current volume level.
         print(volume)
         # VOICE: getting details of the current voice (male=1, female=0).
-        voice = self.engine.getProperty('voice')
+        voice = self.__engine.getProperty('voice')
         # Printing the current voice.
         print(voice)
 
@@ -88,9 +88,9 @@ class VoiceSystem:
         """
         set the voice model properties.
         """
-        self.engine.setProperty('rate', 180)
-        self.engine.setProperty('volume', 1)
-        self.engine.setProperty('voice', self.engine.getProperty('voices')[not FEMALE].id)
+        self.__engine.setProperty('rate', 180)
+        self.__engine.setProperty('volume', 1)
+        self.__engine.setProperty('voice', self.__engine.getProperty('voices')[not FEMALE].id)
 
 
 def for_tests_only():

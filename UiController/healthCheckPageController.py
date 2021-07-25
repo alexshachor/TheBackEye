@@ -10,35 +10,35 @@ class HealthCheckPageController:
         """
         init function for the status of the program and the health list.
         """
-        self.ready = True
-        self.health_list = health_list_tests() if config.DEBUG else hcs.run_health_checks()
-        self.health_dict = {}
+        self.__ready = True
+        self.__health_list = health_list_tests() if config.DEBUG else hcs.run_health_checks()
+        self.__health_dict = {}
 
     def get_health_map(self):
         """
         create a health map from the health list.
         :return: self.health_dict: health map for each component what is status
         """
-        for i in range(len(self.health_list)):
-            val = self.health_list[i]
+        for i in range(len(self.__health_list)):
+            val = self.__health_list[i]
             try:
                 key = list(val.keys())[0].split('is_')[1].replace('_', ' ').upper()
             except:
                 key = list(val.keys())[0].replace('_', ' ').upper()
             val = list(val.values())[0]
-            self.health_dict.update({key: val})
+            self.__health_dict.update({key: val})
             print(val, key) if config.DEBUG else None
-        return self.health_dict
+        return self.__health_dict
 
     def is_ready(self):
         """
         check if all health components are ready to run.
         :return: self.ready: a boolean indicating if the process is ready or not
         """
-        for key, val in self.health_dict.items():
+        for key, val in self.__health_dict.items():
             if not val:
-                self.ready = False
-        return self.ready
+                self.__ready = False
+        return self.__ready
 
 
 def send_email(message):
