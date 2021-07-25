@@ -14,7 +14,7 @@ def check_recognition(path):
     img = Image.open(path)
     face_recognition_res = {}
     img = cv2.cvtColor(numpy.asarray(img), cv2.COLOR_RGB2BGR)
-    img = sr.SuperResolution(img, 0)
+    img = sr.SuperResolution(img, 0).get_image()
     fr.FaceRecognition().run(img, face_recognition_res)
     return face_recognition_res[fr.FaceRecognition().__repr__()]
 

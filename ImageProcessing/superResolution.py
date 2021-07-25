@@ -11,7 +11,8 @@ class SuperResolution:
         :param: img: the image to improve
         :param: quality: in which quality the result pic should be
         """
-        self.__image = img
+        self.__org_image = img
+        self.__super_image = None
         self.__quality = quality if quality in [0, 1, 2, 3] else 0
         self.__models = {1: 'FSRCNN_x3.pb', 2: 'ESPCN_x4.pb', 'MediumGPU': 'EDSR_x4.pb',
                          3: 'LapSRN_x8.pb'}
@@ -19,18 +20,21 @@ class SuperResolution:
         self.__debug = debug
         self.__to_bicubic() if self.__quality == 0 else self.__to_super_resolution()
 
+    def get_image(self):
+        return self.__super_image
+
     def __to_bicubic(self):
         """
         a minor improvement to a picture, take a very sort time.
         :return: bicubic: a bicubic improvement image
         """
         start = time.time()
-        bicubic = cv2.resize(self.__image, (self.__image.shape[1], self.__image.shape[0]),
+        bicubic = cv2.resize(self.__org_image, (self.__org_image.shape[1], self.__org_image.shape[0]),
                              interpolation=cv2.INTER_CUBIC)
         end = time.time()
         if self.__debug:
             self.__show_interpolation_results(bicubic, end - start)
-        return bicubic
+        self.__super_image = bicubic
 
     def __show_interpolation_results(self, interpolation_img, took_time):
         """
@@ -39,7 +43,7 @@ class SuperResolution:
         :param took_time: the time for the interpolation
         """
         print('Bicubic interpolation took {:.2f} seconds'.format(took_time))
-        cv2.imshow("Original", self.__image)
+        cv2.imshow("Original", self.__org_image)
         cv2.imshow("Bicubic", interpolation_img)
         cv2.imwrite('.\SavedImages\\interpolation_img.jpg', interpolation_img)
         cv2.waitKey(0)
@@ -52,11 +56,11 @@ class SuperResolution:
         """
         model = self.init_model()
         start = time.time()
-        scaled_image = model.upsample(self.__image)
+        scaled_image = model.upsample(self.__org_image)
         end = time.time()
         if self.__debug:
             self.__show_interpolation_results(scaled_image, end - start)
-        return scaled_image
+        self.__super_image = scaled_image
 
     def init_model(self):
         """

@@ -83,4 +83,4 @@ def for_test_only_image():
 
 
 if __name__ == '__main__':
-    for_tests_only()
+    for_test_only_image()

@@ -49,7 +49,7 @@ class TheBackEyeView(tk.Tk):
         When moving between pages, keep the pages updated by rebuilding.
         :param con: page
         """
-        if con in self.frames:
+        if con in self.__frames:
             self.__remove_frame(con)
         self.__add_frame(con)
         self.__show_frame(con)
