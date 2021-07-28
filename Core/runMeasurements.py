@@ -113,5 +113,5 @@ class RunMeasurements:
         :return: void
         """
         cv2.destroyAllWindows()
-        loggerService.send_log_reports()
         loggerService.get_logger().info('lesson ended')
+        loggerService.send_log_reports()
