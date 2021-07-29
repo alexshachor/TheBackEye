@@ -4,7 +4,7 @@ import cv2
 from time import sleep
 import config
 from Core.measurementsResult import MeasurementsResult
-from Services import loggerService
+from Services import loggerService, datetimeService
 from Services.runMeasurementsService import MeasurementsService
 import multiprocessing as mp
 
@@ -26,9 +26,10 @@ class RunMeasurements:
 
         self.measurements = measurements
         self.lesson = {
-            'start': lesson_configuration['startTime'],
-            'end': lesson_configuration['endTime'],
-            'breaks': [(lesson_configuration['breakStart'], lesson_configuration['breakEnd'])]
+            'start': datetimeService.convert_iso_format_to_datetime(lesson_configuration['startTime']),
+            'end': datetimeService.convert_iso_format_to_datetime(lesson_configuration['endTime']),
+            'breaks': [(datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakStart']),
+                        datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakEnd']))]
             if lesson_configuration['breakStart'] is not None else []
         }
 

@@ -7,6 +7,7 @@ from Measurements.ObjectDetection import objectDetection as od
 from Measurements.SleepDetector import sleepDetector as sd
 from Measurements.HeadPose import headPose as hp
 from Measurements.FaceRecognition import faceRecognition as fr
+from Services import datetimeService
 
 
 class MeasurementsResult:
@@ -43,7 +44,7 @@ class MeasurementsResult:
         #     "personId": StudentManager.get_student()['id']
         # }
         self.result['id'] = 0
-        self.result['dateTime'] = self.time.isoformat() + 'Z'
+        self.result['dateTime'] = datetimeService.convert_datetime_to_iso(self.time)
         self.result['lessonId'] = LessonConfiguration.get_lesson()['id']
         self.result['personId'] = StudentManager.get_student()['id']
         self.result['lesson'] = None

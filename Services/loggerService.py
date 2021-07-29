@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import config
-from Services import httpService
+from Services import httpService, datetimeService
 from Core.studentManager import StudentManager
 
 
@@ -48,7 +48,7 @@ def get_log_dto(log_lines):
     """
     return {
         'id': 0,
-        'creationDate': datetime.now().isoformat() + 'Z',
+        'creationDate': datetimeService.convert_datetime_to_iso(datetime.now()),
         'data': str(log_lines),
         'person': None,
         'personId': StudentManager.get_student()['id']
