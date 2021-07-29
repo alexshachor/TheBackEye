@@ -3,7 +3,7 @@ from datetime import datetime
 
 import config
 from Services import httpService, datetimeService
-from Core.studentManager import StudentManager
+
 
 
 def get_logger(log_name=config.LOG_FILES['default']):
@@ -28,22 +28,24 @@ def get_logger(log_name=config.LOG_FILES['default']):
     return logging.getLogger(log_name)
 
 
-def send_log_reports(log_name=config.LOG_FILES['default']):
+def send_log_reports(person_id, log_name=config.LOG_FILES['default']):
     """
     send the given log file to the server.
+    :param person_id: the id of the student
     :param log_name: the name of log file to send.
     :return: True if the logs successfully sent and False otherwise.
     """
     with open(log_name) as f:
         log_lines = f.readlines()
-    log_dto = get_log_dto(log_lines)
+    log_dto = get_log_dto(log_lines, person_id)
     return httpService.post(config.URLS['post_logs'], log_dto)
 
 
-def get_log_dto(log_lines):
+def get_log_dto(log_lines, person_id):
     """
     get a log dto object contains log details and data
     :param log_lines: the log data from file
+    :param person_id: the id of the student
     :return: log_dto object
     """
     return {
@@ -51,13 +53,12 @@ def get_log_dto(log_lines):
         'creationDate': datetimeService.convert_datetime_to_iso(datetime.now()),
         'data': str(log_lines),
         'person': None,
-        'personId': StudentManager.get_student()['id']
+        'personId': person_id
     }
 
 
 if __name__ == '__main__':
-    student = StudentManager.get_student("123")
-    if student:
-        res = send_log_reports()
-        if res:
-            print('result: ', res.text)
+
+    res = send_log_reports("123")
+    if res:
+        print('result: ', res.text)

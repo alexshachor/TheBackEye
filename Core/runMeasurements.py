@@ -7,6 +7,7 @@ from Core.measurementsResult import MeasurementsResult
 from Services import loggerService, datetimeService
 from Services.runMeasurementsService import MeasurementsService
 import multiprocessing as mp
+from Core.studentManager import StudentManager
 
 
 class RunMeasurements:
@@ -30,7 +31,8 @@ class RunMeasurements:
             'end': datetimeService.convert_iso_format_to_datetime(lesson_configuration['endTime']),
             'breaks': [(datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakStart']),
                         datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakEnd']))]
-            if lesson_configuration['breakStart'] is not None else []
+            if datetimeService.convert_iso_format_to_datetime(
+                lesson_configuration['breakStart']) is not datetime.MINYEAR else []
         }
 
     def run(self):
@@ -110,4 +112,4 @@ class RunMeasurements:
         """
         cv2.destroyAllWindows()
         loggerService.get_logger().info('lesson ended')
-        loggerService.send_log_reports()
+        loggerService.send_log_reports(StudentManager.get_student()['id'])

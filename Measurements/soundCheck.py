@@ -21,7 +21,7 @@ class SoundCheck(am.AbstractMeasurement):
         self.is_active_lesson = False
         lesson = lc.get_lesson()
         if lesson:
-            self.is_active_lesson = self.lesson['isActive']
+            self.is_active_lesson = lesson['isActive']
 
 
     def init_volume(self):
