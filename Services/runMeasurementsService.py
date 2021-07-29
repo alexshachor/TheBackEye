@@ -18,7 +18,7 @@ class MeasurementsService:
         :param measurements: measurements to send to the server
         :return: void
         """
-        has_success = httpService.post(config.URLS['post_measures'], measurements)
+        has_success = httpService.post(config.URLS['post_measures'], measurements.get_measurement_dto())
         # if has success it means the connection eith the server is on
         if has_success:
             # if there is measurements to send
@@ -30,4 +30,4 @@ class MeasurementsService:
                     self.measurements_stack = []
         else:
             # there is no connection so save it for later trial
-            self.measurements_stack.append(measurements)
+            self.measurements_stack.append(measurements.get_measurement_dto())

@@ -1,5 +1,5 @@
 import logging
-import datetime
+from datetime import datetime
 
 import config
 from Services import httpService
@@ -48,9 +48,9 @@ def get_log_dto(log_lines):
     """
     return {
         'id': 0,
-        'creationDate': datetime.datetime.now().isoformat() + 'Z',
+        'creationDate': datetime.now().isoformat() + 'Z',
         'data': str(log_lines),
-        'person': {},
+        'person': None,
         'personId': StudentManager.get_student()['id']
     }
 

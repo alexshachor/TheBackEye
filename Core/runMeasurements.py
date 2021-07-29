@@ -24,17 +24,12 @@ class RunMeasurements:
                 configuration of a specific lesson such as lesson duration and breaks.
             *************************************************************************"""
 
-        # [fd.FaceDetector(),hp(),ot(),sd()]
         self.measurements = measurements
-        # TODO: take it from server instead of a mock
-        # self.lesson = lesson_configuration
         self.lesson = {
-            'start': datetime.datetime.now() + datetime.timedelta(seconds=10),
-            'end': datetime.datetime.now() + datetime.timedelta(seconds=70),
-            'breaks': [(datetime.datetime.now() + datetime.timedelta(seconds=30),
-                        datetime.datetime.now() + datetime.timedelta(seconds=35)),
-                       (datetime.datetime.now() + datetime.timedelta(seconds=50),
-                        datetime.datetime.now() + datetime.timedelta(seconds=60))]
+            'start': lesson_configuration['startTime'],
+            'end': lesson_configuration['endTime'],
+            'breaks': [(lesson_configuration['breakStart'], lesson_configuration['breakEnd'])]
+            if lesson_configuration['breakStart'] is not None else []
         }
 
     def run(self):
