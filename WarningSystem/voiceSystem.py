@@ -7,7 +7,7 @@ GENERAL_WARNING = 2
 
 class VoiceSystem:
 
-    def __init__(self, indices_list):
+    def __init__(self, indices_list, student_name):
         """
         init indices & msgs & the model for text to speech msgs
         given the teacher an option to to give us unique messages for the student.
@@ -16,7 +16,7 @@ class VoiceSystem:
         self.__indices_list = indices_list
         self.__indices_msgs = self.__init_indices_msgs() if config.TEACHER_MSGS is None else config.TEACHER_MSGS
         self.__msg = ''
-        self.__general_msg = ' Please return to learning mode!.'
+        self.__general_msg = f'{student_name} Please return to learning mode!.'
         # Object voice creation.
         self.__engine = pyttsx3.init()
         self.__init_msg()
@@ -47,22 +47,22 @@ class VoiceSystem:
         initialize the messages into a one long string for the voice model.
         """
         if len(self.__indices_list) > GENERAL_WARNING:
-            self.msg = self.__indices_msgs['MANY_FAILURES']
+            self.__msg = self.__indices_msgs['MANY_FAILURES']
             return
         for i in self.__indices_list:
             if i != 'SoundCheck'.upper():
-                self.msg += self.__indices_msgs[i] + ' '
+                self.__msg += self.__indices_msgs[i] + ' '
 
     def __run_voice_system(self):
         """
         run the voice system & if in debug mode, record the voice system
         into a mp3 file.
         """
-        self.__engine.say(self.msg)
+        self.__engine.say(self.__msg)
         self.__engine.say(self.__general_msg)
         self.__engine.runAndWait()
         if config.DEBUG:
-            self.__engine.save_to_file(self.msg + self.__general_msg, '.\\Mp3Files\\test.mp3')
+            self.__engine.save_to_file(self.__msg + self.__general_msg, '.\\Mp3Files\\test.mp3')
             self.__engine.runAndWait()
         self.__engine.stop()
 
@@ -97,10 +97,11 @@ def for_tests_only():
     """
     this function is used only for tests.
     """
+    student_name = "David"
     indices_list = ['FACEDETECTOR', 'OBJECTDETECTOR', 'SLEEPDETECTOR']
-    VoiceSystem(indices_list)
+    VoiceSystem(indices_list,student_name)
     indices_list = ['FACERECOGNITION', 'OBJECTDETECTOR']
-    VoiceSystem(indices_list)
+    VoiceSystem(indices_list, student_name)
 
 
 if __name__ == '__main__':

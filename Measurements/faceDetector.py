@@ -1,3 +1,5 @@
+from time import sleep
+
 import cv2
 import config
 from Measurements import abstractMeasurement as am
@@ -45,6 +47,7 @@ class FaceDetector(am.AbstractMeasurement):
                 # show face net on image
                 if config.DEBUG:
                     self.draw_annotations(image, results)
+                # sleep(config.TIMEOUT)
             dict_results.update(run_result)
         except Exception as e:
             self.face_mesh.close()
@@ -71,7 +74,7 @@ class FaceDetector(am.AbstractMeasurement):
                 connections=mp_face_mesh.FACE_CONNECTIONS,
                 landmark_drawing_spec=self.drawing_spec,
                 connection_drawing_spec=self.drawing_spec)
-            cv2.imshow('MediaPipe FaceMesh', image)
+        cv2.imshow('MediaPipe FaceMesh', image)
 
 
 def test_face_detector_measure():
@@ -110,7 +113,6 @@ def test_measurement_on_images(file_list):
 
 
 if __name__ == "__main__":
-    # test_face_detector_measure()
-
     file_list = glob.glob(r".\TestImages\FaceDetector\*.jpg")
     test_measurement_on_images(file_list)
+    test_face_detector_measure()

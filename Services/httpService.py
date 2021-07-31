@@ -18,6 +18,7 @@ def get(url, params=None):
     try:
         if not url:
             raise ValueError(f'cannot get, url is missing')
+        response = None
         response = requests.get(url, params, verify=False)
         response.raise_for_status()
         # data = response.json()
@@ -25,12 +26,12 @@ def get(url, params=None):
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return None
-    except requests.exceptions.RequestException:
-        loggerService.get_logger().error(str(response.text))
+    except requests.exceptions.RequestException as e:
+        loggerService.get_logger().error(str(e))
         return None
     except Exception as e:
         loggerService.get_logger().error(
-            f'get call to url: {url} has failed with status: {response.status_code}, due to: {str(e)}')
+            f'get call to url: {url} has failed, due to: {str(e)}')
         return None
 
 
@@ -42,6 +43,7 @@ def post(url, json):
     :return: response from server if succeed and None otherwise
     """
     try:
+        response = None
         if not json or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {json}')
         response = requests.post(url, json=json, verify=False)
@@ -50,12 +52,12 @@ def post(url, json):
     except ValueError as e:
         loggerService.get_logger().error(str(e))
         return None
-    except requests.exceptions.RequestException:
-        loggerService.get_logger().error(str(response.text))
+    except requests.exceptions.RequestException as e:
+        loggerService.get_logger().error(str(e))
         return None
     except Exception as e:
         loggerService.get_logger().error(
-            f'post call to url: {url}, data: {json} has failed with status: {response.status_code}, due to: {str(e)}')
+            f'post call to url: {url}, data: {json} has failed, due to: {str(e)}')
         return None
 
 

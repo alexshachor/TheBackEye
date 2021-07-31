@@ -308,10 +308,12 @@ def test_head_pose_measure():
     :return: void
     """
     dict_results = {}
-    video_capture = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+    # video_capture = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+    video_capture = cv2.VideoCapture(config.CAM_SRC)
     success, frame = video_capture.read()
+    hp = HeadPose()
     while success:
-        HeadPose().run(frame, dict_results)
+        hp.run(frame, dict_results)
         print(dict_results)
         success, frame = video_capture.read()
     video_capture.release()
@@ -339,6 +341,6 @@ def test_measurement_on_images(file_list):
 
 
 if __name__ == "__main__":
-    # test_head_pose_measure()
     file_list = glob.glob(r"..\TestImages\HeadPose\*.jpg")
     test_measurement_on_images(file_list)
+    test_head_pose_measure()

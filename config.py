@@ -1,6 +1,6 @@
 import logging
 
-DEBUG = True
+DEBUG = False
 TIMEOUT = 5
 CAM_SRC = 1
 
@@ -10,13 +10,14 @@ use: every page that use httpService.
 """
 URLS = {
     'post_measures': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Measurement/',
+    # 'post_measures': 'https://localhost:44378/api/Measurement/',
     'post_stacked_measures': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Measurement/PostMeasurements',
+    # 'post_stacked_measures': 'https://localhost:44378/api/Measurement/PostMeasurements',
     'post_logs': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Log/',
-    #'post_logs': 'https://localhost:44378/api/Log/',
     'is_server_alive': 'https://datamanagementapi20210728183549.azurewebsites.net/api/IsAlive/',
     'get_student':'https://datamanagementapi20210728183549.azurewebsites.net/api/Person/',
     'put_student':'https://datamanagementapi20210728183549.azurewebsites.net/api/Person/',
-    'get_lesson':'https://datamanagementapi20210728183549.azurewebsites.net/api/Lesson/'
+    'get_lesson':'https://datamanagementapi20210728183549.azurewebsites.net/api/Lesson/GetNextLesson/'
 }
 
 """
@@ -82,7 +83,7 @@ enlist parameters that needed for head pose estimation.
 use: in headPose measurement.
 """
 HEAD_POSE = {
-    'video_file': './video/result.avi',
+    'video_file': './video/result.mp4',
     'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar',
     'range': {
         'yaw': (-10, 10),
