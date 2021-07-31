@@ -59,7 +59,7 @@ def get_log_dto(log_lines, person_id):
         'creationDate': datetimeService.convert_datetime_to_iso(datetime.now()),
         'data': str(log_lines),
         'person': None,
-        'personId': 4
+        'personId': person_id
     }
 
 
