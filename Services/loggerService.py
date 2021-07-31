@@ -30,15 +30,21 @@ def get_logger(log_name=config.LOG_FILES['default']):
 
 def send_log_reports(person_id, log_name=config.LOG_FILES['default']):
     """
-    send the given log file to the server.
+    send the given log file to the server and clear log data.
     :param person_id: the id of the student
     :param log_name: the name of log file to send.
     :return: True if the logs successfully sent and False otherwise.
     """
     with open(log_name) as f:
         log_lines = f.readlines()
+    if log_lines is None or log_lines == []:
+        return False
     log_dto = get_log_dto(log_lines, person_id)
-    return httpService.post(config.URLS['post_logs'], log_dto)
+    result = httpService.post(config.URLS['post_logs'], log_dto)
+    # if log data was sent to server then clear log content
+    if result:
+        open(log_name, "w").close()
+    return result
 
 
 def get_log_dto(log_lines, person_id):
@@ -53,7 +59,7 @@ def get_log_dto(log_lines, person_id):
         'creationDate': datetimeService.convert_datetime_to_iso(datetime.now()),
         'data': str(log_lines),
         'person': None,
-        'personId': person_id
+        'personId': 4
     }
 
 

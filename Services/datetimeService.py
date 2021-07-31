@@ -6,6 +6,8 @@ def convert_datetime_to_iso(datetime_obj):
     :param datetime_obj: datetime object to convert
     :return: iso format (string) of the given datetime
     """
+    if datetime_obj is None:
+        return None
     return datetime_obj.isoformat() + 'Z'
 
 def convert_iso_format_to_datetime(iso_format_str):
@@ -14,4 +16,6 @@ def convert_iso_format_to_datetime(iso_format_str):
     :param iso_format_str: iso format in string to convert
     :return: datetime object represent the given iso format
     """
-    return datetime.fromisoformat(iso_format_str.replace("Z", "+00:00"))
+    if iso_format_str is None:
+        return None
+    return datetime.fromisoformat(iso_format_str.split('.')[0])
