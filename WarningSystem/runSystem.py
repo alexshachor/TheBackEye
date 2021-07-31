@@ -20,7 +20,7 @@ class RunSystem:
         self.__dict_process = {
             'voice': mp.Process(target=vs.VoiceSystem, args=(self.__failed_in,self.__student["firstName"])),
             'flicker': mp.Process(target=fs.FlickerSystem),
-            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,))
+            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,self.__student["email"]))
         }
         self.__init_failed_indices()
         self.__run_warning_system()

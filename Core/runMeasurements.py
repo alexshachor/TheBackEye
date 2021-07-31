@@ -64,6 +64,7 @@ class RunMeasurements:
             loggerService.get_logger().info('lesson started')
 
             # if current time is still in range of lesson time
+            # TODO: change to only hour and minute validation
             while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
                 if current_break is not None and current_break[0] <= current_time < current_break[1]:
