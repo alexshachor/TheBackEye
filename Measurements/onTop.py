@@ -9,10 +9,7 @@ from win32api import GetSystemMetrics
 from Core.lessonConfiguration import LessonConfiguration as lc
 import time
 
-# If it True: If the desired program is not ON TOP, it will be.
-# If it False: Report only.
-res = lc.get_lesson()['isActive']
-REPORT_ONLY = not res
+
 # The volume that a program considered to be On Top.
 DESIRED_SIZE = 77
 
@@ -26,6 +23,9 @@ class OnTop(am.AbstractMeasurement):
         am.AbstractMeasurement.__init__(self)
         self.__screen_width = GetSystemMetrics(0)
         self.__screen_height = GetSystemMetrics(1)
+        # If it True: If the desired program is not ON TOP, it will be.
+        # If it False: Report only.
+        self.is_active = lc.get_lesson()['isActive']
 
     def run(self, frame, dict_results):
         """
@@ -66,7 +66,7 @@ class OnTop(am.AbstractMeasurement):
                 return True
         # If we got here the student is not watching the desired program and we act
         # according to the settings.
-        if not REPORT_ONLY:
+        if self.is_active:
             self.__handle_active_teacher(is_on_top)
         return False
 

@@ -45,7 +45,7 @@ class StudentManager:
 
 
 if __name__ == '__main__':
-    student = StudentManager.get_student("123456789")
+    student = StudentManager.get_student("123")
     if student:
         print('got student from server: ', student)
         # change something in student details

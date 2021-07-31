@@ -1,4 +1,6 @@
 import multiprocessing as mp
+
+from Core.studentManager import StudentManager
 from WarningSystem import voiceSystem as vs
 from WarningSystem import flickerSystem as fs
 from WarningSystem import emailWarning as ew
@@ -14,10 +16,11 @@ class RunSystem:
         """
         self.__indices_dict = indices_dict
         self.__failed_in = []
+        self.__student = StudentManager.get_student()
         self.__dict_process = {
-            'voice': mp.Process(target=vs.VoiceSystem, args=(self.__failed_in,)),
+            'voice': mp.Process(target=vs.VoiceSystem, args=(self.__failed_in,self.__student["firstName"])),
             'flicker': mp.Process(target=fs.FlickerSystem),
-            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,))
+            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,self.__student["email"]))
         }
         self.__init_failed_indices()
         self.__run_warning_system()
@@ -65,5 +68,6 @@ def for_tests_only():
 
 
 if __name__ == '__main__':
+    StudentManager.get_student("333")
     for_tests_only()
 

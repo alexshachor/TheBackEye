@@ -18,10 +18,10 @@ class SoundCheck(am.AbstractMeasurement):
         am.AbstractMeasurement.__init__(self)
         self.volume = self.init_volume()
         self.min_sound_level = config.SOUND_CHECK['min_volume']
-        self.is_active_lesson = False
+        self.is_active_lesson = True
         lesson = lc.get_lesson()
         if lesson:
-            self.is_active_lesson = self.lesson['isActive']
+            self.is_active_lesson = lesson['isActive']
 
 
     def init_volume(self):

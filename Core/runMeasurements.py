@@ -4,9 +4,12 @@ import cv2
 from time import sleep
 import config
 from Core.measurementsResult import MeasurementsResult
-from Services import loggerService
+from Services import loggerService, datetimeService
 from Services.runMeasurementsService import MeasurementsService
 import multiprocessing as mp
+from Core.studentManager import StudentManager
+from ImageProcessing import superResolution as sr
+from WarningSystem.runSystem import RunSystem
 
 
 class RunMeasurements:
@@ -24,17 +27,14 @@ class RunMeasurements:
                 configuration of a specific lesson such as lesson duration and breaks.
             *************************************************************************"""
 
-        # [fd.FaceDetector(),hp(),ot(),sd()]
         self.measurements = measurements
-        # TODO: take it from server instead of a mock
-        # self.lesson = lesson_configuration
         self.lesson = {
-            'start': datetime.datetime.now() + datetime.timedelta(seconds=10),
-            'end': datetime.datetime.now() + datetime.timedelta(seconds=70),
-            'breaks': [(datetime.datetime.now() + datetime.timedelta(seconds=30),
-                        datetime.datetime.now() + datetime.timedelta(seconds=35)),
-                       (datetime.datetime.now() + datetime.timedelta(seconds=50),
-                        datetime.datetime.now() + datetime.timedelta(seconds=60))]
+            'start': datetimeService.convert_iso_format_to_datetime(lesson_configuration['startTime']),
+            'end': datetimeService.convert_iso_format_to_datetime(lesson_configuration['endTime']),
+            'breaks': [(datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakStart']),
+                        datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakEnd']))]
+            if datetimeService.convert_iso_format_to_datetime(
+                lesson_configuration['breakStart']) is not datetime.MINYEAR else []
         }
 
     def run(self):
@@ -48,7 +48,7 @@ class RunMeasurements:
         measurements_service = MeasurementsService()
 
         try:
-            capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+
             # assign current_break to be None if there are no breaks. otherwise, assign first break
             current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
             current_time = datetime.datetime.now()
@@ -57,10 +57,14 @@ class RunMeasurements:
             if current_time < self.lesson['start']:
                 sleep((self.lesson['start'] - current_time).seconds)
 
+            # turn on computer camera
+            capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+
             current_time = datetime.datetime.now()
             loggerService.get_logger().info('lesson started')
 
             # if current time is still in range of lesson time
+            # TODO: change to only hour and minute validation
             while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
                 if current_break is not None and current_break[0] <= current_time < current_break[1]:
@@ -71,7 +75,19 @@ class RunMeasurements:
                 if not ret:
                     loggerService.get_logger().fatal(f'cannot read from camera source. source value = {config.CAM_SRC}')
                     continue
-                result = self.run_measurement_processes(frame)
+                frame = sr.SuperResolution(frame, 0).get_image()
+
+                # result = self.run_measurement_processes(frame)
+                result = {
+                    "headPose": True,
+                    "faceRecognition": False,
+                    "sleepDetector": True,
+                    "onTop": True,
+                    "faceDetector": True,
+                    "objectDetection": True,
+                    "soundCheck": True,
+                }
+                RunSystem(result)
                 measurements_service.post_measurements(MeasurementsResult(result))
 
                 sleep(config.TIMEOUT)
@@ -113,5 +129,5 @@ class RunMeasurements:
         :return: void
         """
         cv2.destroyAllWindows()
-        loggerService.send_log_reports()
         loggerService.get_logger().info('lesson ended')
+        loggerService.send_log_reports(StudentManager.get_student()['id'])

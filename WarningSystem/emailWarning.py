@@ -4,13 +4,13 @@ from EmailMessagingSystem import emailSystem as es
 
 class EmailWarning:
 
-    def __init__(self, failed_measurements):
+    def __init__(self, failed_measurements, user_email):
         """
         init the email msg & email user
         :param: failed_measurements: list of failed measurements
         """
         self.__msg = self.__create_msg(failed_measurements)
-        self.__user_email = config.EMAIL['USER_EMAIL']
+        self.__user_email = user_email
         self.__subject = 'TheBackEye Warning System!'
         self.__send_msg()
 
@@ -41,7 +41,7 @@ def for_tests_only():
     """
     A test func to this page only.
     """
-    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'])
+    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'],"TheBackEyeApp@gmail.com")
 
 
 if __name__ == '__main__':
