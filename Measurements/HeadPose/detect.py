@@ -5,13 +5,16 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 
+import config
+
+
 class Detection:
     def __init__(self):
         """
         init the class with caffe model and decide the amount of confidence.
         """
-        caffemodel = "./checkpoint/Widerface-RetinaFace.caffemodel"
-        deploy = "./checkpoint/deploy.prototxt"
+        caffemodel = config.HEAD_POSE['caffemodel']
+        deploy = config.HEAD_POSE['deploy']
         self.detector = cv2.dnn.readNetFromCaffe(deploy, caffemodel)
         self.detector_confidence = 0.7
 
@@ -32,9 +35,11 @@ class Detection:
         self.detector.setInput(blob, 'data')
         out = self.detector.forward('detection_out').squeeze()
         max_conf_index = np.argmax(out[:, 2])
-        left, top, right, bottom = out[max_conf_index, 3]*width, out[max_conf_index, 4]*height,out[max_conf_index, 5]*width, out[max_conf_index, 6]*height
-        bbox = [int(left), int(top), int(right-left+1), int(bottom-top+1)]
+        left, top, right, bottom = out[max_conf_index, 3] * width, out[max_conf_index, 4] * height, out[
+            max_conf_index, 5] * width, out[max_conf_index, 6] * height
+        bbox = [int(left), int(top), int(right - left + 1), int(bottom - top + 1)]
         return bbox
+
 
 class AntiSpoofPredict(Detection):
     def __init__(self, device_id):
@@ -44,4 +49,3 @@ class AntiSpoofPredict(Detection):
         """
         super(AntiSpoofPredict, self).__init__()
         self.device = torch.device("cuda:{}".format(device_id) if torch.cuda.is_available() else "cpu")
-

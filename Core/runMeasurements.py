@@ -58,7 +58,7 @@ class RunMeasurements:
                 sleep((self.lesson['start'] - current_time).seconds)
 
             # turn on computer camera
-            capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
+            capture_device = cv2.VideoCapture(config.CAM_SRC)
 
             current_time = datetime.datetime.now()
             loggerService.get_logger().info('lesson started')
@@ -76,22 +76,27 @@ class RunMeasurements:
                     continue
                 frame = sr.SuperResolution(frame, 0).get_image()
 
-                result = self.run_measurement_processes(frame)
-                result = {
-                    "headPose": True,
-                    "faceRecognition": False,
-                    "sleepDetector": True,
-                    "onTop": True,
-                    "faceDetector": True,
-                    "objectDetection": True,
-                    "soundCheck": True,
-                }
+                # measurements_results = self.run_measurement_processes(frame)
+                measurements_results = {}
+                for job in self.measurements:
+                    job.run(frame,measurements_results)
+                if config.DEBUG:
+                    print(measurements_results)
+                # result = {
+                #     "headPose": True,
+                #     "faceRecognition": False,
+                #     "sleepDetector": True,
+                #     "onTop": True,
+                #     "faceDetector": True,
+                #     "objectDetection": True,
+                #     "soundCheck": True,
+                # }
 
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
-                    RunSystem(result)
+                    RunSystem(measurements_results)
                     alert_counter = datetime.datetime.now()
 
-                measurements_service.post_measurements(MeasurementsResult(result))
+                measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
                 sleep(config.TIMEOUT)
                 current_time = datetime.datetime.now()
