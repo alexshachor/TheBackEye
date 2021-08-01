@@ -51,7 +51,7 @@ class RunMeasurements:
 
             # assign current_break to be None if there are no breaks. otherwise, assign first break
             current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
-            current_time = datetime.datetime.now()
+            current_time = alert_counter = datetime.datetime.now()
 
             # if lesson start time is yet to be started, sleep for the time between
             if current_time < self.lesson['start']:
@@ -64,7 +64,6 @@ class RunMeasurements:
             loggerService.get_logger().info('lesson started')
 
             # if current time is still in range of lesson time
-            # TODO: change to only hour and minute validation
             while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
                 if current_break is not None and current_break[0] <= current_time < current_break[1]:
@@ -77,7 +76,7 @@ class RunMeasurements:
                     continue
                 frame = sr.SuperResolution(frame, 0).get_image()
 
-                # result = self.run_measurement_processes(frame)
+                result = self.run_measurement_processes(frame)
                 result = {
                     "headPose": True,
                     "faceRecognition": False,
@@ -87,7 +86,11 @@ class RunMeasurements:
                     "objectDetection": True,
                     "soundCheck": True,
                 }
-                RunSystem(result)
+
+                if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
+                    RunSystem(result)
+                    alert_counter = datetime.datetime.now()
+
                 measurements_service.post_measurements(MeasurementsResult(result))
 
                 sleep(config.TIMEOUT)
@@ -111,7 +114,7 @@ class RunMeasurements:
         # assign all processes and start each one of them
         processes = []
         for job in self.measurements:
-            process = mp.Process(target=job, args=(frame, dict_results))
+            process = mp.Process(target=job.run, args=(frame, dict_results,))
             process.start()
             processes.append(process)
 
