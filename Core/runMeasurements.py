@@ -13,19 +13,18 @@ from WarningSystem.runSystem import RunSystem
 
 
 class RunMeasurements:
-    """*************************************** Description of the Class - RunMeasurements:
-        Gaol: This class is responsible for running all measurements and sending
-        the results data to the server.
-    ***********************************************************************************"""
+    """
+    This class is responsible for running all measurements and sending the results data to the server.
+    """
 
     def __init__(self, measurements, lesson_configuration):
-        """********************************* Description of the Function - __init__:
-                Gaol: The constructor function.
-                Parameters: measurements - List of objects [each object is a measure
-                that needs to be executed and get its results].
-                lesson_configuration - lesson configuration dictionary which hold the
+        """
+        The constructor function
+        :param measurements: List of objects [each object is a measure
+                that needs to be executed and get its results]
+        :param lesson_configuration: lesson configuration dictionary which hold the
                 configuration of a specific lesson such as lesson duration and breaks.
-            *************************************************************************"""
+        """
 
         self.measurements = measurements
         self.lesson = {
@@ -38,12 +37,12 @@ class RunMeasurements:
         }
 
     def run(self):
-        """************************************** Description of the Function - run:
-              Gaol: Streaming from the user's camera at regular intervals, for the
+        """
+        Streaming from the user's camera at regular intervals, for the
               captured frame all the objects of the measurement are activated - the
-              results are sent to the server.
-              Parameters: self.
-          *************************************************************************"""
+              results are sent to the server
+        :return: void
+        """
 
         measurements_service = MeasurementsService()
 
@@ -124,8 +123,6 @@ class RunMeasurements:
             processes.append(process)
 
         for process in processes:
-            # TODO: do we need to use timeout (if one of the processes is taking too long time to finish)?
-            # TODO: what we do in case of one of the processes has not finished yet?
             process.join()
             process.close()
 
