@@ -48,11 +48,12 @@ class FaceDetector(am.AbstractMeasurement):
                 if config.DEBUG:
                     self.draw_annotations(image, results)
                 # sleep(config.TIMEOUT)
-            dict_results.update(run_result)
         except Exception as e:
             self.face_mesh.close()
             # write error to log file
             loggerService.get_logger().error(str(e))
+        finally:
+            dict_results.update(run_result)
 
     def __repr__(self):
         return 'FaceDetector'

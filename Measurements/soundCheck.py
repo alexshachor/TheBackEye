@@ -69,10 +69,11 @@ class SoundCheck(am.AbstractMeasurement):
                     if config.DEBUG:
                         print("volume is up. volume level: ", self.volume.GetMasterVolumeLevelScalar())
 
-            dict_results.update(run_result)
         except Exception as e:
             # write error to log file
             loggerService.get_logger().error(str(e))
+        finally:
+            dict_results.update(run_result)
 
     def __repr__(self):
         return 'SoundCheck'
