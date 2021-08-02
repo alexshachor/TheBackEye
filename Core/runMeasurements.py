@@ -1,4 +1,5 @@
 import datetime
+import threading
 
 import cv2
 from time import sleep
@@ -75,10 +76,11 @@ class RunMeasurements:
                     continue
                 frame = sr.SuperResolution(frame, 0).get_image()
 
-                # measurements_results = self.run_measurement_processes(frame)
-                measurements_results = {}
-                for job in self.measurements:
-                    job.run(frame,measurements_results)
+                measurements_results = self.run_measurement_threads(frame)
+
+                # measurements_results = {}
+                # for job in self.measurements:
+                #     job.run(frame, measurements_results)
                 if config.DEBUG:
                     print(measurements_results)
                 # result = {
@@ -92,7 +94,9 @@ class RunMeasurements:
                 # }
 
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
-                    RunSystem(measurements_results)
+                    # RunSystem(measurements_results)
+                    thread = threading.Thread(target=RunSystem, args=(measurements_results,))
+                    thread.start()
                     alert_counter = datetime.datetime.now()
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
@@ -125,6 +129,26 @@ class RunMeasurements:
         for process in processes:
             process.join()
             process.close()
+
+        return dict_results
+
+    def run_measurement_threads(self, frame):
+        """
+        run all measurements each one in different thread, wait them all to finish, and return their result.
+        :param frame: frame to measure.
+        :return: results - dictionary of the results [key = measurement name, value = measurement result]
+        """
+
+        dict_results = mp.Manager().dict()
+
+        # assign all threads and start each one of them
+        threads = []
+        for job in self.measurements:
+            thread = threading.Thread(target=job.run, args=(frame, dict_results,))
+            thread.start()
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
 
         return dict_results
 
