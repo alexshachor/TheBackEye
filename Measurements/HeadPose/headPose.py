@@ -64,11 +64,11 @@ class HeadPose(am.AbstractMeasurement):
             if config.DEBUG:
                 self.write_measures_to_video(frame, yaw, pitch, roll, is_looking)
 
-            dict_results.update(run_result)
-
         except Exception as e:
             # write error to log file
             loggerService.get_logger().error(str(e))
+        finally:
+            dict_results.update(run_result)
 
     def write_measures_to_video(self, frame, yaw, pitch, roll, is_looking):
         """

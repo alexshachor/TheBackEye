@@ -83,8 +83,10 @@ enlist parameters that needed for head pose estimation.
 use: in headPose measurement.
 """
 HEAD_POSE = {
-    'video_file': './video/result.mp4',
-    'snapshot_file': './checkpoint/snapshot/checkpoint.pth.tar',
+    'video_file': r'./Measurements/HeadPose/video/result.mp4',
+    'snapshot_file': r'./Measurements/HeadPose/checkpoint/snapshot/checkpoint.pth.tar',
+    'caffemodel': r'./Measurements/HeadPose/checkpoint/Widerface-RetinaFace.caffemodel',
+    'deploy':r'./Measurements/HeadPose/checkpoint/deploy.prototxt',
     'range': {
         'yaw': (-10, 10),
         'pitch': (4, 20),
@@ -140,4 +142,11 @@ specify the expected volume (in dB) for the sound check
 """
 SOUND_CHECK = {
     'min_volume':0.34
+}
+
+"""
+specify the interval seconds which every x seconds alert system will be called
+"""
+ALERT_SYSTEM = {
+    'interval_seconds':480
 }
