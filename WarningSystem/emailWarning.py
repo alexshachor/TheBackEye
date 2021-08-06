@@ -1,16 +1,17 @@
 import config
+from Core.studentManager import StudentManager
 from EmailMessagingSystem import emailSystem as es
 
 
 class EmailWarning:
 
-    def __init__(self, failed_measurements, user_email):
+    def __init__(self, failed_measurements):
         """
         init the email msg & email user
         :param: failed_measurements: list of failed measurements
         """
         self.__msg = self.__create_msg(failed_measurements)
-        self.__user_email = user_email
+        self.__user_email = StudentManager.get_student()["email"]
         self.__subject = 'TheBackEye Warning System!'
         self.__send_msg()
 
@@ -41,7 +42,7 @@ def for_tests_only():
     """
     A test func to this page only.
     """
-    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'],"TheBackEyeApp@gmail.com")
+    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'],"thebackeyeapp@gmail.com")
 
 
 if __name__ == '__main__':
