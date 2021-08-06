@@ -1,5 +1,6 @@
 import pyttsx3
 import config
+from Core.studentManager import StudentManager
 
 FEMALE = 0
 GENERAL_WARNING = 2
@@ -7,7 +8,7 @@ GENERAL_WARNING = 2
 
 class VoiceSystem:
 
-    def __init__(self, indices_list, student_name):
+    def __init__(self, indices_list):
         """
         init indices & msgs & the model for text to speech msgs
         given the teacher an option to to give us unique messages for the student.
@@ -16,7 +17,7 @@ class VoiceSystem:
         self.__indices_list = indices_list
         self.__indices_msgs = self.__init_indices_msgs() if config.TEACHER_MSGS is None else config.TEACHER_MSGS
         self.__msg = ''
-        self.__general_msg = f'{student_name} Please return to learning mode!.'
+        self.__general_msg = f'{StudentManager.get_student()["firstName"]} Please return to learning mode!.'
         # Object voice creation.
         self.__engine = pyttsx3.init()
         self.__init_msg()

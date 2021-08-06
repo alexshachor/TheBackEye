@@ -1,9 +1,8 @@
-import multiprocessing as mp
-
 from Core.studentManager import StudentManager
 from WarningSystem import voiceSystem as vs
 from WarningSystem import flickerSystem as fs
 from WarningSystem import emailWarning as ew
+import threading
 
 
 class RunSystem:
@@ -17,10 +16,10 @@ class RunSystem:
         self.__indices_dict = indices_dict
         self.__failed_in = []
         self.__student = StudentManager.get_student()
-        self.__dict_process = {
-            'voice': mp.Process(target=vs.VoiceSystem, args=(self.__failed_in,self.__student["firstName"])),
-            'flicker': mp.Process(target=fs.FlickerSystem),
-            'email': mp.Process(target=ew.EmailWarning, args=(self.__failed_in,self.__student["email"]))
+        self.__dict_threads = {
+            'voice': threading.Thread(target=vs.VoiceSystem, args=(self.__failed_in, )),
+            'flicker': threading.Thread(target=fs.FlickerSystem),
+            'email': threading.Thread(target=ew.EmailWarning, args=(self.__failed_in, ))
         }
         self.__init_failed_indices()
         self.__run_warning_system()
@@ -32,20 +31,19 @@ class RunSystem:
         # assign all processes and start each one of them
         if not self.__failed_in:
             return
-        processes = []
+        threads = []
 
-        for key, process in self.__dict_process.items():
+        for key, thread in self.__dict_threads.items():
             if key == 'email':
                 if 'ObjectDetector'.upper() in self.__failed_in or 'SoundCheck'.upper() in self.__failed_in:
-                    process.start()
-                    processes.append(process)
+                    thread.start()
+                    threads.append(thread)
             else:
-                process.start()
-                processes.append(process)
+                thread.start()
+                threads.append(thread)
 
-        for process in processes:
-            process.join()
-            process.close()
+        for thread in threads:
+            thread.join()
 
     def __init_failed_indices(self):
         """
