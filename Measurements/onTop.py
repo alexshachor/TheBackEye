@@ -16,7 +16,7 @@ DESIRED_SIZE = 77
 
 class OnTop(am.AbstractMeasurement):
 
-    def __init__(self):
+    def __init__(self, debug=False):
         """
         initialize the parent class and size screen.
         """
@@ -25,7 +25,10 @@ class OnTop(am.AbstractMeasurement):
         self.__screen_height = GetSystemMetrics(1)
         # If it True: If the desired program is not ON TOP, it will be.
         # If it False: Report only.
-        self.is_active = lc.get_lesson()['isActive']
+        if debug:
+            self.is_active = True
+        else:
+            self.is_active = lc.get_lesson()['isActive']
 
     def run(self, frame, dict_results):
         """
@@ -118,7 +121,7 @@ def for_tests_only():
     A test func to this page only.
     """
     dict = {}
-    x = OnTop()
+    x = OnTop(True)
     while True:
         x.run(None, dict)
         print(dict[x.__repr__()])
