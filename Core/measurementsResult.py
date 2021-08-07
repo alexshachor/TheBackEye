@@ -28,21 +28,6 @@ class MeasurementsResult:
         return measurements data and time as MeasurementDto as server format
         :return: MeasurementDto in format supported by the server
         """
-        # return {
-        #     "id": 0,
-        #     "dateTime": self.time.isoformat() + 'Z',
-        #     "headPose": self.result['HeadPose'],
-        #     "faceRecognition": self.result['FaceRecognition'],
-        #     "sleepDetector": self.result['SleepDetector'],
-        #     "onTop": self.result['OnTop'],
-        #     "faceDetector": self.result['FaceDetector'],
-        #     "objectDetection": self.result['ObjectDetection'],
-        #     "soundCheck": self.result['SoundCheck'],
-        #     "lesson": {},
-        #     "lessonId": LessonConfiguration.get_lesson()['id'],
-        #     "person": {},
-        #     "personId": StudentManager.get_student()['id']
-        # }
         self.result['id'] = 0
         self.result['dateTime'] = datetimeService.convert_datetime_to_iso(self.time)
         self.result['lessonId'] = LessonConfiguration.get_lesson()['id']

@@ -11,6 +11,13 @@ import multiprocessing as mp
 from Core.studentManager import StudentManager
 from ImageProcessing import superResolution as sr
 from WarningSystem.runSystem import RunSystem
+from Core.lessonConfiguration import LessonConfiguration as lc
+from Measurements import soundCheck, faceDetector, onTop
+from Measurements.ObjectDetection import objectDetection as od
+from Measurements.SleepDetector import sleepDetector as sd
+from Measurements.HeadPose import headPose as hp
+from Measurements.FaceRecognition import faceRecognition as fr
+
 
 
 class RunMeasurements:
@@ -83,15 +90,6 @@ class RunMeasurements:
                 #     job.run(frame, measurements_results)
                 if config.DEBUG:
                     print(measurements_results)
-                # result = {
-                #     "headPose": True,
-                #     "faceRecognition": False,
-                #     "sleepDetector": True,
-                #     "onTop": True,
-                #     "faceDetector": True,
-                #     "objectDetection": True,
-                #     "soundCheck": True,
-                # }
 
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
                     # RunSystem(measurements_results)
@@ -160,3 +158,11 @@ class RunMeasurements:
         cv2.destroyAllWindows()
         loggerService.get_logger().info('lesson ended')
         loggerService.send_log_reports(StudentManager.get_student()['id'])
+
+
+if __name__ == '__main__':
+    StudentManager.get_student("333")
+    lc.get_lesson("444")
+    measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
+                    sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
+    RunMeasurements(measurements, lc.get_lesson()).run()
