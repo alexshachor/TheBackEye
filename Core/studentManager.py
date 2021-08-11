@@ -20,8 +20,8 @@ class StudentManager:
         """
         global student_from_server
         if password:
-            url = config.URLS['get_student'] + password
-            result = httpService.get(url)
+            url = config.URLS['get_student']
+            result = httpService.post(url,password)
             if result:
                 student_from_server = result.json()
 

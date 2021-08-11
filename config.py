@@ -8,16 +8,16 @@ CAM_SRC = 1
 enlist each action and its corresponding URL.
 use: every page that use httpService.
 """
+BASE_URL = "https://datamanagementapi20210728183549.azurewebsites.net/api/"
+# BASE_URL ="https://localhost:44378/api/"
 URLS = {
-    'post_measures': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Measurement/',
-    # 'post_measures': 'https://localhost:44378/api/Measurement/',
-    'post_stacked_measures': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Measurement/PostMeasurements',
-    # 'post_stacked_measures': 'https://localhost:44378/api/Measurement/PostMeasurements',
-    'post_logs': 'https://datamanagementapi20210728183549.azurewebsites.net/api/Log/',
-    'is_server_alive': 'https://datamanagementapi20210728183549.azurewebsites.net/api/IsAlive/',
-    'get_student':'https://datamanagementapi20210728183549.azurewebsites.net/api/Person/',
-    'put_student':'https://datamanagementapi20210728183549.azurewebsites.net/api/Person/',
-    'get_lesson':'https://datamanagementapi20210728183549.azurewebsites.net/api/Lesson/GetNextLesson/'
+    'post_measures': BASE_URL + 'Measurement/',
+    'post_stacked_measures': BASE_URL + 'Measurement/PostMeasurements',
+    'post_logs': BASE_URL + 'Log/',
+    'is_server_alive': BASE_URL + 'IsAlive/',
+    'get_student': BASE_URL + 'Person/GetStudent/',
+    'put_student': BASE_URL + 'Person/',
+    'get_lesson': BASE_URL + 'Lesson/GetNextLesson/'
 }
 
 """
@@ -86,7 +86,7 @@ HEAD_POSE = {
     'video_file': r'./Measurements/HeadPose/video/result.mp4',
     'snapshot_file': r'./Measurements/HeadPose/checkpoint/snapshot/checkpoint.pth.tar',
     'caffemodel': r'./Measurements/HeadPose/checkpoint/Widerface-RetinaFace.caffemodel',
-    'deploy':r'./Measurements/HeadPose/checkpoint/deploy.prototxt',
+    'deploy': r'./Measurements/HeadPose/checkpoint/deploy.prototxt',
     'range': {
         'yaw': (-10, 10),
         'pitch': (4, 20),
@@ -141,12 +141,12 @@ PREREQUISITE_PROCESSES = {
 specify the expected volume (in dB) for the sound check 
 """
 SOUND_CHECK = {
-    'min_volume':0.34
+    'min_volume': 0.34
 }
 
 """
 specify the interval seconds which every x seconds alert system will be called
 """
 ALERT_SYSTEM = {
-    'interval_seconds':480
+    'interval_seconds': 480
 }

@@ -20,7 +20,7 @@ class MeasurementsResult:
         initialize the class by setting the result and the current time.
         :param measurements_result: a dictionary which contains all the measurements result.
         """
-        self.result = measurements_result
+        self.result = dict(measurements_result)
         self.time = datetime.datetime.now()
 
     def get_measurement_dto(self):

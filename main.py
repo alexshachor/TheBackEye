@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # uiController.run()
     # ZoomService(lc.get_lesson()['link']).join()
     StudentManager.get_student("333")
-    lc.get_lesson("333")
+    lc.get_lesson("444")
     measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
                     sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
     rm(measurements, lc.get_lesson()).run()
