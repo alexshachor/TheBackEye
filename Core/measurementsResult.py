@@ -32,6 +32,4 @@ class MeasurementsResult:
         self.result['dateTime'] = datetimeService.convert_datetime_to_iso(self.time)
         self.result['lessonId'] = LessonConfiguration.get_lesson()['id']
         self.result['personId'] = StudentManager.get_student()['id']
-        self.result['lesson'] = None
-        self.result['person'] = None
         return self.result
