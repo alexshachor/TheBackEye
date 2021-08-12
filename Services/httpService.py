@@ -18,8 +18,9 @@ def get(url, params=None):
     try:
         if not url:
             raise ValueError(f'cannot get, url is missing')
+        header = get_token_header()
         response = None
-        response = requests.get(url, params, verify=False)
+        response = requests.get(url, params, verify=False, headers = header)
         response.raise_for_status()
         # data = response.json()
         return response
@@ -43,10 +44,11 @@ def post(url, json):
     :return: response from server if succeed and None otherwise
     """
     try:
-        response = None
         if not json or not url:
             raise ValueError(f'cannot post, one of the params is missing. url: {url}, data: {json}')
-        response = requests.post(url, json=json, verify=False)
+        header = get_token_header()
+        response = None
+        response = requests.post(url, json=json, verify=False, headers = header)
         response.raise_for_status()
         return response
     except ValueError as e:
@@ -71,7 +73,9 @@ def put(url, json):
     try:
         if not json or not url:
             raise ValueError(f'cannot put, one of the params is missing. url: {url}, data: {json}')
-        response = requests.put(url, json=json, verify=False)
+        header = get_token_header()
+        response = None
+        response = requests.put(url, json=json, verify=False, headers = header)
         response.raise_for_status()
         return response
     except ValueError as e:
@@ -82,7 +86,7 @@ def put(url, json):
         return None
     except Exception as e:
         loggerService.get_logger().error(
-            f'put call to url: {url}, data: {json} has failed with status: {response.status_code}, due to: {str(e)}')
+            f'put call to url: {url}, data: {json} has failed, due to: {str(e)}')
         return None
 
 
@@ -130,6 +134,7 @@ def head(url):
     try:
         if not url:
             raise ValueError(f'cannot make head call, url is missing')
+        response = None
         response = requests.head(url, verify=False)
         response.raise_for_status()
         return True if response.ok else False
@@ -141,5 +146,11 @@ def head(url):
         return False
     except Exception as e:
         loggerService.get_logger().error(
-            f'head call to url: {url} has failed with status: {response.status_code}, due to: {str(e)}')
+            f'head call to url: {url} has failed, due to: {str(e)}')
         return False
+
+def get_token_header(student = None):
+    header = {'Authorization': 'Bearer'}
+    if student:
+        header['Authorization'] += f' {student["token"]}'
+    return header
