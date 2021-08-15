@@ -20,8 +20,8 @@ class StudentManager:
         """
         global student_from_server
         if password:
-            url = config.URLS['get_student'] + password
-            result = httpService.get(url)
+            url = config.URLS['get_student']
+            result = httpService.post(url,password, None)
             if result:
                 student_from_server = result.json()
 
@@ -37,7 +37,7 @@ class StudentManager:
         global student_from_server
         if student_updated:
             url = config.URLS['put_student']
-            result = httpService.put(url, student_updated)
+            result = httpService.put(url, student_updated, student_from_server['token'])
             if result:
                 student_from_server = result.json()
 
@@ -45,10 +45,10 @@ class StudentManager:
 
 
 if __name__ == '__main__':
-    student = StudentManager.get_student("123")
+    student = StudentManager.get_student("999")
     if student:
         print('got student from server: ', student)
         # change something in student details
         student['person']['firstName'] = student['person']['firstName'] + 'X'
         print('got student after update: ', StudentManager.update_student(student))
-        print('get from server after update: ', StudentManager.get_student("123456789"))
+        print('get from server after update: ', StudentManager.get_student("999"))

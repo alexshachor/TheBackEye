@@ -1,4 +1,5 @@
 import datetime
+import threading
 
 import cv2
 from time import sleep
@@ -10,6 +11,13 @@ import multiprocessing as mp
 from Core.studentManager import StudentManager
 from ImageProcessing import superResolution as sr
 from WarningSystem.runSystem import RunSystem
+from Core.lessonConfiguration import LessonConfiguration as lc
+from Measurements import soundCheck, faceDetector, onTop
+from Measurements.ObjectDetection import objectDetection as od
+from Measurements.SleepDetector import sleepDetector as sd
+from Measurements.HeadPose import headPose as hp
+from Measurements.FaceRecognition import faceRecognition as fr
+
 
 
 class RunMeasurements:
@@ -75,24 +83,18 @@ class RunMeasurements:
                     continue
                 frame = sr.SuperResolution(frame, 0).get_image()
 
-                # measurements_results = self.run_measurement_processes(frame)
-                measurements_results = {}
-                for job in self.measurements:
-                    job.run(frame,measurements_results)
+                measurements_results = self.run_measurement_threads(frame)
+
+                # measurements_results = {}
+                # for job in self.measurements:
+                #     job.run(frame, measurements_results)
                 if config.DEBUG:
                     print(measurements_results)
-                # result = {
-                #     "headPose": True,
-                #     "faceRecognition": False,
-                #     "sleepDetector": True,
-                #     "onTop": True,
-                #     "faceDetector": True,
-                #     "objectDetection": True,
-                #     "soundCheck": True,
-                # }
 
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
-                    RunSystem(measurements_results)
+                    # RunSystem(measurements_results)
+                    thread = threading.Thread(target=RunSystem, args=(measurements_results,))
+                    thread.start()
                     alert_counter = datetime.datetime.now()
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
@@ -128,6 +130,26 @@ class RunMeasurements:
 
         return dict_results
 
+    def run_measurement_threads(self, frame):
+        """
+        run all measurements each one in different thread, wait them all to finish, and return their result.
+        :param frame: frame to measure.
+        :return: results - dictionary of the results [key = measurement name, value = measurement result]
+        """
+
+        dict_results = mp.Manager().dict()
+
+        # assign all threads and start each one of them
+        threads = []
+        for job in self.measurements:
+            thread = threading.Thread(target=job.run, args=(frame, dict_results,))
+            thread.start()
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
+
+        return dict_results
+
     def finish_lesson(self):
         """
         all the logic concerning finishing lesson will be activated from here.
@@ -135,4 +157,12 @@ class RunMeasurements:
         """
         cv2.destroyAllWindows()
         loggerService.get_logger().info('lesson ended')
-        loggerService.send_log_reports(StudentManager.get_student()['id'])
+        loggerService.send_log_reports(StudentManager.get_student())
+
+
+if __name__ == '__main__':
+    StudentManager.get_student("999")
+    lc.get_lesson("999")
+    measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
+                    sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
+    RunMeasurements(measurements, lc.get_lesson()).run()
