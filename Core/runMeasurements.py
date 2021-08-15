@@ -19,7 +19,6 @@ from Measurements.HeadPose import headPose as hp
 from Measurements.FaceRecognition import faceRecognition as fr
 
 
-
 class RunMeasurements:
     """
     This class is responsible for running all measurements and sending the results data to the server.
@@ -33,7 +32,9 @@ class RunMeasurements:
         :param lesson_configuration: lesson configuration dictionary which hold the
                 configuration of a specific lesson such as lesson duration and breaks.
         """
-
+        self.measurements_interval = {'SoundCheck': [], 'OnTop': [], 'FaceDetector': [],
+                                      'SleepDetector': [], 'ObjectDetection': [],
+                                      'HeadPose': [], 'FaceRecognition':[]}
         self.measurements = measurements
         self.lesson = {
             'start': datetimeService.convert_iso_format_to_datetime(lesson_configuration['startTime']),
@@ -51,31 +52,30 @@ class RunMeasurements:
               results are sent to the server
         :return: void
         """
-
         measurements_service = MeasurementsService()
 
         try:
 
             # assign current_break to be None if there are no breaks. otherwise, assign first break
-            current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+            # current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
             current_time = alert_counter = datetime.datetime.now()
 
             # if lesson start time is yet to be started, sleep for the time between
-            if current_time < self.lesson['start']:
-                sleep((self.lesson['start'] - current_time).seconds)
+            # if current_time < self.lesson['start']:
+            #     sleep((self.lesson['start'] - current_time).seconds)
 
             # turn on computer camera
-            capture_device = cv2.VideoCapture(config.CAM_SRC)
-
+            capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
             current_time = datetime.datetime.now()
             loggerService.get_logger().info('lesson started')
 
             # if current time is still in range of lesson time
-            while self.lesson['start'] <= current_time < self.lesson['end']:
+            # while self.lesson['start'] <= current_time < self.lesson['end']:
+            while True:
                 # if it's time to break then sleep for the break duration
-                if current_break is not None and current_break[0] <= current_time < current_break[1]:
-                    sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
-                    current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+                # if current_break is not None and current_break[0] <= current_time < current_break[1]:
+                #     sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
+                #     current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
 
                 ret, frame = capture_device.read()
                 if not ret:
@@ -91,6 +91,8 @@ class RunMeasurements:
                 if config.DEBUG:
                     print(measurements_results)
 
+                print(measurements_results)
+                self.update_measurements_interval(measurements_results)
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
                     # RunSystem(measurements_results)
                     thread = threading.Thread(target=RunSystem, args=(measurements_results,))

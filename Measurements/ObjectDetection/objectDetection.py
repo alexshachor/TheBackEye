@@ -1,4 +1,5 @@
 from Measurements import abstractMeasurement as am
+from ImageProcessing import superResolution as sr
 from Services import loggerService as ls
 import config
 import os
@@ -20,7 +21,7 @@ class ObjectDetection(am.AbstractMeasurement):
         self.__prohibited_objects = config.PROHIBITED_OBJECTS
         self.__model = None
         # Threshold to detect object
-        self.__threshold = 0.45
+        self.__threshold = config.THRESHOLD_OD
         self.__init_model()
         try:
             self.__objects = [line.strip() for line in open(self.__class_file, 'rt')]
@@ -44,7 +45,7 @@ class ObjectDetection(am.AbstractMeasurement):
             for obj in objects.flatten():
                 if self.__objects[obj - 1].upper() in self.__prohibited_objects:
                     dict_results.update(result)
-                    break
+                    return
             result[repr(self)] = True
             dict_results.update(result)
             if config.DEBUG:
@@ -97,6 +98,29 @@ def for_tests_only():
     """
     A test func to this page only.
     """
+    x = ObjectDetection()
+    dict_res = {}
+    # Initialize and start realtime video capture
+    cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+    # set video width
+    cam.set(3, 640)
+    # set video height
+    cam.set(4, 480)
+    while True:
+        ret, img = cam.read()
+        img = sr.SuperResolution(img, 0).get_image()
+        x.run(img, dict_res)
+        print(dict_res[x.__repr__()])
+        cv2.imshow('camera', img)
+        # Press 'ESC' for exiting video
+        k = cv2.waitKey(10) & 0xff
+        if cv2.waitKey(10) & 0xff == 27:
+            break
+    cam.release()
+    cv2.destroyAllWindows()
+
+
+def test_on_image():
     x = ObjectDetection()
     dict_res = {}
     image = cv2.imread(r"C:\Users\Dell\Desktop\Projects\Final\TheBackEye\ImageProcessing\SavedImages\2.png")

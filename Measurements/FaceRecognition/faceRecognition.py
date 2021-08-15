@@ -1,5 +1,6 @@
 import cv2
 from Measurements import abstractMeasurement as am
+from ImageProcessing import superResolution as sr
 from Services import loggerService as ls
 import config
 import os
@@ -18,7 +19,7 @@ class FaceRecognition(am.AbstractMeasurement):
         self.__recognizer.read(os.path.join(script_dir, 'Models/trainer.yml'))
         self.__cascade_path = os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml')
         self.__face_cascade = cv2.CascadeClassifier(self.__cascade_path)
-        self.__threshold = 45
+        self.__threshold = config.THRESHOLD_FR
         self.__id = 0
         # names related to ids - example, Shalom: id=3, this line used only for testing
         self.__names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
@@ -101,6 +102,7 @@ def for_tests_only():
     cam.set(4, 480)
     while True:
         ret, img = cam.read()
+        img = sr.SuperResolution(img, 0).get_image()
         x.run(img, dict_res)
         print(dict_res[x.__repr__()])
         cv2.imshow('camera', img)

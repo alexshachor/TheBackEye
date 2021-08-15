@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # ZoomService(lc.get_lesson()['link']).join()
     StudentManager.get_student("999")
     lc.get_lesson("999")
-    # measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
-    #                 sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
-    # rm(measurements, lc.get_lesson()).run()
+    measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(),
+                    sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
+    rm(measurements, lc.get_lesson()).run()
     print('Closing application..')
