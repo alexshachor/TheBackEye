@@ -8,8 +8,8 @@ CAM_SRC = 1
 enlist each action and its corresponding URL.
 use: every page that use httpService.
 """
-# BASE_URL = "https://datamanagementapi20210728183549.azurewebsites.net/api/"
-BASE_URL ="https://localhost:44378/api/"
+BASE_URL = "https://datamanagementapi20210728183549.azurewebsites.net/api/"
+# BASE_URL ="https://localhost:44378/api/"
 URLS = {
     'post_measures': BASE_URL + 'Measurement/',
     'post_stacked_measures': BASE_URL + 'Measurement/PostMeasurements',
@@ -148,5 +148,19 @@ SOUND_CHECK = {
 specify the interval seconds which every x seconds alert system will be called
 """
 ALERT_SYSTEM = {
-    'interval_seconds': 480
+    'interval_seconds': 180
 }
+
+"""
+specify the interval seconds which every x seconds measurements_interval will be calculate
+"""
+MEASUREMENT_INTERVAL = {
+    'interval_seconds': 90
+}
+
+"""
+specify the face recognition & objects detector threshold
+[minimum value in order to protect user from false negatives]
+"""
+THRESHOLD_FR = 20
+THRESHOLD_OD = 0.45

@@ -93,7 +93,6 @@ class LogInPage(tk.Frame):
         :param obg: the login controller
         """
         student_data = obg.check_student_data_in_server()
-        page_to_jump = obg.page_to_jump()
         self.pb.destroy()
         self.clean_entries()
         if student_data['Class Code'] != '':
@@ -102,6 +101,7 @@ class LogInPage(tk.Frame):
             self.invalid_password = ovb.create_msg(self, 260, 275, student_data['Password'])
         if student_data['Class Code'] != '' or student_data['Password'] != '':
             return
+        page_to_jump = obg.page_to_jump()
         if page_to_jump == 'ToValidation':
             controller.manage_frame(vp.ValidationPage)
         elif page_to_jump == 'ToUpload':

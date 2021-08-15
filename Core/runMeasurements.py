@@ -19,7 +19,6 @@ from Measurements.HeadPose import headPose as hp
 from Measurements.FaceRecognition import faceRecognition as fr
 
 
-
 class RunMeasurements:
     """
     This class is responsible for running all measurements and sending the results data to the server.
@@ -33,7 +32,9 @@ class RunMeasurements:
         :param lesson_configuration: lesson configuration dictionary which hold the
                 configuration of a specific lesson such as lesson duration and breaks.
         """
-
+        self.measurements_interval = {'SoundCheck': [], 'OnTop': [], 'FaceDetector': [],
+                                      'SleepDetector': [], 'ObjectDetection': [],
+                                      'HeadPose': [], 'FaceRecognition':[]}
         self.measurements = measurements
         self.lesson = {
             'start': datetimeService.convert_iso_format_to_datetime(lesson_configuration['startTime']),
@@ -51,22 +52,18 @@ class RunMeasurements:
               results are sent to the server
         :return: void
         """
-
         measurements_service = MeasurementsService()
-
         try:
-
             # assign current_break to be None if there are no breaks. otherwise, assign first break
             current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
-            current_time = alert_counter = datetime.datetime.now()
+            current_time = alert_counter = interval_counter = datetime.datetime.now()
 
             # if lesson start time is yet to be started, sleep for the time between
             if current_time < self.lesson['start']:
                 sleep((self.lesson['start'] - current_time).seconds)
 
             # turn on computer camera
-            capture_device = cv2.VideoCapture(config.CAM_SRC)
-
+            capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
             current_time = datetime.datetime.now()
             loggerService.get_logger().info('lesson started')
 
@@ -91,11 +88,19 @@ class RunMeasurements:
                 if config.DEBUG:
                     print(measurements_results)
 
+                self.update_measurements_interval(measurements_results)
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
                     # RunSystem(measurements_results)
+                    self.update_measurements_by_interval(measurements_results)
                     thread = threading.Thread(target=RunSystem, args=(measurements_results,))
                     thread.start()
                     alert_counter = datetime.datetime.now()
+
+                # TODO: uncomment the 2 lines inside the if statement acorrding to the logic in the teacher side.
+                if (datetime.datetime.now() - interval_counter).seconds > config.MEASUREMENT_INTERVAL['interval_seconds']:
+                    # self.update_measurements_by_interval()
+                    self.reset_measurements_interval()
+                    # measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
@@ -108,15 +113,28 @@ class RunMeasurements:
             loggerService.get_logger().error(f'an error occurred: {str(e)}')
             return
 
+    def update_measurements_by_interval(self, measurements_results):
+        for key, val in self.measurements_interval.items():
+            if key in ['FaceDetector', 'SleepDetector', 'HeadPose', 'FaceRecognition']:
+                measurements_results[key] = True if True in val else False
+            else:
+                measurements_results[key] = False if False in val else True
+
+    def reset_measurements_interval(self):
+        for val in self.measurements_interval.values():
+            val.clear()
+
+    def update_measurements_interval(self, measurements_results):
+        for key, val in measurements_results.items():
+            self.measurements_interval[key].append(val)
+
     def run_measurement_processes(self, frame):
         """
         run all measurements in a parallel, wait them all to finish, and return their result.
         :param frame: frame to measure.
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
-
         dict_results = mp.Manager().dict()
-
         # assign all processes and start each one of them
         processes = []
         for job in self.measurements:
@@ -136,9 +154,7 @@ class RunMeasurements:
         :param frame: frame to measure.
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
-
         dict_results = mp.Manager().dict()
-
         # assign all threads and start each one of them
         threads = []
         for job in self.measurements:

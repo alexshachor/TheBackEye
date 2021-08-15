@@ -57,6 +57,8 @@ class SuperResolution:
         model = self.init_model()
         start = time.time()
         scaled_image = model.upsample(self.__org_image)
+        scaled_image = cv2.resize(scaled_image, (self.__org_image.shape[1], self.__org_image.shape[0]),
+                                  interpolation=self.__model_scale[self.__quality])
         end = time.time()
         if self.__debug:
             self.__show_interpolation_results(scaled_image, end - start)

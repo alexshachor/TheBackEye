@@ -42,7 +42,7 @@ def for_tests_only():
     """
     A test func to this page only.
     """
-    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'],"thebackeyeapp@gmail.com")
+    EmailWarning(['OBJECTDETECTOR', 'SoundCheck'])
 
 
 if __name__ == '__main__':
