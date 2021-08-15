@@ -157,12 +157,12 @@ class RunMeasurements:
         """
         cv2.destroyAllWindows()
         loggerService.get_logger().info('lesson ended')
-        loggerService.send_log_reports(StudentManager.get_student()['id'])
+        loggerService.send_log_reports(StudentManager.get_student())
 
 
 if __name__ == '__main__':
-    StudentManager.get_student("333")
-    lc.get_lesson("444")
+    StudentManager.get_student("999")
+    lc.get_lesson("999")
     measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
                     sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
     RunMeasurements(measurements, lc.get_lesson()).run()
