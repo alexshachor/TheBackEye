@@ -148,7 +148,14 @@ SOUND_CHECK = {
 specify the interval seconds which every x seconds alert system will be called
 """
 ALERT_SYSTEM = {
-    'interval_seconds': 480
+    'interval_seconds': 180
+}
+
+"""
+specify the interval seconds which every x seconds measurements_interval will be calculate
+"""
+MEASUREMENT_INTERVAL = {
+    'interval_seconds': 90
 }
 
 """

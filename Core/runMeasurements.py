@@ -53,16 +53,14 @@ class RunMeasurements:
         :return: void
         """
         measurements_service = MeasurementsService()
-
         try:
-
             # assign current_break to be None if there are no breaks. otherwise, assign first break
-            # current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
-            current_time = alert_counter = datetime.datetime.now()
+            current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+            current_time = alert_counter = interval_counter = datetime.datetime.now()
 
             # if lesson start time is yet to be started, sleep for the time between
-            # if current_time < self.lesson['start']:
-            #     sleep((self.lesson['start'] - current_time).seconds)
+            if current_time < self.lesson['start']:
+                sleep((self.lesson['start'] - current_time).seconds)
 
             # turn on computer camera
             capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
@@ -70,12 +68,11 @@ class RunMeasurements:
             loggerService.get_logger().info('lesson started')
 
             # if current time is still in range of lesson time
-            # while self.lesson['start'] <= current_time < self.lesson['end']:
-            while True:
+            while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
-                # if current_break is not None and current_break[0] <= current_time < current_break[1]:
-                #     sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
-                #     current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
+                if current_break is not None and current_break[0] <= current_time < current_break[1]:
+                    sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
+                    current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
 
                 ret, frame = capture_device.read()
                 if not ret:
@@ -91,13 +88,19 @@ class RunMeasurements:
                 if config.DEBUG:
                     print(measurements_results)
 
-                print(measurements_results)
                 self.update_measurements_interval(measurements_results)
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
                     # RunSystem(measurements_results)
+                    self.update_measurements_by_interval(measurements_results)
                     thread = threading.Thread(target=RunSystem, args=(measurements_results,))
                     thread.start()
                     alert_counter = datetime.datetime.now()
+
+                # TODO: uncomment the 2 lines inside the if statement acorrding to the logic in the teacher side.
+                if (datetime.datetime.now() - interval_counter).seconds > config.MEASUREMENT_INTERVAL['interval_seconds']:
+                    # self.update_measurements_by_interval()
+                    self.reset_measurements_interval()
+                    # measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
@@ -110,15 +113,28 @@ class RunMeasurements:
             loggerService.get_logger().error(f'an error occurred: {str(e)}')
             return
 
+    def update_measurements_by_interval(self, measurements_results):
+        for key, val in self.measurements_interval.items():
+            if key in ['FaceDetector', 'SleepDetector', 'HeadPose', 'FaceRecognition']:
+                measurements_results[key] = True if True in val else False
+            else:
+                measurements_results[key] = False if False in val else True
+
+    def reset_measurements_interval(self):
+        for val in self.measurements_interval.values():
+            val.clear()
+
+    def update_measurements_interval(self, measurements_results):
+        for key, val in measurements_results.items():
+            self.measurements_interval[key].append(val)
+
     def run_measurement_processes(self, frame):
         """
         run all measurements in a parallel, wait them all to finish, and return their result.
         :param frame: frame to measure.
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
-
         dict_results = mp.Manager().dict()
-
         # assign all processes and start each one of them
         processes = []
         for job in self.measurements:
@@ -138,9 +154,7 @@ class RunMeasurements:
         :param frame: frame to measure.
         :return: results - dictionary of the results [key = measurement name, value = measurement result]
         """
-
         dict_results = mp.Manager().dict()
-
         # assign all threads and start each one of them
         threads = []
         for job in self.measurements:
