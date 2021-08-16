@@ -11,10 +11,10 @@ from Measurements.FaceRecognition import faceRecognition as fr
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # uiController.run()
-    # ZoomService(lc.get_lesson()['link']).join()
-    StudentManager.get_student("999")
-    lc.get_lesson("999")
+    uiController.run()
+    ZoomService(lc.get_lesson()['link']).join()
+    # StudentManager.get_student("7654")
+    # lc.get_lesson("4567")
     measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
                     sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
     rm(measurements, lc.get_lesson()).run()

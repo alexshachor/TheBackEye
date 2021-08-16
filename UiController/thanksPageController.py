@@ -2,6 +2,7 @@ import datetime
 import os
 import psutil
 from Core.lessonConfiguration import LessonConfiguration as lc
+from Services.datetimeService import convert_iso_format_to_datetime
 from UiController import uiController
 
 
@@ -12,7 +13,7 @@ def get_time_remaining():
     :return: date_time_obj[1]: minutes
     """
     res = lc.get_lesson()
-    lesson_start_time = datetime.datetime.fromisoformat(res['startTime'])
+    lesson_start_time = convert_iso_format_to_datetime(res['startTime'])
     late_time = int(res['maxLate'])
     time_left = (lesson_start_time - datetime.datetime.now()).total_seconds() / 60
     if str(time_left)[0] == '-':

@@ -2,7 +2,7 @@ import logging
 
 DEBUG = False
 TIMEOUT = 5
-CAM_SRC = 1
+CAM_SRC = 0
 
 """
 enlist each action and its corresponding URL.
@@ -162,5 +162,5 @@ MEASUREMENT_INTERVAL = {
 specify the face recognition & objects detector threshold
 [minimum value in order to protect user from false negatives]
 """
-THRESHOLD_FR = 20
+THRESHOLD_FR = 40
 THRESHOLD_OD = 0.45

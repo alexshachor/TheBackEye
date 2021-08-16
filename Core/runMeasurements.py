@@ -70,7 +70,7 @@ class RunMeasurements:
             # if current time is still in range of lesson time
             while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
-                if current_break is not None and current_break[0] <= current_time < current_break[1]:
+                if current_break[0] is not None and current_break[0] <= current_time < current_break[1]:
                     sleep((current_break[1] - datetime.datetime.now()).seconds + 1)
                     current_break = None if len(self.lesson['breaks']) == 0 else self.lesson['breaks'].pop(0)
 

@@ -32,7 +32,7 @@ class FaceRecognition(am.AbstractMeasurement):
         :param dict_results: a dictionary which the result will be put there
         """
         am.AbstractMeasurement.run(self, frame, dict_results)
-        result = {repr(self): False}
+        result = {repr(self): True}
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = self.__get_faces(frame, gray)
