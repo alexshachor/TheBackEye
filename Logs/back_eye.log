@@ -15837,4 +15837,153 @@
 16/08/21 17:54:59,177 CRITICAL cannot read from camera source. source value = 1
 16/08/21 17:54:59,177 CRITICAL cannot read from camera source. source value = 1
 16/08/21 17:54:59,177 CRITICAL cannot read from camera source. source value = 1
-16/08/21 17:54:59,177 CRITICAL cannot read from camera source. source v
+16/08/21 17:54:59,177 CRITICAL cannot read from camera source. source v17/08/21 15:33:23,729 INFO is zoom installed = False
+17/08/21 15:33:23,928 INFO is manycam installed = True
+17/08/21 15:33:24,126 INFO manycam status: running
+17/08/21 15:33:24,131 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:33:25,148 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:33:25,151 INFO is server alive = True
+17/08/21 15:33:25,936 INFO read from camera source was success. source value = 0
+17/08/21 15:33:25,940 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x19359a54410 at 1935b4c1540>
+17/08/21 15:33:25,943 DEBUG Release <POINTER(IMMDevice) ptr=0x19359f70be0 at 1935b4c19c0>
+17/08/21 15:33:25,944 INFO is sound ok: True
+17/08/21 15:33:25,944 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x1935896fb30 at 1935b4c1bc0>
+17/08/21 15:33:25,956 DEBUG Release <POINTER(IUnknown) ptr=0x1935896fb30 at 1935b4c1540>
+17/08/21 15:33:34,181 DEBUG Calling CoUnititialize()
+17/08/21 15:33:34,181 DEBUG CoUnititialize() done.
+17/08/21 15:33:51,290 INFO is zoom installed = True
+17/08/21 15:33:51,566 INFO is manycam installed = True
+17/08/21 15:33:51,837 INFO manycam status: running
+17/08/21 15:33:51,845 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:33:52,605 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:33:52,608 INFO is server alive = True
+17/08/21 15:33:53,393 INFO read from camera source was success. source value = 0
+17/08/21 15:33:53,397 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x21c5de21ea0 at 21c5f37f240>
+17/08/21 15:33:53,400 DEBUG Release <POINTER(IMMDevice) ptr=0x21c5de8a180 at 21c5f37f6c0>
+17/08/21 15:33:53,400 INFO is sound ok: True
+17/08/21 15:33:53,400 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x21c5c7c8830 at 21c5f37f8c0>
+17/08/21 15:33:53,413 DEBUG Release <POINTER(IUnknown) ptr=0x21c5c7c8830 at 21c5f37f240>
+17/08/21 15:34:04,927 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:34:08,181 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 390
+17/08/21 15:34:08,185 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:34:09,143 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:35:12,3 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x21c5de21ea0 at 21c61a969c0>
+17/08/21 15:35:12,12 DEBUG Release <POINTER(IMMDevice) ptr=0x21c65a57fd0 at 21c61a96a40>
+17/08/21 15:35:22,629 INFO is zoom installed = True
+17/08/21 15:35:22,852 INFO is manycam installed = True
+17/08/21 15:35:23,76 INFO manycam status: running
+17/08/21 15:35:23,82 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:35:24,46 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:35:24,48 INFO is server alive = True
+17/08/21 15:35:24,751 INFO read from camera source was success. source value = 0
+17/08/21 15:35:24,754 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x1fe5428ee50 at 1fe55871540>
+17/08/21 15:35:24,757 DEBUG Release <POINTER(IMMDevice) ptr=0x1fe52b79680 at 1fe558719c0>
+17/08/21 15:35:24,757 INFO is sound ok: True
+17/08/21 15:35:24,757 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x1fe52862e00 at 1fe55871bc0>
+17/08/21 15:35:24,770 DEBUG Release <POINTER(IUnknown) ptr=0x1fe52862e00 at 1fe55871540>
+17/08/21 15:35:37,487 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:35:38,424 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 387
+17/08/21 15:35:38,427 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:35:39,349 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:35:53,95 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x1fe5428ee50 at 1fe59b77cc0>
+17/08/21 15:35:53,96 DEBUG Release <POINTER(IMMDevice) ptr=0x1fe58d8d790 at 1fe59b77f40>
+17/08/21 15:36:58,750 INFO is zoom installed = True
+17/08/21 15:36:58,975 INFO is manycam installed = True
+17/08/21 15:36:59,197 INFO manycam status: running
+17/08/21 15:36:59,203 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:37:00,237 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:37:00,240 INFO is server alive = True
+17/08/21 15:37:00,943 INFO read from camera source was success. source value = 0
+17/08/21 15:37:00,946 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x196a22d2e30 at 196a384f240>
+17/08/21 15:37:00,949 DEBUG Release <POINTER(IMMDevice) ptr=0x196a234f1e0 at 196a384f6c0>
+17/08/21 15:37:00,949 INFO is sound ok: True
+17/08/21 15:37:00,949 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x196a238c450 at 196a384f8c0>
+17/08/21 15:37:00,961 DEBUG Release <POINTER(IUnknown) ptr=0x196a238c450 at 196a384f240>
+17/08/21 15:37:20,548 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:37:21,470 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 390
+17/08/21 15:37:21,474 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:37:22,398 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:38:17,736 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x196a22d2e30 at 196a5f668c0>
+17/08/21 15:38:17,737 DEBUG Release <POINTER(IMMDevice) ptr=0x196a2cec420 at 196a5f66a40>
+17/08/21 15:38:25,82 INFO is zoom installed = True
+17/08/21 15:38:25,312 INFO is manycam installed = True
+17/08/21 15:38:25,534 INFO manycam status: running
+17/08/21 15:38:25,540 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:38:26,657 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:38:26,659 INFO is server alive = True
+17/08/21 15:38:27,363 INFO read from camera source was success. source value = 0
+17/08/21 15:38:27,366 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x27a423e5d10 at 27a44f2d240>
+17/08/21 15:38:27,369 DEBUG Release <POINTER(IMMDevice) ptr=0x27a439e5580 at 27a44f2d6c0>
+17/08/21 15:38:27,369 INFO is sound ok: True
+17/08/21 15:38:27,369 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x27a41f2ab60 at 27a44f2d8c0>
+17/08/21 15:38:27,382 DEBUG Release <POINTER(IUnknown) ptr=0x27a41f2ab60 at 27a44f2d240>
+17/08/21 15:38:39,570 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:38:40,501 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 386
+17/08/21 15:38:40,504 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:38:41,427 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:38:49,929 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x27a423e5d10 at 27a492469c0>
+17/08/21 15:38:49,931 DEBUG Release <POINTER(IMMDevice) ptr=0x27a422c1fe0 at 27a49246b40>
+17/08/21 15:38:55,122 INFO is zoom installed = True
+17/08/21 15:38:55,337 INFO is manycam installed = True
+17/08/21 15:38:55,555 INFO manycam status: running
+17/08/21 15:38:55,559 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:38:56,644 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:38:56,646 INFO is server alive = True
+17/08/21 15:38:57,377 INFO read from camera source was success. source value = 0
+17/08/21 15:38:57,381 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x2c598d43b00 at 2c59a31c340>
+17/08/21 15:38:57,383 DEBUG Release <POINTER(IMMDevice) ptr=0x2c59761f050 at 2c59a31c7c0>
+17/08/21 15:38:57,384 INFO is sound ok: True
+17/08/21 15:38:57,384 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x2c597437db0 at 2c59a31c9c0>
+17/08/21 15:38:57,396 DEBUG Release <POINTER(IUnknown) ptr=0x2c597437db0 at 2c59a31c340>
+17/08/21 15:39:10,383 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:39:11,328 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 383
+17/08/21 15:39:11,332 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:39:12,320 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:39:17,251 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x2c598d43b00 at 2c59e627ac0>
+17/08/21 15:39:17,253 DEBUG Release <POINTER(IMMDevice) ptr=0x2c5a13edde0 at 2c59e627c40>
+17/08/21 15:41:25,867 INFO is zoom installed = True
+17/08/21 15:41:26,80 INFO is manycam installed = True
+17/08/21 15:41:26,289 INFO manycam status: running
+17/08/21 15:41:26,294 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:41:27,217 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:41:27,219 INFO is server alive = True
+17/08/21 15:41:27,945 INFO read from camera source was success. source value = 0
+17/08/21 15:41:27,950 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x139cd2beec0 at 139d0292540>
+17/08/21 15:41:27,954 DEBUG Release <POINTER(IMMDevice) ptr=0x139cd091aa0 at 139d02929c0>
+17/08/21 15:41:27,954 INFO is sound ok: True
+17/08/21 15:41:27,954 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x139cd4d0940 at 139d0292bc0>
+17/08/21 15:41:27,965 DEBUG Release <POINTER(IUnknown) ptr=0x139cd4d0940 at 139d0292540>
+17/08/21 15:42:01,739 INFO is zoom installed = True
+17/08/21 15:42:01,950 INFO is manycam installed = True
+17/08/21 15:42:02,160 INFO manycam status: running
+17/08/21 15:42:02,165 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:42:03,212 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:42:03,215 INFO is server alive = True
+17/08/21 15:42:03,913 INFO read from camera source was success. source value = 0
+17/08/21 15:42:03,916 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x22c0c194c50 at 22c0d91c5c0>
+17/08/21 15:42:03,919 DEBUG Release <POINTER(IMMDevice) ptr=0x22c0e31a7d0 at 22c0d91ca40>
+17/08/21 15:42:03,920 INFO is sound ok: True
+17/08/21 15:42:03,920 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x22c0be5eaf0 at 22c0d91cc40>
+17/08/21 15:42:03,932 DEBUG Release <POINTER(IUnknown) ptr=0x22c0be5eaf0 at 22c0d91c5c0>
+17/08/21 15:42:16,613 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:42:19,466 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 391
+17/08/21 15:42:19,470 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:42:20,414 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:43:08,163 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x22c0c194c50 at 22c119c62c0>
+17/08/21 15:43:08,164 DEBUG Release <POINTER(IMMDevice) ptr=0x22c0eda87f0 at 22c119c6340>
+17/08/21 15:47:36,543 INFO is zoom installed = True
+17/08/21 15:47:36,760 INFO is manycam installed = True
+17/08/21 15:47:36,975 INFO manycam status: running
+17/08/21 15:47:36,981 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:47:38,82 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+17/08/21 15:47:38,84 INFO is server alive = True
+17/08/21 15:47:38,786 INFO read from camera source was success. source value = 0
+17/08/21 15:47:38,791 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x19d33c92d20 at 19d3324f8c0>
+17/08/21 15:47:38,795 DEBUG Release <POINTER(IMMDevice) ptr=0x19d31ab1330 at 19d3324fd40>
+17/08/21 15:47:38,796 INFO is sound ok: True
+17/08/21 15:47:38,796 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x19d31fc0a60 at 19d3324ff40>
+17/08/21 15:47:54,484 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:47:57,652 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 385
+17/08/21 15:47:57,656 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+17/08/21 15:47:58,578 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+17/08/21 15:48:06,910 DEBUG Release <POINTER(IUnknown) ptr=0x19d31fc0a60 at 19d3324f8c0>

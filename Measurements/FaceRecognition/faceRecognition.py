@@ -1,8 +1,9 @@
+import face_recognition
+import pickle
 import cv2
 from Measurements import abstractMeasurement as am
 from ImageProcessing import superResolution as sr
 from Services import loggerService as ls
-import config
 import os
 
 
@@ -13,16 +14,13 @@ class FaceRecognition(am.AbstractMeasurement):
         initialize the parent class, model, threshold
         """
         am.AbstractMeasurement.__init__(self)
-        self.__recognizer = cv2.face.LBPHFaceRecognizer_create()
         script_dir = os.path.dirname(__file__)
-        self.__path = os.path.join(script_dir, "Model/haarcascade_eye_tree_eyeglasses.xml")
-        self.__recognizer.read(os.path.join(script_dir, 'Models/trainer.yml'))
-        self.__cascade_path = os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml')
-        self.__face_cascade = cv2.CascadeClassifier(self.__cascade_path)
-        self.__threshold = config.THRESHOLD_FR
-        self.__id = 0
-        # names related to ids - example, Shalom: id=3, this line used only for testing
-        self.__names = ['None', config.USER_DATA['USERNAME'], 'Alex', 'Shalom', 'L', 'Z', 'W']
+        # find path of xml file containing haarcascade file
+        self.__casc_path_face = os.path.dirname(cv2.__file__) + "/data/haarcascade_frontalface_alt2.xml"
+        # load the harcaascade in the cascade classifier
+        self.__face_cascade = cv2.CascadeClassifier(self.__casc_path_face)
+        # load the known faces and embeddings saved in last file
+        self.__data = pickle.loads(open(os.path.join(script_dir, 'Models/face_enc'), "rb").read())
 
     def run(self, frame, dict_results):
         """
@@ -32,19 +30,24 @@ class FaceRecognition(am.AbstractMeasurement):
         :param dict_results: a dictionary which the result will be put there
         """
         am.AbstractMeasurement.run(self, frame, dict_results)
-        result = {repr(self): True}
+        result = {repr(self): False}
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = self.__get_faces(frame, gray)
-            for (x, y, w, h) in faces:
-                self.__id, confidence = self.__recognizer.predict(gray[y:y + h, x:x + w])
-                # check if confidence is less them 100, zero is perfect confidence
-                print(round(100 - confidence)) if config.DEBUG else None
-                if confidence < 100:
-                    if round(100 - confidence) >= self.__threshold:
-                        result[repr(self)] = True
-                if config.DEBUG:
-                    self.run_debug(frame, x, y, h, w, confidence)
+            faces = self.__get_faces(gray)
+            # convert the input frame from BGR to RGB
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # the facial embeddings for face in input
+            encodings = face_recognition.face_encodings(rgb)
+            names = []
+            # loop over the facial embeddings incase we have multiple embeddings for multiple fcaes
+            for encoding in encodings:
+                # Compare encodings with encodings
+                matches = face_recognition.compare_faces(self.__data['encodings'], encoding)
+                # check to see if we have found a match
+                if True in matches:
+                    result[repr(self)] = True
+                    if True:
+                        self.run_debug(frame, matches, names, faces)
             dict_results.update(result)
         except Exception as e:
             ls.get_logger().error(
@@ -56,35 +59,41 @@ class FaceRecognition(am.AbstractMeasurement):
         """
         return 'FaceRecognition'
 
-    def __get_faces(self, frame, gray):
+    def __get_faces(self, gray):
         """
         run the model and return the faces it detected.
-        :param frame: frame to process
         :param gray: cvt - the frame in gray color
         :return: faces: the faces it detected
         """
-        faces = self.__face_cascade.detectMultiScale(
-            gray, scaleFactor=1.2, minNeighbors=5,
-            minSize=(int(0.1 * frame.shape[1]), int(0.1 * frame.shape[0])),
-        )
+        faces = self.__face_cascade.detectMultiScale(gray,
+                                                     scaleFactor=1.1,
+                                                     minNeighbors=5,
+                                                     minSize=(60, 60),
+                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         return faces
 
-    def run_debug(self, img, x, y, h, w, confidence):
+    def run_debug(self, frame, matches, names, faces):
         """
         in debug mode, put txt & boxes on the image we examined
-        :param img: the image to put the txt on
-        :param x: the x point to draw on
-        :param y: the y point to draw on
-        :param h: the height of the rectangle to draw
-        :param w: the width of the rectangle to draw
-        :param confidence: the confidence of the result to draw
+        :param frame: the image to put the txt on
+        :param matches: the list of matches
+        :param names: list of names of to be updated
+        :param faces: faces that we recognized
         """
-        name = str(self.__names[self.__id]) if confidence < 100 else 'unknown'
-        confidence = "  {0}%".format(round(100 - confidence))
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        cv2.putText(img, str(name), (x + 5, y - 5), font, 1, (255, 255, 255), 2)
-        cv2.putText(img, str(confidence), (x + 5, y + h - 5), font, 1, (255, 255, 0), 1)
+        name = "Unknown"
+        # Find positions at which we get True and store them
+        matched_ids = [i for (i, b) in enumerate(matches) if b]
+        counts = {}
+        # loop over the matched indexes and maintain a count for each recognized face
+        for i in matched_ids:
+            name = self.__data['names'][i]
+            counts[name] = counts.get(name, 0) + 1
+        name = max(counts, key=counts.get)
+        names.append(name)
+        # loop over the recognized faces
+        for ((x, y, w, h), name) in zip(faces, names):
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2), cv2.putText(frame, str(name)
+                               , (x + 5, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
 
 def for_tests_only():
