@@ -1,6 +1,6 @@
+import face_recognition
+import pickle
 import cv2
-import numpy as np
-from PIL import Image
 import config
 import os
 
@@ -12,42 +12,44 @@ class FaceTraining:
         init the model for training and init the images path.
         """
         script_dir = os.path.dirname(__file__)
-        self.__recognizer = cv2.face.LBPHFaceRecognizer_create()
-        self.__detector = cv2.CascadeClassifier(os.path.join(script_dir, 'Models/haarcascade_frontalface_default.xml'))
-        self.__image_paths = [os.path.join(script_dir, 'Images/1.jpg'), os.path.join(script_dir, 'Images/2.jpg'),
-                            os.path.join(script_dir, 'Images/3.jpg'), os.path.join(script_dir, 'Images/4.jpg'),
-                            os.path.join(script_dir, 'Images/5.jpg')]
         print('Training faces. It will take a few seconds.') if config.DEBUG else None
-        self.__faces, self.__ids = self.__get_images_labels()
-        self.__train()
+        self.__image_paths = [os.path.join(script_dir, 'Images/1.jpg'), os.path.join(script_dir, 'Images/2.jpg'),
+                              os.path.join(script_dir, 'Images/3.jpg'), os.path.join(script_dir, 'Images/4.jpg'),
+                              os.path.join(script_dir, 'Images/5.jpg')]
+        self.__known_encodings = []
+        self.__known_names = []
+        self.__train_images_and_labels()
+        self.__save_train_data()
         print('[INFO] faces trained. Exiting Program') if config.DEBUG else None
 
-    def __get_images_labels(self):
+    def __train_images_and_labels(self):
         """
         get the faces from the image & set the id of a face [we set it to 1]
-        :return: face_samples: the faces from the image
-        :return: id_s: the id of a face [we set it to 1]
         """
-        face_samples = []
-        id_s = []
-        for path in self.__image_paths:
-            # convert it to grayscale
-            img = Image.open(path).convert('L')
-            img_numpy = np.array(img, 'uint8')
-            faces = self.__detector.detectMultiScale(img_numpy)
-            for (x, y, w, h) in faces:
-                face_samples.append(img_numpy[y:y + h, x:x + w])
-                id_s.append(1)
-        return face_samples, id_s
+        for (i, image_path) in enumerate(self.__image_paths):
+            # load the input image and convert it from BGR (OpenCV ordering)
+            # to dlib ordering (RGB)
+            image = cv2.imread(image_path)
+            rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            # Use Face_recognition to locate faces
+            boxes = face_recognition.face_locations(rgb, model='hog')
+            # compute the facial embedding for the face
+            encodings = face_recognition.face_encodings(rgb, boxes)
+            # loop over the encodings
+            for encoding in encodings:
+                self.__known_encodings.append(encoding)
+                self.__known_names.append(1)
 
-    def __train(self):
+    def __save_train_data(self):
         """
-        train the model on face data & id's & write the results to
-        yml file.
+        save the train data.
         """
-        self.__recognizer.train(self.__faces, np.array(self.__ids))
+        data = {"encodings": self.__known_encodings, "names": self.__known_names}
+        # use pickle to save data into a file for later use
         script_dir = os.path.dirname(__file__)
-        self.__recognizer.write(os.path.join(script_dir, 'Models/trainer.yml'))
+        f = open(os.path.join(script_dir, 'Models/face_enc'), 'wb')
+        f.write(pickle.dumps(data))
+        f.close()
 
 
 def for_tests_only():
