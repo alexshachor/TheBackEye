@@ -42,9 +42,9 @@ class SuperResolution:
         :param interpolation_img: the img after interpolation
         :param took_time: the time for the interpolation
         """
-        print('Bicubic interpolation took {:.2f} seconds'.format(took_time))
+        print('Interpolation took {:.2f} seconds'.format(took_time))
         cv2.imshow("Original", self.__org_image)
-        cv2.imshow("Bicubic", interpolation_img)
+        cv2.imshow("Interpolation", interpolation_img)
         cv2.imwrite('.\SavedImages\\interpolation_img.jpg', interpolation_img)
         cv2.waitKey(0)
 
@@ -57,8 +57,7 @@ class SuperResolution:
         model = self.init_model()
         start = time.time()
         scaled_image = model.upsample(self.__org_image)
-        scaled_image = cv2.resize(scaled_image, (self.__org_image.shape[1], self.__org_image.shape[0]),
-                                  interpolation=self.__model_scale[self.__quality])
+        scaled_image = cv2.resize(scaled_image, (self.__org_image.shape[1], self.__org_image.shape[0]))
         end = time.time()
         if self.__debug:
             self.__show_interpolation_results(scaled_image, end - start)
@@ -83,7 +82,7 @@ def for_tests_only():
     A test func to this page only..
     """
     image = cv2.imread('.\SavedImages\\butterfly.png')
-    SuperResolution(image, 0)
+    # SuperResolution(image, 0)
     SuperResolution(image, 2, True)
 
 
