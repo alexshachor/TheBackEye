@@ -81,9 +81,13 @@ def run_images_checks(image, dict_res, pics, i):
     pics[i] = image
     # run the measurements over the image
     result = {}
-    sd.SleepDetector().run(image, result)
-    fd.FaceDetector().run(image, result)
-    hp.HeadPose().run(image, result)
+    threads = []
+    for job in [sd.SleepDetector(), fd.FaceDetector(), hp.HeadPose()]:
+        thread = threading.Thread(target=job.run, args=(image, result,))
+        thread.start()
+        threads.append(thread)
+    for thread in threads:
+        thread.join()
     msg = check_pic(result)
     dict_res[i] = msg
 

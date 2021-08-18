@@ -15987,3 +15987,97 @@
 17/08/21 15:47:57,656 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
 17/08/21 15:47:58,578 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
 17/08/21 15:48:06,910 DEBUG Release <POINTER(IUnknown) ptr=0x19d31fc0a60 at 19d3324f8c0>
+18/08/21 12:10:56,464 INFO is zoom installed = False
+18/08/21 12:10:56,657 INFO is manycam installed = True
+18/08/21 12:10:56,846 INFO manycam status: running
+18/08/21 12:10:56,855 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:10:57,981 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+18/08/21 12:10:57,983 INFO is server alive = True
+18/08/21 12:10:58,714 INFO read from camera source was success. source value = 0
+18/08/21 12:10:58,718 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x1fd2cb17b00 at 1fd2c04a140>
+18/08/21 12:10:58,721 DEBUG Release <POINTER(IMMDevice) ptr=0x1fd2aa0c850 at 1fd2c04a5c0>
+18/08/21 12:10:58,721 INFO is sound ok: True
+18/08/21 12:10:58,721 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x1fd2a784d50 at 1fd2c04a7c0>
+18/08/21 12:11:04,832 DEBUG Calling CoUnititialize()
+18/08/21 12:11:04,832 DEBUG CoUnititialize() done.
+18/08/21 12:11:24,96 INFO is zoom installed = False
+18/08/21 12:11:24,263 INFO is manycam installed = True
+18/08/21 12:11:24,438 INFO manycam status: running
+18/08/21 12:11:24,445 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:11:25,194 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+18/08/21 12:11:25,196 INFO is server alive = True
+18/08/21 12:11:25,916 INFO read from camera source was success. source value = 0
+18/08/21 12:11:25,920 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x2b2f4592630 at 2b2f73c21c0>
+18/08/21 12:11:25,922 DEBUG Release <POINTER(IMMDevice) ptr=0x2b2f690cd10 at 2b2f73c2640>
+18/08/21 12:11:25,923 INFO is sound ok: True
+18/08/21 12:11:25,923 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x2b2f4521d70 at 2b2f73c2840>
+18/08/21 12:11:25,933 DEBUG Release <POINTER(IUnknown) ptr=0x2b2f4521d70 at 2b2f73c21c0>
+18/08/21 12:11:30,743 DEBUG Calling CoUnititialize()
+18/08/21 12:11:30,744 DEBUG CoUnititialize() done.
+18/08/21 12:11:55,264 INFO is zoom installed = True
+18/08/21 12:11:55,509 INFO is manycam installed = True
+18/08/21 12:11:55,698 INFO manycam status: running
+18/08/21 12:11:55,703 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:11:56,663 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+18/08/21 12:11:56,665 INFO is server alive = True
+18/08/21 12:11:57,402 INFO read from camera source was success. source value = 0
+18/08/21 12:11:57,406 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x14e615b6920 at 14e60a2bec0>
+18/08/21 12:11:57,408 DEBUG Release <POINTER(IMMDevice) ptr=0x14e5f4a92e0 at 14e60a2be40>
+18/08/21 12:11:57,409 INFO is sound ok: True
+18/08/21 12:11:57,409 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x14e5f1e2d60 at 14e60a2bf40>
+18/08/21 12:11:57,421 DEBUG Release <POINTER(IUnknown) ptr=0x14e5f1e2d60 at 14e60a2bec0>
+18/08/21 12:12:10,527 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:12:11,500 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 389
+18/08/21 12:12:11,507 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:12:12,459 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+18/08/21 12:12:57,632 ERROR Failed to identify the eyes, due to: There are no eyes in the frame
+Possible reasons: wearing glasses, problematic lighting.
+18/08/21 12:12:57,646 DEBUG Calling CoUnititialize()
+18/08/21 12:12:57,646 DEBUG CoUnititialize() done.
+18/08/21 12:13:02,372 ERROR Failed to identify the eyes, due to: There are no eyes in the frame
+Possible reasons: wearing glasses, problematic lighting.
+18/08/21 12:13:02,387 DEBUG Calling CoUnititialize()
+18/08/21 12:13:02,387 DEBUG CoUnititialize() done.
+18/08/21 12:13:06,850 ERROR Failed to identify the eyes, due to: There are no eyes in the frame
+Possible reasons: wearing glasses, problematic lighting.
+18/08/21 12:13:06,863 DEBUG Calling CoUnititialize()
+18/08/21 12:13:06,863 DEBUG CoUnititialize() done.
+18/08/21 12:13:32,690 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x14e615b6920 at 14e64ad54c0>
+18/08/21 12:13:32,691 DEBUG Release <POINTER(IMMDevice) ptr=0x14e61f841c0 at 14e64ad5a40>
+18/08/21 12:13:33,161 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x14e5f1e2d60 at 14e64ad5ac0>
+18/08/21 12:13:33,161 DEBUG Calling CoUnititialize()
+18/08/21 12:13:33,162 DEBUG CoUnititialize() done.
+18/08/21 12:21:45,454 INFO is zoom installed = True
+18/08/21 12:21:45,639 INFO is manycam installed = True
+18/08/21 12:21:45,822 INFO manycam status: running
+18/08/21 12:21:45,828 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:21:46,943 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+18/08/21 12:21:46,945 INFO is server alive = True
+18/08/21 12:21:47,680 INFO read from camera source was success. source value = 0
+18/08/21 12:21:47,684 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x25a6a52a3e0 at 25a6999bec0>
+18/08/21 12:21:47,687 DEBUG Release <POINTER(IMMDevice) ptr=0x25a683cedb0 at 25a6999be40>
+18/08/21 12:21:47,687 INFO is sound ok: True
+18/08/21 12:21:47,687 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x25a684b4130 at 25a6999bf40>
+18/08/21 12:21:47,700 DEBUG Release <POINTER(IUnknown) ptr=0x25a684b4130 at 25a6999bec0>
+18/08/21 12:21:59,456 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:22:02,297 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 385
+18/08/21 12:22:02,301 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:22:03,257 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
+18/08/21 12:23:04,319 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x25a6a52a3e0 at 25a6da43cc0>
+18/08/21 12:23:04,320 DEBUG Release <POINTER(IMMDevice) ptr=0x25a6aeb16b0 at 25a6da43d40>
+18/08/21 12:23:12,836 INFO is zoom installed = True
+18/08/21 12:23:13,29 INFO is manycam installed = True
+18/08/21 12:23:13,219 INFO manycam status: running
+18/08/21 12:23:13,224 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:23:14,327 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "HEAD /api/IsAlive/ HTTP/1.1" 200 0
+18/08/21 12:23:14,329 INFO is server alive = True
+18/08/21 12:23:15,52 INFO read from camera source was success. source value = 0
+18/08/21 12:23:15,55 DEBUG Release <POINTER(IMMDeviceEnumerator) ptr=0x28cf7977990 at 28cf8adcec0>
+18/08/21 12:23:15,58 DEBUG Release <POINTER(IMMDevice) ptr=0x28cf74fbeb0 at 28cf8adce40>
+18/08/21 12:23:15,58 INFO is sound ok: True
+18/08/21 12:23:15,59 DEBUG Release <POINTER(IAudioEndpointVolume) ptr=0x28cf7652d00 at 28cf8adcf40>
+18/08/21 12:23:15,71 DEBUG Release <POINTER(IUnknown) ptr=0x28cf7652d00 at 28cf8adcec0>
+18/08/21 12:23:25,972 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:23:26,922 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "POST /api/Person/GetStudent/ HTTP/1.1" 200 387
+18/08/21 12:23:26,926 DEBUG Starting new HTTPS connection (1): datamanagementapi20210728183549.azurewebsites.net:443
+18/08/21 12:23:27,863 DEBUG https://datamanagementapi20210728183549.azurewebsites.net:443 "GET /api/Lesson/GetNextLesson/4567 HTTP/1.1" 200 393
