@@ -77,8 +77,9 @@ def run_images_checks(image, dict_res, pics, i):
     :param i: key to put the msg into in the dict of msgs
     """
     # update the images in the pics dict to images in super resolution
-    image = sr.SuperResolution(image, 0).get_image()
-    pics[i] = image
+    # image = sr.SuperResolution(image, 0).get_image()
+    # pics[i] = image
+
     # run the measurements over the image
     result = {}
     threads = []

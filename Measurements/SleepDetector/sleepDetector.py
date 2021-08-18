@@ -52,15 +52,15 @@ class SleepDetector(am.AbstractMeasurement):
                 ear_right = self.get_eye_ratio(right_eye)
                 closed = ear_left < 0.2 and ear_right < 0.2
             if eyes is None or closed:
-                # ls.get_logger().error(
-                #     f'Failed to identify the eyes, due to: There are no eyes in the frame\n'
-                #     f'Possible reasons: wearing glasses, problematic lighting.')
+                ls.get_logger().error(
+                    f'Failed to identify the eyes, due to: There are no eyes in the frame\n'
+                    f'Possible reasons: wearing glasses, problematic lighting.')
                 dict_results.update(result)
                 return
         except Exception as e:
             print(e)
-            # ls.get_logger().error(
-            #     f'Failed to identify the eyes, due to: {str(e)}')
+            ls.get_logger().error(
+                f'Failed to identify the eyes, due to: {str(e)}')
         if len(eyes) != 0 or (not closed):
             result[repr(self)] = True
         dict_results.update(result)
@@ -88,7 +88,6 @@ def for_tests_only():
         ret, frame = cap.read()
         if ret:
             dict = {}
-            # frame = superResolution.SuperResolution(frame, 2).get_image()
             SleepDetector().run(frame, dict)
             print(dict[SleepDetector().__repr__()])
             cv2.imshow('Sleep Detector', frame)
