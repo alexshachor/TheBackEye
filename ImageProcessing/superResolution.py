@@ -29,7 +29,7 @@ class SuperResolution:
         :return: bicubic: a bicubic improvement image
         """
         start = time.time()
-        bicubic = cv2.resize(self.__org_image, (self.__org_image.shape[1], self.__org_image.shape[0]),
+        bicubic = cv2.resize(self.__org_image, (self.__org_image.shape[1]*2, self.__org_image.shape[0]*2),
                              interpolation=cv2.INTER_CUBIC)
         end = time.time()
         if self.__debug:
@@ -42,10 +42,10 @@ class SuperResolution:
         :param interpolation_img: the img after interpolation
         :param took_time: the time for the interpolation
         """
-        print('Bicubic interpolation took {:.2f} seconds'.format(took_time))
+        print('Interpolation took {:.2f} seconds'.format(took_time))
         cv2.imshow("Original", self.__org_image)
-        cv2.imshow("Bicubic", interpolation_img)
-        cv2.imwrite('.\SavedImages\\interpolation_img.jpg', interpolation_img)
+        cv2.imshow("Interpolation", interpolation_img)
+        cv2.imwrite('.\SavedImages\\interpolation_img.png', interpolation_img, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
         cv2.waitKey(0)
 
     def __to_super_resolution(self):
@@ -57,8 +57,7 @@ class SuperResolution:
         model = self.init_model()
         start = time.time()
         scaled_image = model.upsample(self.__org_image)
-        scaled_image = cv2.resize(scaled_image, (self.__org_image.shape[1], self.__org_image.shape[0]),
-                                  interpolation=self.__model_scale[self.__quality])
+        # scaled_image = cv2.resize(scaled_image, (self.__org_image.shape[1], self.__org_image.shape[0]))
         end = time.time()
         if self.__debug:
             self.__show_interpolation_results(scaled_image, end - start)
@@ -82,11 +81,12 @@ def for_tests_only():
     """
     A test func to this page only..
     """
-    image = cv2.imread('.\SavedImages\\butterfly.png')
-    SuperResolution(image, 0)
+    image = cv2.imread('.\SavedImages\\4.png')
+    # SuperResolution(image, 0)
     SuperResolution(image, 2, True)
 
 
 if __name__ == '__main__':
     for_tests_only()
+
 

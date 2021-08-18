@@ -6,6 +6,7 @@ import os
 import face_recognition
 from PIL import ImageTk, Image
 from scipy.spatial import distance as dist
+from ImageProcessing import superResolution
 import numpy
 
 
@@ -57,6 +58,7 @@ class SleepDetector(am.AbstractMeasurement):
                 dict_results.update(result)
                 return
         except Exception as e:
+            print(e)
             ls.get_logger().error(
                 f'Failed to identify the eyes, due to: {str(e)}')
         if len(eyes) != 0 or (not closed):

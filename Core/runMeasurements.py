@@ -78,7 +78,7 @@ class RunMeasurements:
                 if not ret:
                     loggerService.get_logger().fatal(f'cannot read from camera source. source value = {config.CAM_SRC}')
                     continue
-                frame = sr.SuperResolution(frame, 0).get_image()
+                # frame = sr.SuperResolution(frame, 0).get_image()
 
                 measurements_results = self.run_measurement_threads(frame)
 
