@@ -3,7 +3,9 @@ from Services import loggerService as ls
 import config
 import cv2
 import os
+import face_recognition
 from PIL import ImageTk, Image
+from scipy.spatial import distance as dist
 import numpy
 
 
@@ -31,23 +33,42 @@ class SleepDetector(am.AbstractMeasurement):
         :param dict_results: a dictionary which the result will be put there
         """
         am.AbstractMeasurement.run(self, frame, dict_results)
+        flg_frame = frame
         eyes = None
+        closed = True
         result = {repr(self): False}
         try:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             eyes = self.__eye_cascade.detectMultiScale(frame, scaleFactor=1.1,
                                                        minNeighbors=1, minSize=(1, 1))
+            # try to find eye in other way
+            rgb_frame = flg_frame[:, :, ::-1]
+            face_landmarks_list = face_recognition.face_landmarks(rgb_frame)
+            for face_landmark in face_landmarks_list:
+                left_eye = face_landmark['left_eye']
+                right_eye = face_landmark['right_eye']
+                ear_left = self.get_eye_ratio(left_eye)
+                ear_right = self.get_eye_ratio(right_eye)
+                closed = ear_left < 0.2 and ear_right < 0.2
+            if eyes is None or closed:
+                ls.get_logger().error(
+                    f'Failed to identify the eyes, due to: There are no eyes in the frame\n'
+                    f'Possible reasons: wearing glasses, problematic lighting.')
+                dict_results.update(result)
+                return
         except Exception as e:
             ls.get_logger().error(
                 f'Failed to identify the eyes, due to: {str(e)}')
-        if eyes is None:
-            ls.get_logger().error(
-                f'Failed to identify the eyes, due to: There are no eyes in the frame\n'
-                f'Possible reasons: wearing glasses, problematic lighting.')
-            dict_results.update(result)
-            return
-        result[repr(self)] = True if len(eyes) != 0 else False
+        if len(eyes) != 0 or (not closed):
+            result[repr(self)] = True
         dict_results.update(result)
+
+    @staticmethod
+    def get_eye_ratio(eye):
+        a = dist.euclidean(eye[1], eye[5])
+        b = dist.euclidean(eye[2], eye[4])
+        c = dist.euclidean(eye[0], eye[3])
+        return (a + b) / (2.0 * c)
 
     def __repr__(self):
         """
