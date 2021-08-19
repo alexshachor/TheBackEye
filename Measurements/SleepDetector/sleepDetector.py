@@ -51,7 +51,7 @@ class SleepDetector(am.AbstractMeasurement):
                 ear_left = self.get_eye_ratio(left_eye)
                 ear_right = self.get_eye_ratio(right_eye)
                 closed = ear_left < 0.2 and ear_right < 0.2
-            if eyes is None or closed:
+            if eyes is None and closed:
                 ls.get_logger().error(
                     f'Failed to identify the eyes, due to: There are no eyes in the frame\n'
                     f'Possible reasons: wearing glasses, problematic lighting.')
