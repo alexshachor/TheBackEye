@@ -11,6 +11,10 @@ from Measurements.FaceRecognition import faceRecognition as fr
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # print(StudentManager.get_student("jc?@jJQR>r"))
+    # lesson = ")[(.O6cRNE\\"
+    # print(lc.get_lesson(lesson))
+
     uiController.run()
     ZoomService(lc.get_lesson()['link']).join()
     # StudentManager.get_student("7654")

@@ -37,7 +37,7 @@ LOG_OPTIONS = {
     'file_mode': 'a',
     'format': '%(asctime)s,%(msecs)d %(levelname)s %(message)s',
     'date_format': '%d/%m/%y %H:%M:%S',
-    'level': logging.DEBUG
+    'level': logging.WARNING
 }
 
 """
