@@ -2,7 +2,7 @@ import logging
 
 DEBUG = False
 TIMEOUT = 5
-CAM_SRC = 0
+CAM_SRC = 1
 
 """
 enlist each action and its corresponding URL.
@@ -148,14 +148,14 @@ SOUND_CHECK = {
 specify the interval seconds which every x seconds alert system will be called
 """
 ALERT_SYSTEM = {
-    'interval_seconds': 180
+    'interval_seconds': 60
 }
 
 """
 specify the interval seconds which every x seconds measurements_interval will be calculate
 """
 MEASUREMENT_INTERVAL = {
-    'interval_seconds': 90
+    'interval_seconds': 60
 }
 
 """
