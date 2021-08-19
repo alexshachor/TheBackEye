@@ -36,7 +36,7 @@ class VoiceSystem:
             'FACEDETECTOR': 'Our system suspects you are not in front of the screen.',
             'HEADPOSE': 'Our system notes that you are not looking at the screen.',
             'ONTOP': 'Our system detected that you are running non-lesson related apps.',
-            'OBJECTDETECTOR': 'Our system detected that you are dealing with distracting objects.',
+            'OBJECTDETECTION': 'Our system detected that you are dealing with distracting objects.',
             'SLEEPDETECTOR': 'Our system suspects you\'m asleep',
             'FACERECOGNITION': 'Our system suspects that you are not the person in front of the screen.',
             'MANY_FAILURES': 'Our system updates that you are completely out of learning mode.'
