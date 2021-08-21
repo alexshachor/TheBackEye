@@ -79,17 +79,11 @@ def run_images_checks(image, dict_res, pics, i):
     # update the images in the pics dict to images in super resolution
     # image = sr.SuperResolution(image, 0).get_image()
     # pics[i] = image
-
-    # run the measurements over the image
-    result = {}
-    threads = []
-    for job in [sd.SleepDetector(), fd.FaceDetector(), hp.HeadPose()]:
-        thread = threading.Thread(target=job.run, args=(image, result,))
-        thread.start()
-        threads.append(thread)
-    for thread in threads:
-        thread.join()
-    msg = check_pic(result)
+    measurements = [sd.SleepDetector(), fd.FaceDetector(), hp.HeadPose()]
+    measurements_results = {}
+    for measure in measurements:
+        measure.run(image, measurements_results)
+    msg = check_pic(measurements_results)
     dict_res[i] = msg
 
 

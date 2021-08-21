@@ -28,9 +28,9 @@ class RunMeasurements:
         """
         The constructor function
         :param measurements: List of objects [each object is a measure
-                that needs to be executed and get its results]
+        that needs to be executed and get its results]
         :param lesson_configuration: lesson configuration dictionary which hold the
-                configuration of a specific lesson such as lesson duration and breaks.
+        configuration of a specific lesson such as lesson duration and breaks.
         """
         self.measurements_interval = {'SoundCheck': [], 'OnTop': [], 'FaceDetector': [],
                                       'SleepDetector': [], 'ObjectDetection': [],
@@ -48,8 +48,8 @@ class RunMeasurements:
     def run(self):
         """
         Streaming from the user's camera at regular intervals, for the
-              captured frame all the objects of the measurement are activated - the
-              results are sent to the server
+        captured frame all the objects of the measurement are activated - the
+        results are sent to the server
         :return: void
         """
         measurements_service = MeasurementsService()
@@ -66,8 +66,8 @@ class RunMeasurements:
             capture_device = cv2.VideoCapture(config.CAM_SRC, cv2.CAP_DSHOW)
             current_time = datetime.datetime.now()
             loggerService.get_logger().info('lesson started')
-
             # if current time is still in range of lesson time
+            # while True:
             while self.lesson['start'] <= current_time < self.lesson['end']:
                 # if it's time to break then sleep for the break duration
                 if current_break[0] is not None and current_break[0] <= current_time < current_break[1]:
@@ -78,35 +78,24 @@ class RunMeasurements:
                 if not ret:
                     loggerService.get_logger().fatal(f'cannot read from camera source. source value = {config.CAM_SRC}')
                     continue
-                # frame = sr.SuperResolution(frame, 0).get_image()
 
-                measurements_results = self.run_measurement_threads(frame)
-
-                # measurements_results = {}
-                # for job in self.measurements:
-                #     job.run(frame, measurements_results)
+                measurements_results = self.serial_run_measurement(frame)
                 if config.DEBUG:
                     print(measurements_results)
 
+                print(measurements_results)
                 self.update_measurements_interval(measurements_results)
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
-                    # RunSystem(measurements_results)
                     self.update_measurements_by_interval(measurements_results)
                     thread = threading.Thread(target=RunSystem, args=(measurements_results,))
+                    thread.setDaemon(True)
                     thread.start()
-                    alert_counter = datetime.datetime.now()
-
-                # TODO: uncomment the 2 lines inside the if statement acorrding to the logic in the teacher side.
-                if (datetime.datetime.now() - interval_counter).seconds > config.MEASUREMENT_INTERVAL['interval_seconds']:
-                    # self.update_measurements_by_interval()
+                    alert_counter = interval_counter = datetime.datetime.now()
                     self.reset_measurements_interval()
-                    # measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
-
                 sleep(config.TIMEOUT)
                 current_time = datetime.datetime.now()
-
             capture_device.release()
             self.finish_lesson()
         except Exception as e:
@@ -128,43 +117,11 @@ class RunMeasurements:
         for key, val in measurements_results.items():
             self.measurements_interval[key].append(val)
 
-    def run_measurement_processes(self, frame):
-        """
-        run all measurements in a parallel, wait them all to finish, and return their result.
-        :param frame: frame to measure.
-        :return: results - dictionary of the results [key = measurement name, value = measurement result]
-        """
-        dict_results = mp.Manager().dict()
-        # assign all processes and start each one of them
-        processes = []
-        for job in self.measurements:
-            process = mp.Process(target=job.run, args=(frame, dict_results,))
-            process.start()
-            processes.append(process)
-
-        for process in processes:
-            process.join()
-            process.close()
-
-        return dict_results
-
-    def run_measurement_threads(self, frame):
-        """
-        run all measurements each one in different thread, wait them all to finish, and return their result.
-        :param frame: frame to measure.
-        :return: results - dictionary of the results [key = measurement name, value = measurement result]
-        """
-        dict_results = mp.Manager().dict()
-        # assign all threads and start each one of them
-        threads = []
-        for job in self.measurements:
-            thread = threading.Thread(target=job.run, args=(frame, dict_results,))
-            thread.start()
-            threads.append(thread)
-        for thread in threads:
-            thread.join()
-
-        return dict_results
+    def serial_run_measurement(self, frame):
+        measurements_results = {}
+        for measure in self.measurements:
+            measure.run(frame, measurements_results)
+        return measurements_results
 
     def finish_lesson(self):
         """

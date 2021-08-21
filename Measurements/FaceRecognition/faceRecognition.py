@@ -105,13 +105,13 @@ def for_tests_only():
     dict_res = {}
     # Initialize and start realtime video capture
     cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-    # set video width
-    cam.set(3, 640)
-    # set video height
-    cam.set(4, 480)
+    # # set video width
+    # cam.set(3, 640)
+    # # set video height
+    # cam.set(4, 480)
     while True:
         ret, img = cam.read()
-        img = sr.SuperResolution(img, 0).get_image()
+        # img = sr.SuperResolution(img, 0).get_image()
         x.run(img, dict_res)
         print(dict_res[x.__repr__()])
         cv2.imshow('camera', img)

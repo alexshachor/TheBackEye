@@ -1,8 +1,6 @@
 import glob
 import ntpath
 
-from tabulate import tabulate
-
 import config
 from Measurements import abstractMeasurement as am
 from Services import loggerService
@@ -337,7 +335,7 @@ def test_measurement_on_images(file_list):
 
     # print test results in a readable table format
     headers = ['File Name', 'Head Is Facing Screen', 'Measurement Result', 'Test Result']
-    print(tabulate(test_details_list, headers))
+    # print(tabulate(test_details_list, headers))
 
 
 if __name__ == "__main__":

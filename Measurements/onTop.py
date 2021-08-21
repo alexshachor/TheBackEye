@@ -105,7 +105,6 @@ class OnTop(am.AbstractMeasurement):
                 w.SetForegroundWindow(hwnd)
         except IOError as e:
             pass
-            # TODO - check way logger make the program Exception and exit.
             # ls.get_logger().error(
             #     f'Failed to force forward the desired program, due to: {str(e)}')
 
