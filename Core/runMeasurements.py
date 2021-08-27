@@ -37,6 +37,7 @@ class RunMeasurements:
                                       'HeadPose': [], 'FaceRecognition':[]}
         self.measurements = measurements
         self.lesson = {
+            'isActive':lesson_configuration['isActive'],
             'start': datetimeService.convert_iso_format_to_datetime(lesson_configuration['startTime']),
             'end': datetimeService.convert_iso_format_to_datetime(lesson_configuration['endTime']),
             'breaks': [(datetimeService.convert_iso_format_to_datetime(lesson_configuration['breakStart']),
@@ -80,27 +81,29 @@ class RunMeasurements:
                     continue
                 # frame = sr.SuperResolution(frame, 0).get_image()
 
-                measurements_results = self.run_measurement_threads(frame)
+                measurements_results = {}
+                for measure in self.measurements:
+                    measure.run(frame, measurements_results)
+                # measurements_results = self.run_measurement_threads(frame)
 
-                # measurements_results = {}
-                # for job in self.measurements:
-                #     job.run(frame, measurements_results)
                 if config.DEBUG:
                     print(measurements_results)
-
                 self.update_measurements_interval(measurements_results)
                 if (datetime.datetime.now() - alert_counter).seconds > config.ALERT_SYSTEM['interval_seconds']:
                     # RunSystem(measurements_results)
                     self.update_measurements_by_interval(measurements_results)
-                    thread = threading.Thread(target=RunSystem, args=(measurements_results,))
-                    thread.start()
-                    alert_counter = datetime.datetime.now()
+                    if self.lesson['isActive']:
+                        thread = threading.Thread(target=RunSystem, args=(measurements_results,))
+                        thread.setDaemon(True)
+                        thread.start()
+                    alert_counter = interval_counter = datetime.datetime.now()
+                    self.reset_measurements_interval()
 
                 # TODO: uncomment the 2 lines inside the if statement acorrding to the logic in the teacher side.
-                if (datetime.datetime.now() - interval_counter).seconds > config.MEASUREMENT_INTERVAL['interval_seconds']:
-                    # self.update_measurements_by_interval()
-                    self.reset_measurements_interval()
-                    # measurements_service.post_measurements(MeasurementsResult(measurements_results))
+                # if (datetime.datetime.now() - interval_counter).seconds > config.MEASUREMENT_INTERVAL['interval_seconds']:
+                # self.update_measurements_by_interval()
+                # self.reset_measurements_interval()
+                # measurements_service.post_measurements(MeasurementsResult(measurements_results))
 
                 measurements_service.post_measurements(MeasurementsResult(measurements_results))
 

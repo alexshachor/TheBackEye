@@ -16,9 +16,11 @@ if __name__ == '__main__':
     # print(lc.get_lesson(lesson))
 
     uiController.run()
-    ZoomService(lc.get_lesson()['link']).join()
-    # StudentManager.get_student("7654")
-    # lc.get_lesson("4567")
+    try:
+        ZoomService(lc.get_lesson()['link']).join()
+    except:
+        pass
+
     measurements = [soundCheck.SoundCheck(), faceDetector.FaceDetector(), onTop.OnTop(),
                     sd.SleepDetector(), hp.HeadPose(), od.ObjectDetection(), fr.FaceRecognition()]
     rm(measurements, lc.get_lesson()).run()
